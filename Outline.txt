@@ -130,7 +130,7 @@ PartyManager
 
 
 
-PoketrainorStats
+PoketrainerStats
 
 	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
 	total pokemon per type: dict {pokemon type : int}
