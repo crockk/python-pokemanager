@@ -1,0 +1,146 @@
+# Tushya Iyer
+# ACIT 2515 - 2A
+# Pokemon UML Outline
+# Feb 4, 2020
+
+
+PRIVATE ATTRIBUTES SET IN CONSTRUCTOR with stuff in brackets after them indicates attributes than can be set in the constructor without needing user parameters.
+
+PartyMember
+	
+	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
+	ID: Abstract
+	Pokemon Name: str
+	Nickname: str, default as Pokemon Name
+	in_party: Bool (False)
+	--> Either party or storage
+	Weight: float (rand default)
+	Height: float (rand default)
+	Description_of_Member: Abstract
+	Source: str (Caught, trade, gift)
+	Acquire date: Date-time (Now)
+	Held_Item: str 
+
+	# Public Get/Set
+G	ID: str
+G	Pokemon Name: str
+G/S	Nickname: str
+G	in_party: bool
+G	Weight: float
+G	Height: float
+G	Description_of_Member: str
+G	Source: str
+G	Acquire date: date-time
+G/S	Held_Item: str
+
+
+Pokemon(PartyMember)
+	
+	# CLASS VARIABLES
+	move list: {move name: (Description, Power)}
+	available pokemon: {pokedex# : Name} -> for egg options
+	Valid types: []
+	TYPE: str
+
+	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
+	ID = Pokedex# + Acquire Date
+	Pokedex #: int
+	MovesList: List, length = 4 always (random default)
+	Exp until next level: int (rand default)
+	Level: int (5)
+	Ability: str <-??
+	Type: str
+	Attack: int (rand default)
+	Speed: int (rand default)
+	Defense: int (rand default)
+	Total Health: int (rand default)
+	Current Health: int (total Health)
+	Is Knocked Out: Bool (False)
+
+	# PRIVATE METHODS
+	Level up: None
+	Knock Out: None
+
+
+	# PUBLIC GET/SET
+G	ID: str
+G	Pokedex #: int
+G	MovesList: List
+G	Exp until next level: int
+G	Level: int
+G	Ability: str
+G	Type: str
+G	Attack: int
+G	Speed: int
+G	Defense: int
+G	Total Health: int
+G	Current Health: int
+G	Is Knocked Out: Bool
+G	get type: str
+
+	# PUBLIC METHODS
+	Use Move(move:str): None
+	Add Exp(int): None
+	Heal(int): None
+	Damage(int): None
+
+
+
+Eggs(PartyMember)
+
+	# CLASS VARIABLES
+	TYPE: str
+
+	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
+	ID = Pokemon inside # + Acquire Date
+	Steps required to hatch: int (random default)
+	Steps till Hatch: int (steps required)
+	Pokemon inside #: int (random default)
+
+	# PRIVATE METHODS
+	hatch: None
+
+	# PUBLIC GET/SET
+G	ID: str
+G	Steps required to hatch: str
+G	Steps till hatch: str
+G   is hatched: bool
+G	get type: str
+
+	# PUBLIC METHODS
+	Walk with egg(int)
+
+
+
+PartyManager
+
+	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
+	Player Name: str
+	current Party: Dictionary ({})
+	In Storage: Dictionary ({})
+
+	# PUBLIC METHODS
+	Add party member(partymember): None
+	withdraw party Member(ID): None
+	Release Party Member(ID): None
+	get by member type(type): PartyMember []
+	get by ID (ID): PartyMember
+	Get pokemon by Type(type): Pokemon []
+	get stats: PoketrainorStats
+
+
+
+PoketrainorStats
+
+	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
+	total pokemon per type: dict {pokemon type : int}
+	total eggs: int
+	Total KO: int
+	total steps walked with eggs: int
+
+	# PUBLIC GET/SET
+G	total pokemon per type: dict {pokemon type : int}
+G	total eggs: int
+G	Total KO: int
+G	total steps walked with eggs: int
+
