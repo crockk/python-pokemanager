@@ -114,6 +114,9 @@ G	get type: str
 
 PartyManager
 
+	Class Variables:
+	Pokedex : dictionary {species : number}	
+
 	# PRIVATE ATTRIBUTES SET IN CONSTRUCTOR
 	Player Name: str
 	current Party: Dictionary ({})
