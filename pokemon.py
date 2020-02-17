@@ -15,6 +15,12 @@ class Pokemon(PartyMember):
     _MAX_LEVEL_UP_XP_MULT = 1.5
 
     _STARTING_LEVEL = 5
+
+    _MIN_BATTLE_STAT = 3
+    _MAX_BATTLE_STAT = 18
+
+    _MIN_BASE_HP = 15
+    _MAX_BASE_HP = 35
         
     def __init__(self, id: int, species_id: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
 	    pass
