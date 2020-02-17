@@ -7,6 +7,12 @@ Date: 2/13/2020
 from datetime import date
 
 class PartyMember():
+    
+    _MIN_WEIGHT = 50 #KG
+    _MAX_WEIGHT = 1000 #KG
+
+    _MIN_HEIGHT = 80 #CM
+    _MAX_HEIGHT = 1500 #CM
 
     def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None) -> None:
 	    pass
