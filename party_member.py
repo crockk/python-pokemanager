@@ -5,6 +5,7 @@ Date: 2/13/2020
 """
 
 from datetime import date
+from random import uniform
 
 class PartyMember():
     
@@ -77,4 +78,12 @@ class PartyMember():
     def held_item(self, item: str) -> None:
         pass
 
+    @classmethod
+    def rand_weight(cls) -> float:
+        return round(uniform(cls._MIN_WEIGHT, cls._MAX_WEIGHT), 2)
+
+
+    @classmethod
+    def rand_height(cls) -> float:
+        return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
 

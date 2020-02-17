@@ -5,6 +5,7 @@ Date: 2/17/2020
 """
 from party_member import PartyMember
 from typing import List
+from random import randint, uniform
 
 class Pokemon(PartyMember):
 
@@ -113,3 +114,24 @@ class Pokemon(PartyMember):
 
     def damage(self, health_decrease: int) -> None:
         pass
+
+    @classmethod
+    def rand_base_xp(cls) -> int:
+        return randint(cls._MIN_BASE_XP, cls._MAX_BASE_XP)
+
+
+    @classmethod
+    def rand_xp_level_up_multiplier(cls) -> float:
+        return round(uniform(cls._MIN_LEVEL_UP_XP_MULT, cls._MAX_LEVEL_UP_XP_MULT), 2)
+
+
+    @classmethod
+    def rand_battle_stat(cls) -> int:
+        return randint(cls._MIN_BATTLE_STAT, cls._MAX_BATTLE_STAT)
+
+
+    @classmethod
+    def rand_base_hp(cls) -> int:
+        return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
+
+
