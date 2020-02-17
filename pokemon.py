@@ -3,10 +3,10 @@ Author: Tushya Iyer, Nolan Crocks
 ACIT 2515
 Date: 2/17/2020
 """
-
+from party_member import PartyMember
 from typing import List
 
-class Pokemon():
+class Pokemon(PartyMember):
 
     _MIN_BASE_XP = 80
     _MAX_BASE_XP = 120
