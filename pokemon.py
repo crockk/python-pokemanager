@@ -7,7 +7,15 @@ Date: 2/17/2020
 from typing import List
 
 class Pokemon():
-    
+
+    _MIN_BASE_XP = 80
+    _MAX_BASE_XP = 120
+
+    _MIN_LEVEL_UP_XP_MULT = 1.0
+    _MAX_LEVEL_UP_XP_MULT = 1.5
+
+    _STARTING_LEVEL = 5
+        
     def __init__(self, id: int, species_id: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
 	    pass
 
