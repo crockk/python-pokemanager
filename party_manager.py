@@ -10,7 +10,18 @@ from typing import List
 
 
 class PartyManager:
-    _POKEDEX = {}
+    _POKEDEX = {
+        1: "Bulbasaur",
+        2: "Charmander",
+        3: "Squirtle",
+        4: "Pikachu",
+        5: "Turtwig",
+        6: "Chimchar",
+        7: "Piplup",
+        8: "Kyogre",
+        9: "Groudon",
+        10: "Rayquaza"
+    }
 
     def __init__(self, player_name: str) -> None:
         pass
