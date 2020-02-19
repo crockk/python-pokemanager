@@ -46,12 +46,6 @@ class Pokemon(PartyMember):
         self._is_KO = False
 
 
-    def _level_up(self) -> None:
-        pass
-
-    def _knock_out(self) -> None:
-        pass
-
     @property
     def id(self) -> int:
         pass
@@ -125,6 +119,14 @@ class Pokemon(PartyMember):
 
     def damage(self, health_decrease: int) -> None:
         pass
+
+
+    def _level_up(self) -> None:
+        pass
+
+    def _knock_out(self) -> None:
+        pass
+
 
     @classmethod
     def _rand_base_xp(cls) -> int:
