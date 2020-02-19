@@ -87,9 +87,5 @@ class PartyMember:
     def rand_height(cls) -> float:
         return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
 
-    # ^ can't we just use one function for these v
-    @classmethod
-    def rand_float(cls, min, max) -> float:
-        return round(uniform(min, max), 2)
 
 
