@@ -107,11 +107,13 @@ class Pokemon(PartyMember):
     def add_xp(self, xp_increse: int) -> None:
         super()._validate_int(xp_increse, 0, "XP increase must be an Integer greater than or equal to 0")
 
-        if xp_increse + self._current_level_xp >= self._next_level_xp:
+        if xp_increse + self._current_level_xp > self._next_level_xp:
             xp_added = self._next_level_xp - self._current_level_xp
             self._level_up()
             # are we allowed recursion???
             self.add_xp(xp_increse - xp_added)
+        elif xp_increse + self._current_level_xp == self._next_level_xp:
+            self._level_up()
         else:
             self._current_level_xp += xp_increse
 
