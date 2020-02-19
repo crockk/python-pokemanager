@@ -27,10 +27,10 @@ class Pokemon(PartyMember):
     _MIN_BASE_HP = 15
     _MAX_BASE_HP = 35
 
-    def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None,
+    def __init__(self, id: int, pokedex_num: str, source: str, nickname: str = None, item: str = None,
                  ability: str = None) -> None:
 
-        super().__init__(id, species, source, nickname, item)
+        super().__init__(id, pokedex_num, source, nickname, item)
 
         super()._validate_string(ability, "Ability must be a none-blank String")
 

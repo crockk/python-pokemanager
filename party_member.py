@@ -15,11 +15,11 @@ class PartyMember:
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
 
-    def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None) -> None:
+    def __init__(self, id: int, pokedex_num: str, source: str, nickname: str = None, item: str = None) -> None:
 
         self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
 
-        self._validate_string(species, "Species must be a none-blank String")
+        self._validate_int(pokedex_num, 1, "Pokedex Number must be greater than or equal to 1")
 
         self._validate_string(source, "Source must be a none-blank String")
 
@@ -30,7 +30,7 @@ class PartyMember:
             self._validate_string(item, "Item must be a none-blank String")
 
         self._id = id
-        self._species = species
+        self._pokedex_num = pokedex_num
         self._source = source
         self._nickname = nickname
         self._item = item
@@ -45,8 +45,8 @@ class PartyMember:
         return self._id
 
     @property
-    def species(self) -> str:
-        return self._species
+    def pokedex_num(self) -> str:
+        return self._pokedex_num
 
     @property
     def name(self) -> str:
