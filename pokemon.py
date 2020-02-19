@@ -165,5 +165,5 @@ class Pokemon(PartyMember):
         return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
 
     @classmethod
-    def member_type(cls)
+    def member_type(cls):
         return cls._MEMBER_TYPE
