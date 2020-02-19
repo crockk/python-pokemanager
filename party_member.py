@@ -43,37 +43,39 @@ class PartyMember:
 
     @property
     def id(self) -> int:
-        pass
+        return self._id
 
 
     @property
     def species(self) -> str:
-        pass
+        return self._species
 
 
     @property
     def name(self) -> str:
-        pass
+        return self._nickname
 
 
     @name.setter
     def name(self, new_name: str) -> None:
-        pass
+        self._validate_string(new_name, "Nickname must be a none-blank String")
+
+        self._nickname = new_name
 
 
     @property
     def in_party(self) -> bool:
-        pass
+        return self._in_party
 
 
     @property
     def weight(self) -> float:
-        pass
+        return self._weight
 
 
     @property
     def height(self) -> float:
-        pass
+        return self._height
 
 
     @property
@@ -83,22 +85,27 @@ class PartyMember:
 
     @property
     def source(self) -> str:
-        pass
+        return self._source
 
 
     @property
     def date_aquired(self) -> date:
-        pass
+        return self._date_aquired
 
 
     @property
     def held_item(self) -> str:
-        pass
+        if self._item:
+            return self._item
+        else:
+            return "None"
 
 
     @held_item.setter
     def held_item(self, item: str) -> None:
-        pass
+        self._validate_string(item, "Item must be a none-blank String")
+
+        self._item = item
 
     @classmethod
     def _rand_weight(cls) -> float:
