@@ -47,13 +47,24 @@ class PartyManager:
             print(f"{member_type} is not a valid Party Member type")
 
     def withdraw_party_member(self, id: int) -> None:
-        pass
+        self._pc_pokemon[id] = self._party[id]
+        del self._party[id]
 
     def release_party_member(self, id: int) -> None:
-        pass
+        del self._party[id] # pokemon has been yeeted
 
-    def get_members_by_types(self, type: tuple) -> List:
-        pass
+    def release_pc_pokemon(self, id: int) -> None:
+        del self._pc_pokemon[id] # pokemon has been yeeted
+
+    def get_members_by_types(self, types: tuple) -> List:
+        members = []
+        for type in types:
+            for key in self._party.keys():
+                type_members = []
+                if self._party[key].member_type == type:
+                    type_members.append(self._party[key])
+                members.append(type_members)
+        return members
 
     def get_member_by_id(self, id: int) -> PartyMember:
         return self._party[id]
