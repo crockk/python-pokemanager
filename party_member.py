@@ -62,7 +62,7 @@ class PartyMember:
 
 
     @property
-    def in_part(self) -> bool:
+    def in_party(self) -> bool:
         pass
 
 
