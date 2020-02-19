@@ -48,7 +48,7 @@ class Pokemon(PartyMember):
 
     @property
     def id(self) -> int:
-        pass
+        return self._id
 
     @property
     def pokedex(self) -> List:
@@ -60,49 +60,51 @@ class Pokemon(PartyMember):
 
     @property
     def xp_till_next_level(self) -> int:
-        pass
+        return self._next_level_xp - self._current_level_xp
 
     @property
     def level(self) -> int:
-        pass
+        return self._level
 
 
     @property
     def ability(self) -> str:
-        pass
-
+        if self._ability:
+            return self._ability
+        else:
+            return "None"
     @property
     def type(self) -> str:
         pass
 
     @property
     def attack(self) -> int:
-        pass
+        return self._attack
 
 
     @property
     def speed(self) -> int:
-        pass
+        return self._speed
 
 
     @property
     def defense(self) -> int:
-        pass
+        return self._defense
 
 
     @property
     def total_hp(self) -> int:
-        pass
+        return self._total_hp
 
 
     @property
     def current_hp(self) -> int:
-        pass
+        return self._current_hp
 
 
     @property
     def is_KO(self) -> bool:
-        pass
+        return self._is_KO
 
 
     def use_move(self, move: str) -> None:
