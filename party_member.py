@@ -4,7 +4,7 @@ ACIT 2515
 Date: 2/13/2020
 """
 
-from datetime import date
+from datetime import date, datetime
 from random import uniform
 
 
@@ -17,8 +17,29 @@ class PartyMember:
     _MAX_HEIGHT = 1500 #CM
 
     def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None) -> None:
-        pass
+        
+        self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
 
+        self._validate_string(species, "Species must be a none-blank String")
+
+        self._validate_string(source, "Source must be a none-blank String")
+
+        if nickname:
+            self._validate_string(nickname, "Nickname must be a none-blank String")
+        
+        if item:
+            self._validate_string(item, "Item must be a none-blank String")
+
+        self._id = id
+        self._species = species
+        self._source = source
+        self._nickname = nickname
+        self._item = item
+
+        self._in_party = False
+        self._weight = self._rand_weight()
+        self._height = self._rand_height()
+        self._date_aquired = datetime.now().date()
 
     @property
     def id(self) -> int:
