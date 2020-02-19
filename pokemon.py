@@ -25,7 +25,26 @@ class Pokemon(PartyMember):
     _MAX_BASE_HP = 35
         
     def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
-        pass
+        
+        super().__init__(id, species, source, nickname, item)
+
+        super()._validate_string(ability, "Ability must be a none-blank String")
+
+        self._ability = ability
+
+        self._next_level_xp = self._rand_base_xp
+        self._current_level_xp = 0
+        self._level = self._STARTING_LEVEL
+
+        self._attack = self._rand_battle_stat()
+        self._defense = self._rand_battle_stat()
+        self._speed = self._rand_battle_stat()
+
+        self._total_hp = self._rand_base_hp()
+        self._current_hp = self._total_hp
+
+        self._is_KO = False
+
 
     def _level_up(self) -> None:
         pass
