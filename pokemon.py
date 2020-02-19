@@ -104,18 +104,18 @@ class Pokemon(PartyMember):
     def use_move(self, move: str) -> None:
         pass
 
-    def add_xp(self, xp_increse: int) -> None:
-        super()._validate_int(xp_increse, 0, "XP increase must be an Integer greater than or equal to 0")
+    def add_xp(self, xp_increase: int) -> None:
+        super()._validate_int(xp_increase, 0, "XP increase must be an Integer greater than or equal to 0")
 
-        if xp_increse + self._current_level_xp > self._next_level_xp:
+        if xp_increase + self._current_level_xp > self._next_level_xp:
             xp_added = self._next_level_xp - self._current_level_xp
             self._level_up()
             # are we allowed recursion???
-            self.add_xp(xp_increse - xp_added)
-        elif xp_increse + self._current_level_xp == self._next_level_xp:
+            self.add_xp(xp_increase - xp_added)
+        elif xp_increase + self._current_level_xp == self._next_level_xp:
             self._level_up()
         else:
-            self._current_level_xp += xp_increse
+            self._current_level_xp += xp_increase
 
     def heal(self, health_increase: int) -> None:
         super()._validate_int(health_increase, 1, "Health increase must be an Integer greater than or equal to 1")
