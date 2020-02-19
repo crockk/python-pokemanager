@@ -5,7 +5,7 @@ Date: 2/13/2020
 """
 
 from party_member import PartyMember
-
+from poke_stats import PokeStats
 from typing import List
 
 
