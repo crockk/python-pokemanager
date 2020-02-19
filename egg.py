@@ -16,8 +16,8 @@ class Egg(PartyMember):
     _MIN_STEPS = 1000  # steps
     _MAX_STEPS = 5000  # steps
 
-    def __init__(self, id: int, pokedex_dum: int, source: str, nickname: str = None, item: str = None):
-        super().__init__(id, pokedex_dum, source, nickname, item)
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None):
+        super().__init__(id, pokedex_num, source, nickname, item)
 
         self._steps_required = self._rand_steps()
 

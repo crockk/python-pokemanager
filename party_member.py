@@ -3,7 +3,7 @@ Author: Tushya Iyer, Nolan Crocks
 ACIT 2515
 Date: 2/13/2020
 """
-
+from abc import abstractmethod
 from datetime import date, datetime
 from random import uniform
 
@@ -119,6 +119,6 @@ class PartyMember:
         if not string:
             raise ValueError(error_msg)
 
-    @classmethod
-    def member_type(cls):
+    @abstractmethod
+    def member_type(self):
         raise NotImplementedError
