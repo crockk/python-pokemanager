@@ -10,6 +10,9 @@ from math import ceil
 
 
 class Pokemon(PartyMember):
+    
+    _MEMBER_TYPE = "Pokemon"
+
     _MIN_BASE_XP = 80
     _MAX_BASE_XP = 120
 
@@ -160,3 +163,7 @@ class Pokemon(PartyMember):
     @classmethod
     def _rand_base_hp(cls) -> int:
         return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
+
+    @classmethod
+    def member_type(cls)
+        return cls._MEMBER_TYPE
