@@ -83,9 +83,27 @@ class PartyMember:
     def _rand_weight(cls) -> float:
         return round(uniform(cls._MIN_WEIGHT, cls._MAX_WEIGHT), 2)
 
+
     @classmethod
     def _rand_height(cls) -> float:
         return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
 
+
+    @staticmethod
+    def _validate_int(num: int, min_val: int, error_msg: str) -> None:
+        """Private method. Used to validate integers according to a minimum value and type. Raises an error with a custom error message"""
+        if type(num) is not int:
+            raise TypeError(error_msg + f"\nNot type {type(num)}")
+        if num < min_val:
+            raise ValueError(error_msg)
+
+
+    @staticmethod
+    def _validate_string(string: str, error_msg: str) -> None:
+        """Private method. Used to validate strings according to type. Raises an error with a custom error message"""
+        if type(string) is not str:
+            raise TypeError(error_msg + f"\nNot type {type(string)}")
+        if not string:
+            raise ValueError(error_msg)
 
 
