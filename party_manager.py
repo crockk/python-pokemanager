@@ -8,7 +8,10 @@ from party_member import PartyMember
 
 from typing import List
 
-class PartyManager():
+
+class PartyManager:
+
+    _POKEDEX = {}
 
     def __init__(self, player_name: str) -> None:
         pass

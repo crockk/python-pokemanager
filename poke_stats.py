@@ -7,7 +7,8 @@ Date: 2/17/2020
 from party_manager import PartyManager
 from typing import List
 
-class PokeStats():
+
+class PokeStats:
 
     def __init__(self, Party: PartyManager) -> None:
         pass

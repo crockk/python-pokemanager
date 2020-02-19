@@ -7,8 +7,9 @@ Date: 2/13/2020
 from datetime import date
 from random import uniform
 
-class PartyMember():
-    
+
+class PartyMember:
+
     _MIN_WEIGHT = 50 #KG
     _MAX_WEIGHT = 1000 #KG
 
@@ -16,7 +17,7 @@ class PartyMember():
     _MAX_HEIGHT = 1500 #CM
 
     def __init__(self, id: int, species: str, source: str, nickname: str = None, item: str = None) -> None:
-	    pass
+        pass
 
 
     @property
@@ -82,8 +83,13 @@ class PartyMember():
     def rand_weight(cls) -> float:
         return round(uniform(cls._MIN_WEIGHT, cls._MAX_WEIGHT), 2)
 
-
     @classmethod
     def rand_height(cls) -> float:
         return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
+
+    # ^ can't we just use one function for these v
+    @classmethod
+    def rand_float(cls, min, max) -> float:
+        return round(uniform(min, max), 2)
+
 

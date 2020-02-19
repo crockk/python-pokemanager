@@ -7,6 +7,7 @@ from party_member import PartyMember
 from typing import List
 from random import randint, uniform
 
+
 class Pokemon(PartyMember):
 
     _MIN_BASE_XP = 80
@@ -24,36 +25,29 @@ class Pokemon(PartyMember):
     _MAX_BASE_HP = 35
         
     def __init__(self, id: int, species_id: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
-	    pass
+        pass
 
-    
     def _level_up(self) -> None:
         pass
 
-
     def _knock_out(self) -> None:
         pass
-
 
     @property
     def id(self) -> int:
         pass
 
-
     @property
     def pokedex(self) -> List:
         pass
-
 
     @property
     def moves(self) -> List:
         pass
 
-
     @property
     def xp_till_next_level(self) -> int:
         pass
-
 
     @property
     def level(self) -> int:
@@ -64,11 +58,9 @@ class Pokemon(PartyMember):
     def ability(self) -> str:
         pass
 
-
     @property
     def type(self) -> str:
         pass
-
 
     @property
     def attack(self) -> int:

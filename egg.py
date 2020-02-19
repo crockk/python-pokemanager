@@ -7,6 +7,7 @@ Date: 2/17/2020
 from party_member import PartyMember
 from typing import List
 
+
 class Egg(PartyMember):
     def __init__(self, id: int, species_id: int, source: str, nickname: str = None, item: str = None) -> None:
         pass
