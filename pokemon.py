@@ -6,6 +6,7 @@ Date: 2/17/2020
 from party_member import PartyMember
 from typing import List
 from random import randint, uniform
+from math import ceil
 
 
 class Pokemon(PartyMember):
@@ -32,7 +33,7 @@ class Pokemon(PartyMember):
 
         self._ability = ability
 
-        self._next_level_xp = self._rand_base_xp
+        self._next_level_xp = self._rand_base_xp()
         self._current_level_xp = 0
         self._level = self._STARTING_LEVEL
 
@@ -112,22 +113,48 @@ class Pokemon(PartyMember):
 
 
     def add_xp(self, xp_increse: int) -> None:
-        pass
+        super()._validate_int(xp_increse, 0, "XP increase must be an Integer greater than or equal to 0")
+
+        if xp_increse + self._current_level_xp >= self._next_level_xp:
+            xp_added = self._next_level_xp - self._current_level_xp
+            self._level_up()
+            # are we allowed recursion???
+            self.add_xp(xp_increse - xp_added)
+        else:
+            self._current_level_xp += xp_increse
 
 
     def heal(self, health_increase: int) -> None:
-        pass
+        super()._validate_int(health_increase, 1, "Health increase must be an Integer greater than or equal to 1")
+
+        if health_increase + self._current_hp >= self._total_hp:
+            self._current_hp = self._total_hp
+        else:
+            self._current_hp += health_increase
 
 
     def damage(self, health_decrease: int) -> None:
-        pass
+        super()._validate_int(health_decrease, 1, "Damage must be an Integer greater than or equal to 1")
+
+        if self._current_hp - health_decrease <= 0:
+            self._knock_out()
+        else:
+            self._current_hp -= health_decrease
 
 
     def _level_up(self) -> None:
-        pass
+        
+        self._level += 1
+        self._current_level_xp = 0
+        self._next_level_xp = ceil(self._next_level_xp * self._rand_xp_level_up_multiplier())
+
+        print(f"{self.name} has leveled up to level {self.level}!!")
+
+
 
     def _knock_out(self) -> None:
-        pass
+        self._is_KO = True
+        print(f"{self.name} was knocked out")
 
 
     @classmethod
