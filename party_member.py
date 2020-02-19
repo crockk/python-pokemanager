@@ -80,11 +80,11 @@ class PartyMember:
         pass
 
     @classmethod
-    def rand_weight(cls) -> float:
+    def _rand_weight(cls) -> float:
         return round(uniform(cls._MIN_WEIGHT, cls._MAX_WEIGHT), 2)
 
     @classmethod
-    def rand_height(cls) -> float:
+    def _rand_height(cls) -> float:
         return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
 
 
