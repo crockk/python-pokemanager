@@ -118,3 +118,7 @@ class PartyMember:
             raise TypeError(error_msg + f"\nNot type {type(string)}")
         if not string:
             raise ValueError(error_msg)
+
+    @classmethod
+    def member_type(cls):
+        raise NotImplementedError
