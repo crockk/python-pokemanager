@@ -67,7 +67,13 @@ class Egg(PartyMember):
         return self._steps_remaining
 
     def walk(self, steps: int) -> None:
-        """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True. """
+        """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.
+
+        :param int steps: Number of steps to decrement _steps_remaining by.
+        :return: No return
+        :rtype: None
+
+        """
         self._steps_remaining -= steps
         if self._steps_remaining <= 0:
             self._hatched = True

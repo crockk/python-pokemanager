@@ -3,12 +3,12 @@ Author: Tushya Iyer, Nolan Crooks
 ACIT 2515
 Date: 2/13/2020
 """
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from datetime import date, datetime
 from random import uniform
 
 
-class PartyMember:
+class PartyMember(ABC):
     _MIN_WEIGHT = 50  # KG
     _MAX_WEIGHT = 1000  # KG
 
