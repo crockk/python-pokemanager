@@ -1,5 +1,5 @@
 """
-Author: Tushya Iyer, Nolan Crocks
+Author: Tushya Iyer, Nolan Crooks
 ACIT 2515
 Date: 2/17/2020
 """

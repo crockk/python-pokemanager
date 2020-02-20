@@ -1,5 +1,5 @@
 """
-Author: Tushya Iyer, Nolan Crocks
+Author: Tushya Iyer, Nolan Crooks
 ACIT 2515
 Date: 2/13/2020
 """
@@ -35,8 +35,7 @@ class PartyManager:
         self._pc_pokemon = {}
         self._player_name = player_name
 
-    def add_party_member(self, member_type: str, pokedex_num: str, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
-        
+    def add_party_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
 
         if member_type == Pokemon.member_type():
             self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability)
@@ -48,16 +47,27 @@ class PartyManager:
             print(f"{member_type} is not a valid Party Member type")
 
     def withdraw_party_member(self, id: int) -> None:
-        pass
+        self._pc_pokemon[id] = self._party[id]
+        del self._party[id]
 
     def release_party_member(self, id: int) -> None:
-        pass
+        del self._party[id] # pokemon has been yeeted
 
-    def get_members_by_types(self, type: tuple) -> List:
-        pass
+    def release_pc_pokemon(self, id: int) -> None:
+        del self._pc_pokemon[id] # pokemon has been yeeted
+
+    def get_members_by_types(self, types: tuple) -> List:
+        members = []
+        for type in types:
+            for key in self._party.keys():
+                type_members = []
+                if self._party[key].member_type == type:
+                    type_members.append(self._party[key])
+                members.append(type_members)
+        return members
 
     def get_member_by_id(self, id: int) -> PartyMember:
-        pass
+        return self._party[id]
 
     def get_stats(self) -> PokeStats:
         pass
