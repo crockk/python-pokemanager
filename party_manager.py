@@ -9,6 +9,7 @@ from pokemon import Pokemon
 from egg import Egg
 from poke_stats import PokeStats
 from typing import List
+import random
 
 
 class PartyManager:
@@ -25,6 +26,7 @@ class PartyManager:
          party member is created.
 
     """
+    random.seed(13)
 
     _POKEDEX = {
         1: ("Bulbasaur", "Grass"),
