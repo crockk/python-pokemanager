@@ -103,6 +103,10 @@ class Pokemon(PartyMember):
     @property
     def is_KO(self) -> bool:
         return self._is_KO
+    
+    @property
+    def description(self) -> str:
+        pass
 
     def use_move(self, move: str) -> None:
         pass

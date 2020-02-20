@@ -78,6 +78,10 @@ class Egg(PartyMember):
         if self._steps_remaining <= 0:
             self._hatched = True
 
+    @property
+    def description(self) -> str:
+        pass
+    
     @classmethod
     def _rand_steps(cls) -> int:
         """ Class method which calculates a random integer between class variables _MIN_STEPS and _MAX_STEPS """
