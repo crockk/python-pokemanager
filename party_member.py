@@ -15,7 +15,7 @@ class PartyMember(ABC):
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
 
-    def __init__(self, id: int, pokedex_num: str, source: str, nickname: str = None, item: str = None) -> None:
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None) -> None:
 
         self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
 
