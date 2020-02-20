@@ -10,6 +10,16 @@ from random import randint
 
 
 class Egg(PartyMember):
+    """ Defines the subclass Egg which is a child of PartyMember
+
+    This class is relatively simple, only adding a few new properties to the abstract
+    class PartyMember it inherits from.
+
+    _steps_required is the number of steps that are required to hatch the egg.
+    _steps_remaining is the number of steps that are remaining to hatch the egg.
+    _hatched is a boolean value which tells PartyManager whether or not to hatch the egg (turn it into a pokemon).
+
+    """
 
     _MEMBER_TYPE = "Egg"
 
@@ -17,6 +27,20 @@ class Egg(PartyMember):
     _MAX_STEPS = 5000  # steps
 
     def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None):
+        """ Initializes the instance properties
+
+        In addition to the superclass init, this function adds _steps_required, _steps_remaining, and _hatched as
+        properties for the class. These properties are defined in the help for the class Egg.
+
+        :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
+        :param int pokedex_num: The Pokedex number of the Pokemon within the egg, corresponding to a species.
+        :param str source: The location where the egg was aquired.
+        :param str nickname: The Pokemon's given name (set once the egg hatches, so set to None for now).
+        :param str item: The item held by the Pokemon, if any (set once the egg hatches, so set to None for now).
+        :return: No return
+        :rtype: None
+
+        """
         super().__init__(id, pokedex_num, source, nickname, item)
 
         self._steps_required = self._rand_steps()
@@ -29,21 +53,26 @@ class Egg(PartyMember):
 
     @property
     def steps_required(self) -> int:
+        """ Gets and returns _steps_required property """
         return self._steps_required
 
     @property
     def steps_remaining(self) -> int:
+        """ Gets and returns _steps_remaining property """
         return self._steps_remaining
 
     def walk(self, steps: int) -> None:
+        """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True. """
         self._steps_remaining -= steps
         if self._steps_remaining <= 0:
             self._hatched = True
 
     @classmethod
     def _rand_steps(cls) -> int:
+        """ Class method which calculates a random integer between class variables _MIN_STEPS and _MAX_STEPS """
         return randint(cls._MIN_STEPS, cls._MAX_STEPS)
 
     @classmethod
     def member_type(cls):
+        """ Gets and returns the _MEMBER_TYPE class variable """
         return cls._MEMBER_TYPE
