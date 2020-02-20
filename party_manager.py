@@ -79,7 +79,7 @@ class PartyManager:
         """
 
         if member_type == Pokemon.member_type():
-            self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability)
+            self._pc_pokemon[self._ID] = Pokemon(self._ID, self._POKEDEX[pokedex_num], source, nickname=nickname, item=item, ability=ability)
             self._ID += 1        
         elif member_type == Egg.member_type():
             self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item)
@@ -129,13 +129,25 @@ class PartyManager:
 
         """
         members = {}
-        for type in types:
-            members[type] = []
-            for key in (self._party.keys() + self._pc_pokemon.keys()):
-                these_types = self._POKEDEX[self._party[key].pokedex_num][1].split('/')
-                for i in range(len(these_types)):
-                    if these_types[i] == type:
-                        members[key].append(self._party[key])
+        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
+        # for type in types:
+        #     members[type] = []
+        #     for key in self._party.keys():
+        #         these_types = self._POKEDEX[self._party[key].pokedex_num][2].split('/')
+        #         for i in range(len(these_types)):
+        #             if these_types[i] == type:
+        #                 members[key].append(self._party[key])
+
+        for member in all_members:
+            # print(id, member,"hi")
+            if member.member_type == Pokemon.member_type:
+                for e_type in member.elemental_type:
+                    if e_type in types:
+                        if e_type in members:
+                            members[e_type].append(member)
+                        else:
+                            members[e_type] = [member]
+
         return members
 
     def get_member_by_id(self, id: int) -> PartyMember:

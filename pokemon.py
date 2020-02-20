@@ -27,14 +27,20 @@ class Pokemon(PartyMember):
     _MIN_BASE_HP = 15
     _MAX_BASE_HP = 35
 
-    def __init__(self, id: int, pokedex_num: str, source: str, nickname: str = None, item: str = None,
+    def __init__(self, id: int, pokedex_info: tuple, source: str, nickname: str = None, item: str = None,
                  ability: str = None) -> None:
 
-        super().__init__(id, pokedex_num, source, nickname, item)
+        super().__init__(id, pokedex_info[0], source, nickname, item)
 
         super()._validate_string(ability, "Ability must be a none-blank String")
 
+        types = pokedex_info[2].split('/')
+        for e_type in types:
+            super()._validate_string(e_type, "Elemental Type must be a none-blank String")
+
         self._ability = ability
+
+        self._elemental_type = tuple(types)
 
         self._next_level_xp = self._rand_base_xp()
         self._current_level_xp = 0
@@ -73,8 +79,8 @@ class Pokemon(PartyMember):
             return "None"
 
     @property
-    def type(self) -> str:
-        pass
+    def elemental_type(self) -> str:
+        return self._elemental_type
 
     @property
     def attack(self) -> int:
