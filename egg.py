@@ -19,6 +19,11 @@ class Egg(PartyMember):
     _steps_remaining is the number of steps that are remaining to hatch the egg.
     _hatched is a boolean value which tells PartyManager whether or not to hatch the egg (turn it into a pokemon).
 
+    CLASS VARIABLES:
+    _MEMBER_TYPE: The type of party member. In this case, it is "Egg"
+
+    _MIN_STEPS, _MAX_STEPS: Defines the range in which the _steps_required is generated between.
+
     """
 
     _MEMBER_TYPE = "Egg"
