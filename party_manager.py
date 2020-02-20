@@ -60,7 +60,7 @@ class PartyManager:
 
     def add_party_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
         # Add check to see if there are already 6 pokemon in party?
-        """ Adds a member (egg or Pokemon) to the player's _party.
+        """ Adds a member (egg or Pokemon) to the player's _pc.
 
         Depending on the type of member, this function adds a new entry to the player's party. It also assigns the
         Pokemon an ID, and then increments it by 1 so that it is unique for the next member that is added.
@@ -85,7 +85,7 @@ class PartyManager:
         else:
             print(f"{member_type} is not a valid Party Member type")
 
-    def withdraw_party_member(self, id: int) -> None:
+    def remove_party_member(self, id: int) -> None:
         """ Removes a party member from _party and places it into _pc_storage.
 
         :param int id: The ID of the Pokemon or Egg to be placed into storage.
@@ -104,7 +104,8 @@ class PartyManager:
         :rtype: None
 
         """
-        del self._party[id] # pokemon has been yeeted
+        if id in self._party.keys():
+            del self._party[id] # pokemon has been yeeted
 
     def release_pc_pokemon(self, id: int) -> None:
         """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
@@ -114,7 +115,8 @@ class PartyManager:
         :rtype: None
 
         """
-        del self._pc_pokemon[id] # pokemon has been yeeted
+        if id in self._pc_pokemon.keys():
+            del self._pc_pokemon[id] # pokemon has been yeeted
 
     def get_members_by_types(self, types: tuple) -> dict:
         """ Gets a collection of party members based on a given type or types.
@@ -127,7 +129,7 @@ class PartyManager:
         members = {}
         for type in types:
             members[type] = []
-            for key in self._party.keys():
+            for key in (self._party.keys() + self._pc_pokemon.keys()):
                 these_types = self._POKEDEX[self._party[key].pokedex_num][1].split('/')
                 for i in range(len(these_types)):
                     if these_types[i] == type:
@@ -142,7 +144,12 @@ class PartyManager:
         :rtype: Pokemon or Egg
 
         """
-        return self._party[id]
+        if id in self._party.keys():    
+            return self._party[id]
+        elif id in self._pc_pokemon.keys():
+            return self._pc_pokemon[id]
+        else:
+            return None
 
     def get_stats(self) -> PokeStats:
         pass
