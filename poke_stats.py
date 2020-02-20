@@ -4,13 +4,13 @@ ACIT 2515
 Date: 2/17/2020
 """
 
-from party_manager import PartyManager
+# from party_manager import PartyManager
 from typing import List
 
 
 class PokeStats:
 
-    def __init__(self, Party: PartyManager) -> None:
+    def __init__(self) -> None:
         pass
 
     def _get_total_by_type(self, type: str) -> dict:
