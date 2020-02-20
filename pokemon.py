@@ -115,7 +115,7 @@ class Pokemon(PartyMember):
         pass
 
     def add_xp(self, xp_increase: int) -> None:
-        super()._validate_int(xp_increase, 0, "XP increase must be an Integer greater than or equal to 0")
+        super()._validate_int(xp_increase, 1, "XP increase must be an Integer greater than or equal to 1")
 
         if xp_increase + self._current_level_xp > self._next_level_xp:
             xp_added = self._next_level_xp - self._current_level_xp
