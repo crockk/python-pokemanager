@@ -77,7 +77,9 @@ class PartyManager:
         :rtype: None
 
         """
-
+        if not nickname:
+            nickname = self._POKEDEX[pokedex_num][1]
+        
         if member_type == Pokemon.member_type():
             self._pc_pokemon[self._ID] = Pokemon(self._ID, self._POKEDEX[pokedex_num], source, nickname=nickname, item=item, ability=ability)
             self._ID += 1        
