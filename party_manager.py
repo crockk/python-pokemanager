@@ -18,8 +18,8 @@ class PartyManager:
     are placed).
 
     CLASS VARIABLES
-    _POKEDEX: Object containing an integer as a key, and a Pokemon species as a value. This is used to assign
-              a pokedex number and allows us to determine the species based upon that number.
+    _POKEDEX: Object containing an integer as a key, and a tuple containing species and type as the value.
+    This is used to assign a Pokedex number and allows us to determine the species/type based upon that number.
 
     _ID: A unique identifier given to each party member, is incremented by 1 each time a new
          party member is created.
@@ -27,16 +27,16 @@ class PartyManager:
     """
 
     _POKEDEX = {
-        1: "Bulbasaur",
-        2: "Charmander",
-        3: "Squirtle",
-        4: "Pikachu",
-        5: "Turtwig",
-        6: "Chimchar",
-        7: "Piplup",
-        8: "Kyogre",
-        9: "Groudon",
-        10: "Rayquaza"
+        1: ("Bulbasaur", "Grass"),
+        2: ("Charmander", "Fire"),
+        3: ("Squirtle", "Water"),
+        4: ("Pikachu", "Electric"),
+        5: ("Turtwig", "Grass"),
+        6: ("Chimchar", "Fire"),
+        7: ("Piplup", "Water"),
+        8: ("Kyogre", "Water"),
+        9: ("Groudon", "Ground"),
+        10: ("Rayquaza", "Flying/Dragon")
     }
 
     _ID = 1
@@ -128,8 +128,10 @@ class PartyManager:
         for type in types:
             members[type] = []
             for key in self._party.keys():
-                if self._party[key].member_type == type:
-                    members[key].append(self._party[key])
+                these_types = self._POKEDEX[self._party[key].pokedex_num][1].split('/')
+                for i in range(len(these_types)):
+                    if these_types[i] == type:
+                        members[key].append(self._party[key])
         return members
 
     def get_member_by_id(self, id: int) -> PartyMember:
