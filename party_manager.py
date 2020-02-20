@@ -128,8 +128,10 @@ class PartyManager:
         for type in types:
             members[type] = []
             for key in self._party.keys():
-                if self._party[key].member_type == type:
-                    members[key].append(self._party[key])
+                these_types = self._POKEDEX[self._party[key].pokedex_num][1].split('/')
+                for i in range(len(these_types)):
+                    if these_types[i] == type:
+                        members[key].append(self._party[key])
         return members
 
     def get_member_by_id(self, id: int) -> PartyMember:
