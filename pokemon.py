@@ -32,7 +32,8 @@ class Pokemon(PartyMember):
 
         super().__init__(id, pokedex_info[0], source, nickname, item)
 
-        super()._validate_string(ability, "Ability must be a none-blank String")
+        if ability is not None:
+            super()._validate_string(ability, "Ability must be a none-blank String")
 
         types = pokedex_info[2].split('/')
         for e_type in types:
