@@ -70,9 +70,9 @@ class PartyMember(ABC):
     def height(self) -> float:
         return self._height
 
-    @property
+    @abstractmethod
     def description(self) -> str:
-        pass
+        raise NotImplementedError
 
     @property
     def source(self) -> str:
