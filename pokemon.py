@@ -53,7 +53,7 @@ class Pokemon(PartyMember):
     def id(self) -> int:
         return self._id
 
-   @property
+    @property
     def moves(self) -> List:
         pass
 
