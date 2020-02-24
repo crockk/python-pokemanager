@@ -4,6 +4,7 @@ ACIT 2515
 Date: 2/17/2020
 """
 from party_member import PartyMember
+from pokedex import Pokedex
 from typing import List
 from random import randint, uniform
 from math import ceil
@@ -27,15 +28,15 @@ class Pokemon(PartyMember):
     _MIN_BASE_HP = 15
     _MAX_BASE_HP = 35
 
-    def __init__(self, id: int, pokedex_info: tuple, source: str, nickname: str = None, item: str = None,
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None,
                  ability: str = None) -> None:
 
-        super().__init__(id, pokedex_info[0], source, nickname, item)
+        super().__init__(id, pokedex_num, source, nickname, item)
 
         if ability is not None:
             super()._validate_string(ability, "Ability must be a none-blank String")
 
-        types = pokedex_info[2].split('/')
+        types = Pokedex[pokedex_num][2].split('/')
         for e_type in types:
             super()._validate_string(e_type, "Elemental Type must be a none-blank String")
 
