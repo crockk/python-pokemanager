@@ -29,7 +29,7 @@ class Pokemon(PartyMember):
     _MIN_BASE_HP and _MAX_BASE_HP: Defines range for base HP to be generated
 
     """
-    
+
     _MEMBER_TYPE = "Pokemon"
 
     _MIN_BASE_XP = 80
@@ -48,6 +48,18 @@ class Pokemon(PartyMember):
 
     def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None,
                  ability: str = None) -> None:
+        """ Initializes the instance properties
+
+        :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
+        :param int pokedex_num: The Pokedex number of the Pokemon
+        :param str source: The location where the Pokemon was acquired.
+        :param str nickname: The Pokemon's given name
+        :param str item: The item held by the Pokemon
+        :param str ability: The Pokemon's special ability
+        :return: No return
+        :rtype: None
+
+        """
 
         super().__init__(id, pokedex_num, source, nickname, item)
 
@@ -77,22 +89,52 @@ class Pokemon(PartyMember):
 
     @property
     def id(self) -> int:
+        """ Gets and returns property id
+
+        :return: ID
+        :rtype: Integer
+
+        """
         return self._id
 
     @property
     def moves(self) -> List:
-        pass
+        """ Gets and returns this pokemon's move list
+
+        :return: Pokemon moves
+        :rtype: List
+
+        """
+        return self._moves
 
     @property
     def xp_till_next_level(self) -> int:
+        """ Calculates and returns the Pokemon's xp till next level
+
+        :return: Xp left to level up
+        :rtype: Integer
+
+        """
         return self._next_level_xp - self._current_level_xp
 
     @property
     def level(self) -> int:
+        """ Gets and returns Pokemon's current level
+
+        :return: Level
+        :rtype: Integer
+
+        """
         return self._level
 
     @property
     def ability(self) -> str:
+        """ Gets and returns existing ability, if any
+
+        :return: Ability
+        :rtype: String
+
+        """
         if self._ability:
             return self._ability
         else:
@@ -100,42 +142,103 @@ class Pokemon(PartyMember):
 
     @property
     def elemental_type(self) -> tuple:
+        """ Gets and returns the Pokemon's type(s)
+
+        :return: Types
+        :rtype: Tuple
+
+        """
         return self._elemental_type
 
     @property
     def attack(self) -> int:
+        """ Gets and returns Pokemon's attack stat
+
+        :return: Attack stat
+        :rtype: Integer
+
+        """
         return self._attack
 
     @property
     def speed(self) -> int:
+        """ Gets and returns Pokemon's speed stat
+
+        :return: Speed stat
+        :rtype: Integer
+
+        """
         return self._speed
 
     @property
     def defense(self) -> int:
+        """ Gets and returns Pokemon's defense stat
+
+        :return: Defence stat
+        :rtype: Integer
+
+        """
         return self._defense
 
     @property
     def total_hp(self) -> int:
+        """ Gets and returns Pokemon's total HP stat
+
+        :return: Total HP stat
+        :rtype: Integer
+
+        """
         return self._total_hp
 
     @property
     def current_hp(self) -> int:
+        """ Gets and returns Pokemon's current HP stat
+
+        :return: Current HP stat
+        :rtype: Integer
+
+        """
         return self._current_hp
 
     @property
     def is_KO(self) -> bool:
+        """ Gets and returns is_KO stat
+
+        :return: If pokemone is KO or not
+        :rtype: Boolean
+
+        """
         return self._is_KO
-    
+
     @property
     def description(self) -> str:
+        """ Gets and returns a description of the Pokemon
+
+        :return: Description of Pokemon
+        :rtype: String
+
+        """
         return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. \n " \
                f"Current level: {self._level}, exp to next level: {self._next_level_xp}. \n" \
                f"{'Currently in party.' if self._in_party else 'Not currently in party'}"
 
     def use_move(self, move: str) -> None:
+        """ Uses a move from the move list, if it knows the move
+
+        :return: Message describing move
+        :rtype: String
+
+        """
         pass
 
     def add_xp(self, xp_increase: int) -> None:
+        """ Adds xp to the Pokemon's current XP level, and levels up if the next level XP is reached
+
+        :param: int xp_increase: XP to increase by
+        :return: No return
+        :rtype: None
+
+        """
         super()._validate_int(xp_increase, 1, "XP increase must be an Integer greater than or equal to 1")
 
         if xp_increase + self._current_level_xp > self._next_level_xp:
@@ -149,6 +252,13 @@ class Pokemon(PartyMember):
             self._current_level_xp += xp_increase
 
     def heal(self, health_increase: int) -> None:
+        """ Heals Pokemon based on given increase
+
+        :param int health_increase: Amount to heal Pokemon by
+        :return: No return
+        :rtype: None
+
+        """
         super()._validate_int(health_increase, 1, "Health increase must be an Integer greater than or equal to 1")
 
         if health_increase + self._current_hp >= self._total_hp:
@@ -157,6 +267,13 @@ class Pokemon(PartyMember):
             self._current_hp += health_increase
 
     def damage(self, health_decrease: int) -> None:
+        """ Damages the Pokemon (decreases current HP) by a given value
+
+        :param int health_decrease: Amount to decrease health by
+        :return: No return
+        :rtype: None
+
+        """
         super()._validate_int(health_decrease, 1, "Damage must be an Integer greater than or equal to 1")
 
         if self._current_hp - health_decrease <= 0:
@@ -165,33 +282,75 @@ class Pokemon(PartyMember):
             self._current_hp -= health_decrease
 
     def _level_up(self) -> None:
+        """ Level up the pokemon by 1 and set the current XP to 0
+
+        :return: No return
+        :rtype: None
+
+        """
 
         self._level += 1
         self._current_level_xp = 0
         self._next_level_xp = ceil(self._next_level_xp * self._rand_xp_level_up_multiplier())
 
-        print(f"{self.name} has leveled up to level {self.level}!!")
+        print(f"{self._nickname} has leveled up to level {self.level}!!")
 
     def _knock_out(self) -> None:
+        """ Kills the Pokemon
+
+        :return: No return
+        :rtype: None
+
+        """
         self._is_KO = True
-        print(f"{self.name} was knocked out")
+        print(f"{self._nickname} was knocked out")
 
     @classmethod
     def _rand_base_xp(cls) -> int:
+        """ Generates random base xp based on class variables
+
+        :return: Base xp level
+        :rtype: Integer
+
+        """
         return randint(cls._MIN_BASE_XP, cls._MAX_BASE_XP)
 
     @classmethod
     def _rand_xp_level_up_multiplier(cls) -> float:
+        """ Generates xp level up multiplier based on class variables
+
+        :return: Xp level up multiplier
+        :rtype: Float
+
+        """
         return round(uniform(cls._MIN_LEVEL_UP_XP_MULT, cls._MAX_LEVEL_UP_XP_MULT), 2)
 
     @classmethod
     def _rand_battle_stat(cls) -> int:
+        """ Generates random base battle stat based on class variables
+
+        :return: Base stat
+        :rtype: Integer
+
+        """
         return randint(cls._MIN_BATTLE_STAT, cls._MAX_BATTLE_STAT)
 
     @classmethod
     def _rand_base_hp(cls) -> int:
+        """ Generates random base HP based on class variables
+
+        :return: Base HP
+        :rtype: Integer
+
+        """
         return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
 
     @classmethod
     def member_type(cls):
+        """ Gets and returns class variable _MEMBER_TYPE
+
+        :return: Member type
+        :rtype: String
+
+        """
         return cls._MEMBER_TYPE
