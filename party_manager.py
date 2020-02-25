@@ -270,7 +270,7 @@ class PartyManager:
         total_steps = self._total_steps
 
         for member in all_members:
-            if member.member_type == 'Pokemon' and member.is_KO:
+            if member.member_type() == 'Pokemon' and member.is_KO:
                 total_KO += 1
 
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
