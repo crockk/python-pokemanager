@@ -130,6 +130,51 @@ class TestPartyManager(unittest.TestCase):
 
         self.assertEqual(len(self.party_manager.get_all_party_members), 6)
 
+    def test_get_member_by_type(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Egg', 4, 'Route 55')
 
+        members = self.party_manager.get_member_by_type('Pokemon')
 
+        self.assertEqual(len(members), 1)
+
+    def test_walk(self):
+        self.party_manager.create_member('Egg', 4, 'Route 55')
+        self.party_manager.create_member('Egg', 5, 'Route 55')
+        self.party_manager.create_member('Egg', 1, 'Route 55')
+
+        self.party_manager.move_to_party(1)
+        self.party_manager.move_to_party(2)
+        self.party_manager.move_to_party(3)
+
+        self.party_manager.walk(5000)
+
+        stats = self.party_manager.get_stats()
+
+        self.assertEqual(stats.get_total_steps(), 5000)
+
+    def test_get_stats(self):
+        self.party_manager.create_member('Egg', 4, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 1, 'Route 55')
+
+        self.party_manager.move_to_party(1)
+        self.party_manager.move_to_party(2)
+        self.party_manager.move_to_party(3)
+
+        poke1 = self.party_manager.get_member_by_id(2)
+        poke2 = self.party_manager.get_member_by_id(3)
+
+        poke1.damage(poke1.total_hp)
+        poke2.damage(poke2.total_hp)
+
+        stats = self.party_manager.get_stats()
+
+        self.assertEqual(stats.get_total_KO(), 2)
+
+        self.assertEqual(stats.get_total_steps(), 0)
+
+        self.assertEqual(len(stats.get_total_by_type()), 1)
+
+        self.assertEqual(stats.get_total_eggs(), 1)
 
