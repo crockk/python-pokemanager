@@ -78,7 +78,7 @@ class PartyManager:
             self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item)
             self._ID += 1
         else:
-            print(f"{member_type} is not a valid Party Member type")
+            raise ValueError(f"{member_type} is not a valid Party Member type")
 
     def move_to_party(self, id: int):
         """ Moves a pokemon from the PC storage into the party
