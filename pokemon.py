@@ -4,9 +4,9 @@ ACIT 2515
 Date: 2/17/2020
 """
 from party_member import PartyMember
-from pokedex import Pokedex
+from pokedex import Pokedex, Moves
 from typing import List
-from random import randint, uniform
+from random import randint, uniform, sample
 from math import ceil
 
 
@@ -45,6 +45,10 @@ class Pokemon(PartyMember):
 
     _MIN_BASE_HP = 15
     _MAX_BASE_HP = 35
+
+    _MOVE_SET_LENGTH = 4
+
+    _DISPLAY_COLUMN_WIDTH = 14
 
     def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None,
                  ability: str = None) -> None:
@@ -86,6 +90,8 @@ class Pokemon(PartyMember):
         self._current_hp = self._total_hp
 
         self._is_KO = False
+
+        self._moves = self._rand_move_set()
 
     @property
     def id(self) -> int:
@@ -222,14 +228,39 @@ class Pokemon(PartyMember):
                f"Current level: {self._level}, exp to next level: {self._next_level_xp}. \n" \
                f"{'Currently in party.' if self._in_party else 'Not currently in party'}"
 
-    def use_move(self, move: str) -> None:
+    def use_move(self, move_index: int) -> None:
         """ Uses a move from the move list, if it knows the move
 
         :return: Message describing move
         :rtype: String
 
         """
-        pass
+        super()._validate_int(move_index, 1, "Move Index must be an Integer between 1 and 4 inclusive", max_val=4)
+        move = self._moves[move_index - 1]
+        out_str = f"{self._nickname} used {move[0]}!! it did {move[1]} damage!"
+        print(out_str)
+        return out_str
+
+    def display_moves(self, move_index: int = None):
+
+        out_str = '\n'
+
+        if move_index is not None:
+            super()._validate_int(move_index, 1, "Move Index must be an Integer between 1 and 4 inclusive", max_val=4)
+            move = self._moves[move_index - 1]
+            out_str += self._display_3_column_line("Move Index", "Move Name", "Damage")
+            out_str += ( '=' * (self._DISPLAY_COLUMN_WIDTH * 3 + 2) + '\n')
+            out_str += self._display_3_column_line(move_index, move[0], move[1])
+            
+        else:
+            out_str += self._display_3_column_line("Move Index", "Move Name", "Damage")
+            out_str += ( '=' * (self._DISPLAY_COLUMN_WIDTH * 3 + 2) + '\n')
+            for i in range(len(self._moves)):
+                move = self._moves[i]
+                out_str += self._display_3_column_line(i + 1, move[0], move[1])  
+
+        print(out_str)
+        return out_str
 
     def add_xp(self, xp_increase: int) -> None:
         """ Adds xp to the Pokemon's current XP level, and levels up if the next level XP is reached
@@ -354,3 +385,13 @@ class Pokemon(PartyMember):
 
         """
         return cls._MEMBER_TYPE
+
+    @classmethod
+    def _rand_move_set(cls):
+        move_indices = sample(list(Moves), cls._MOVE_SET_LENGTH)
+
+        return [Moves[move_index] for move_index in move_indices]
+
+    @classmethod
+    def _display_3_column_line(cls, col1, col2, col3):
+        return f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '\n'
