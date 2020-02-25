@@ -210,7 +210,7 @@ class PartyMember(ABC):
         return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
 
     @staticmethod
-    def _validate_int(num: int, min_val: int, error_msg: str) -> None:
+    def _validate_int(num: int, min_val: int, error_msg: str, max_val: int = None) -> None:
         """ Private method used to validate integers according to a minimum value and type
 
         :param int num: The number to be validated
@@ -225,6 +225,9 @@ class PartyMember(ABC):
             raise TypeError(error_msg + f"\nNot type {type(num)}")
         if num < min_val:
             raise ValueError(error_msg)
+        if max_val is not None:
+            if num > max_val:
+                raise ValueError(error_msg)
 
     @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
