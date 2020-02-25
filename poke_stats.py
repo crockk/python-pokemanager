@@ -4,7 +4,7 @@ ACIT 2515
 Date: 2/17/2020
 """
 
-# from party_manager import PartyManager
+from party_manager import PartyManager
 from typing import List
 
 
