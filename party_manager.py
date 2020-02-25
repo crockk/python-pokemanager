@@ -261,7 +261,7 @@ class PartyManager:
         return members
 
     def get_stats(self) -> PokeStats:
-        """ Populates a stats object with stuff """
+        """ Populates a stats object with statistics about the party manager """
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
 
         members_by_type = self.get_all_members_by_elemental_type()
