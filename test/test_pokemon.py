@@ -77,7 +77,7 @@ class PokemonTestClass(unittest.TestCase):
         self.assertEqual(self.pokemon.held_item, "Wings of Bud")
 
     def test_moves(self):
-        pass
+        self.assertEqual(len(self.pokemon.moves), 4)
     
     def test_xp_till_next_level(self):
         # 80 and 120 come from private class variables in Pokemon class
@@ -141,7 +141,27 @@ class PokemonTestClass(unittest.TestCase):
                f"Not currently in party")
 
     def test_use_move(self):
-        pass
+        self.assertEqual(self.pokemon.use_move(1), "Flyboy used Growl!! it did 0 damage!")
+        with self.assertRaises(ValueError):
+            self.pokemon.use_move(5)
+
+        with self.assertRaises(ValueError):
+            self.pokemon.use_move(-1)
+
+    def test_display_moves(self):
+        # self.assertEqual()  
+        self.maxDiff = None
+        expected_str = "\nMove Index    |Move Name     |Damage        \n============================================\n1             |Growl         |0             \n2             |Tail Whip     |0             \n3             |Splash        |0             \n4             |Leer          |0             \n"
+        self.assertEqual(self.pokemon.display_moves(), expected_str)
+
+        expected_str = "\nMove Index    |Move Name     |Damage        \n============================================\n1             |Growl         |0             \n"
+        self.assertEqual(self.pokemon.display_moves(1), expected_str)
+
+        with self.assertRaises(ValueError):
+            self.pokemon.display_moves(-1)
+
+        with self.assertRaises(ValueError):
+            self.pokemon.display_moves(5)
 
     def test_add_xp(self):
         # 3 and 18 come from private class variables in Pokemon class
