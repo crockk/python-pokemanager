@@ -141,6 +141,28 @@ class PartyManager:
             return True
         else:
             return False
+    
+    def walk(self, steps: int):
+        """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
+        if necessary
+
+         :param int steps: Steps to walk
+         :return: No return
+         :rtype: None
+
+         """
+        eggs = self.get_member_by_type('Egg')
+
+        for egg in eggs:
+            if egg.in_party:
+                egg.add_steps(steps)
+                if egg.hatched:
+                    temp_egg = egg
+                    self.release_party_member(egg.id)
+                    self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
+                    self.move_to_party(self._ID - 1)
+
+        self._total_steps += steps
 
     def get_members_by_elemental_type(self, types: tuple) -> dict:
         """ Gets a collection of party members based on a given elemental type or types.
@@ -161,6 +183,26 @@ class PartyManager:
                             members[e_type].append(member)
                         else:
                             members[e_type] = [member]
+
+        return members
+
+    def get_all_members_by_elemental_type(self) -> dict:
+        """ Gets a collection of party members based on types
+
+        :return: Returns a collection of desired types from the party, seperated by type
+        :rtype: Dictionary
+
+        """
+        members = {}
+        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
+
+        for member in all_members:
+            if member.member_type == Pokemon.member_type:
+                for e_type in member.elemental_type:
+                    if e_type in members:
+                        members[e_type].append(member)
+                    else:
+                        members[e_type] = [member]
 
         return members
 
@@ -189,19 +231,6 @@ class PartyManager:
         """
         return list(self._party.values())
 
-    @staticmethod
-    def _validate_string(string: str, error_msg: str) -> None:
-        """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
-
-        :param str string: The string to be validated
-        :param str error_msg: The error message to be returned if an exception is raised.
-        :return: No return
-        :rtype: none
-        """
-        if type(string) is not str:
-            raise TypeError(error_msg + f"\nNot type {type(string)}")
-        if not string:
-            raise ValueError(error_msg)
 
     def get_member_by_type(self, type: str) -> List:
         """ Gets a list of members from pc_storage and party based on indicated type
@@ -219,48 +248,6 @@ class PartyManager:
                 members.append(member)
         return members
 
-    def walk(self, steps: int):
-        """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
-        if necessary
-
-         :param int steps: Steps to walk
-         :return: No return
-         :rtype: None
-
-         """
-        eggs = self.get_member_by_type('Egg')
-
-        for egg in eggs:
-            if egg.in_party:
-                egg.add_steps(steps)
-                if egg.hatched:
-                    temp_egg = egg
-                    self.release_party_member(egg.id)
-                    self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
-                    self.move_to_party(self._ID - 1)
-
-        self._total_steps += steps
-
-    def get_all_members_by_elemental_type(self) -> dict:
-        """ Gets a collection of party members based on types
-
-        :return: Returns a collection of desired types from the party, seperated by type
-        :rtype: Dictionary
-
-        """
-        members = {}
-        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-
-        for member in all_members:
-            if member.member_type == Pokemon.member_type:
-                for e_type in member.elemental_type:
-                    if e_type in members:
-                        members[e_type].append(member)
-                    else:
-                        members[e_type] = [member]
-
-        return members
-
     def get_stats(self) -> PokeStats:
         """ Populates a stats object with statistics about the party manager """
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
@@ -275,6 +262,20 @@ class PartyManager:
                 total_KO += 1
 
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
+    
+    @staticmethod
+    def _validate_string(string: str, error_msg: str) -> None:
+        """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
+
+        :param str string: The string to be validated
+        :param str error_msg: The error message to be returned if an exception is raised.
+        :return: No return
+        :rtype: none
+        """
+        if type(string) is not str:
+            raise TypeError(error_msg + f"\nNot type {type(string)}")
+        if not string:
+            raise ValueError(error_msg)
 
     def _validate_pokedex_number(self, pokedex_num:int) -> None:
         """ Checks to see if the given pokedex number corrisponds to a pokedex entry """

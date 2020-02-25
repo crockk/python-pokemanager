@@ -87,13 +87,18 @@ class Egg(PartyMember):
     def hatched(self):
         """ Gets and returns hatched property """
         return self._hatched
+
+    @classmethod
+    def member_type(cls):
+        """ Gets and returns class variable _MEMBER_TYPE
+
+        :return: Member type
+        :rtype: String
+
+        """
+        return cls._MEMBER_TYPE
     
     @classmethod
     def _rand_steps(cls) -> int:
         """ Class method which calculates a random integer between class variables _MIN_STEPS and _MAX_STEPS """
         return randint(cls._MIN_STEPS, cls._MAX_STEPS)
-
-    @classmethod
-    def member_type(cls):
-        """ Gets and returns the _MEMBER_TYPE class variable """
-        return cls._MEMBER_TYPE

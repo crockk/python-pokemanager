@@ -312,6 +312,16 @@ class Pokemon(PartyMember):
         else:
             self._current_hp -= health_decrease
 
+    @classmethod
+    def member_type(cls):
+        """ Gets and returns class variable _MEMBER_TYPE
+
+        :return: Member type
+        :rtype: String
+
+        """
+        return cls._MEMBER_TYPE
+
     def _level_up(self) -> None:
         """ Level up the pokemon by 1 and set the current XP to 0
 
@@ -375,16 +385,6 @@ class Pokemon(PartyMember):
 
         """
         return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
-
-    @classmethod
-    def member_type(cls):
-        """ Gets and returns class variable _MEMBER_TYPE
-
-        :return: Member type
-        :rtype: String
-
-        """
-        return cls._MEMBER_TYPE
 
     @classmethod
     def _rand_move_set(cls):
