@@ -67,7 +67,7 @@ class PartyManager:
 
         """
         if not nickname:
-            nickname = self._POKEDEX[pokedex_num][1]
+            nickname = self._POKEDEX[pokedex_num][0]
 
         if member_type == Pokemon.member_type():
             self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability)
@@ -86,8 +86,10 @@ class PartyManager:
         :rtype: None
 
         """
-        if len(self._party) != 6:
-            self._party[id] = self._pc_pokemon[id]
+        if len(self._party) < 6:
+            pokemon = self._pc_pokemon[id]
+            self._party[id] = pokemon
+            self._party[id]._in_party = True
             self.release_pc_pokemon(id)
         else:
             print('Your party is full')
@@ -191,7 +193,7 @@ class PartyManager:
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
         members = []
         for member in all_members:
-            if member.member_type == type:
+            if member.member_type() == type:
                 members.append(member)
         return members
 
@@ -213,4 +215,4 @@ class PartyManager:
                     temp_egg = egg
                     self.release_party_member(egg.id)
                     self.add_party_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
-                    self.move_to_party(temp_egg.id)
+                    self.move_to_party(self._ID - 1)
