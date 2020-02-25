@@ -14,9 +14,8 @@ from datetime import datetime, date
 
 class TestPartyManager(unittest.TestCase):
 
-    random.seed(13)
-
     def setUp(self) -> None:
+        random.seed(13)
         self.party_manager = PartyManager('Nolan')
 
     def test_valid_init(self):
@@ -73,12 +72,12 @@ class TestPartyManager(unittest.TestCase):
 
         self.assertFalse(self.party_manager.release_party_member(1))
 
-    # def test_release_pc_pokemon(self):
-    #     self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    #
-    #     self.assertTrue(self.party_manager.release_pc_pokemon(1))
-    #
-    #     self.assertFalse(self.party_manager.release_pc_pokemon(1))
+    def test_release_pc_pokemon(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+    
+        self.assertTrue(self.party_manager.release_pc_pokemon(1))
+    
+        self.assertFalse(self.party_manager.release_pc_pokemon(1))
 
     # def test_get_members_by_elemental_type(self):
     #     self.party_manager.create_member('Pokemon', 5, 'Route 55')

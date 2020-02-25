@@ -11,10 +11,10 @@ from datetime import datetime, date
 
 class PokemonTestClass(unittest.TestCase):
 
-    random.seed(13)
     _ID = 1
 
     def setUp(self):
+        random.seed(13)
         self.pokemon = Pokemon(self._ID, 10, "BC", "Flyboy", ability="wings")
     
 
