@@ -68,17 +68,31 @@ class PartyManager:
         """
         if not nickname:
             nickname = self._POKEDEX[pokedex_num][1]
-        
+
         if member_type == Pokemon.member_type():
             self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability)
-            self._ID += 1        
+            self._ID += 1
         elif member_type == Egg.member_type():
             self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item)
             self._ID += 1
         else:
             print(f"{member_type} is not a valid Party Member type")
 
-    def remove_party_member(self, id: int) -> None:
+    def move_to_party(self, id: int):
+        """ Moves a pokemon from the PC storage into the party
+
+        :param int id: Pokemon's ID
+        :return: No return
+        :rtype: None
+
+        """
+        if len(self._party) != 6:
+            self._party[id] = self._pc_pokemon[id]
+            self.release_pc_pokemon(id)
+        else:
+            print('Your party is full')
+
+    def move_to_pc(self, id: int) -> None:
         """ Removes a party member from _party and places it into _pc_storage.
 
         :param int id: The ID of the Pokemon or Egg to be placed into storage.
@@ -196,5 +210,7 @@ class PartyManager:
             if egg.in_party:
                 egg.add_steps(steps)
                 if egg.hatched:
-                    self.add_party_member("Pokemon", egg.pokedex_num, egg.source, egg.nickname)
+                    temp_egg = egg
                     self.release_party_member(egg.id)
+                    self.add_party_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
+                    self.move_to_party(temp_egg.id)
