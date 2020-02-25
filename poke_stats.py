@@ -24,7 +24,7 @@ class PokeStats:
 
         self._total_steps = total_steps
 
-    def _get_total_by_type(self) -> dict:
+    def get_total_by_type(self) -> dict:
         """ Gets and returns total pokemon by type
 
         :return: Total by type
@@ -33,7 +33,7 @@ class PokeStats:
         """
         return self._total_by_type
 
-    def _get_total_eggs(self) -> int:
+    def get_total_eggs(self) -> int:
         """ Gets and returns total eggs
 
         :return: Total eggs
@@ -42,7 +42,7 @@ class PokeStats:
         """
         return self._total_eggs
 
-    def _get_total_KO(self) -> int:
+    def get_total_KO(self) -> int:
         """ Gets and returns total pokemon KO'd
 
         :return: Total KO'd
@@ -51,7 +51,7 @@ class PokeStats:
         """
         return self._total_KO
 
-    def _get_total_steps(self) -> int:
+    def get_total_steps(self) -> int:
         """ Gets and returns total steps the player has taken
 
         :return: Total steps

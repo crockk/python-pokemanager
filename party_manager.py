@@ -164,9 +164,6 @@ class PartyManager:
         else:
             return None
 
-    def get_stats(self) -> PokeStats:
-        pass
-
     @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
         """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
@@ -216,3 +213,40 @@ class PartyManager:
                     self.release_party_member(egg.id)
                     self.add_party_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
                     self.move_to_party(self._ID - 1)
+
+        self._total_steps += steps
+
+    def get_all_members_by_elemental_type(self) -> dict:
+        """ Gets a collection of party members based on types
+
+        :return: Returns a collection of desired types from the party, seperated by type
+        :rtype: Dictionary
+
+        """
+        members = {}
+        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
+
+        for member in all_members:
+            if member.member_type == Pokemon.member_type:
+                for e_type in member.elemental_type:
+                    if e_type in members:
+                        members[e_type].append(member)
+                    else:
+                        members[e_type] = [member]
+
+        return members
+
+    def get_stats(self) -> PokeStats:
+        """ Populates a stats object with stuff """
+        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
+
+        members_by_type = self.get_all_members_by_elemental_type()
+        total_eggs = len(self.get_member_by_type('Egg'))
+        total_KO = 0
+        total_steps = self._total_steps
+
+        for member in all_members:
+            if member.member_type == 'Pokemon' and member.is_KO:
+                total_KO += 1
+
+        return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
