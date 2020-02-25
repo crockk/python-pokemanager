@@ -23,6 +23,8 @@ class EggTestClass(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             e = Egg(self._ID, -1, "Calgary")
+        
+        with self.assertRaises(TypeError):
             e = Egg(self._ID, 6, 2)
 
     def test_steps_required(self):
