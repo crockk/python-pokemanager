@@ -50,7 +50,7 @@ class PartyManager:
         self._player_name = player_name
         self._total_steps = 0
 
-    def add_party_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
+    def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
         """ Adds a member (egg or Pokemon) to the player's _pc.
 
         Depending on the type of member, this function adds a new entry to the player's party. It also assigns the
@@ -223,7 +223,7 @@ class PartyManager:
                 if egg.hatched:
                     temp_egg = egg
                     self.release_party_member(egg.id)
-                    self.add_party_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
+                    self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
                     self.move_to_party(self._ID - 1)
 
         self._total_steps += steps
