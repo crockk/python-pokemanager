@@ -277,5 +277,6 @@ class PartyManager:
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
 
     def _validate_pokedex_number(self, pokedex_num:int) -> None:
+        """ Checks to see if the given pokedex number corrisponds to a pokedex entry """
         if pokedex_num not in self._POKEDEX.keys():
             raise ValueError(f'Pokedex Number must be between 1 - {len(self._POKEDEX) + 1}')
