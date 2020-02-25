@@ -141,3 +141,30 @@ class PokemonTestClass(unittest.TestCase):
 
     def test_use_move(self):
         pass
+
+    def test_add_xp(self):
+        # 3 and 18 come from private class variables in Pokemon class
+        self.assertGreaterEqual(self.pokemon.xp_till_next_level, 80)
+        self.assertLess(self.pokemon.xp_till_next_level, 120)
+
+        self.assertEqual(self.pokemon.level, 5)
+
+        self.pokemon.add_xp(self.pokemon.xp_till_next_level + 1)
+
+        self.assertEqual(self.pokemon.level, 6)
+
+    def test_heal(self):
+        self.assertEqual(self.pokemon.current_hp, self.pokemon.total_hp)
+
+        with self.assertRaises(TypeError):
+            self.pokemon.heal("eee")
+
+        
+        self.pokemon.heal(1)
+
+        self.pokemon.damage(10)
+
+        self.pokemon.heal(5)
+
+    def test_member_type(self):
+        self.assertEqual(self.pokemon.member_type(), "Pokemon")
