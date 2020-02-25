@@ -11,6 +11,24 @@ from math import ceil
 
 
 class Pokemon(PartyMember):
+    """ Defines the subclass Pokemon which is a child of PartyMember
+
+    This class inherits all properties of PartyMember, and adds many stats and attributes.
+
+    CLASS VARIABLES:
+    _MEMBER_TYPE: The type of party member. In this case, it is "Pokemon"
+
+    _MIN_BASE_XP and _MAX_BASE_XP: Defines range for base XP to be generated
+
+    _MIN_LEVEL_UP_XP_MULT and _MAX_LEVEL_UP_XP_MULT: Defines range for level up multiplier
+
+    _STARTING_LEVEL: Starting level for the pokemon
+
+    _MIN_BATTLE_STAT and _MAX_BATTLE_STAT: Defines range for battle stats to be generated
+
+    _MIN_BASE_HP and _MAX_BASE_HP: Defines range for base HP to be generated
+
+    """
     
     _MEMBER_TYPE = "Pokemon"
 
@@ -81,7 +99,7 @@ class Pokemon(PartyMember):
             return "None"
 
     @property
-    def elemental_type(self) -> str:
+    def elemental_type(self) -> tuple:
         return self._elemental_type
 
     @property
@@ -110,7 +128,9 @@ class Pokemon(PartyMember):
     
     @property
     def description(self) -> str:
-        pass
+        return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. \n " \
+               f"Current level: {self._level}, exp to next level: {self._next_level_xp}. \n" \
+               f"{'Currently in party.' if self._in_party else 'Not currently in party'}"
 
     def use_move(self, move: str) -> None:
         pass

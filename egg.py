@@ -80,7 +80,8 @@ class Egg(PartyMember):
 
     @property
     def description(self) -> str:
-        pass
+        return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. " \
+               f"{ 'Currently in party.' if self._in_party else 'Not currently in party'}"
     
     @classmethod
     def _rand_steps(cls) -> int:
