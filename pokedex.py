@@ -10,3 +10,10 @@ Pokedex = {
     9: ("Groudon", "Ground"),
     10: ("Rayquaza", "Flying/Dragon")
 }
+
+Moves = {
+    1: ('Tail Whip', ),
+    2: ('Growl', ),
+    3: ('Splash', ),
+    4: ('Leer', )
+}
