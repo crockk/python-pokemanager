@@ -56,13 +56,13 @@ class PokemonTestClass(unittest.TestCase):
 
         # 50 and 1000 come from private class variables in PartyMember class
         self.assertGreaterEqual(self.pokemon.weight, 50)
-        self.assertLess(self.pokemon.weight, 1000)
+        self.assertLessEqual(self.pokemon.weight, 1000)
         
     def test_height(self):
 
         # 80 and 1500 come from private class variables in PartyMember class
         self.assertGreaterEqual(self.pokemon.height, 80)
-        self.assertLess(self.pokemon.height, 1500)
+        self.assertLessEqual(self.pokemon.height, 1500)
 
     def test_source(self):
         self.assertEqual(self.pokemon.source, "BC")
@@ -82,7 +82,7 @@ class PokemonTestClass(unittest.TestCase):
     def test_xp_till_next_level(self):
         # 80 and 120 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.xp_till_next_level, 80)
-        self.assertLess(self.pokemon.xp_till_next_level, 120)
+        self.assertLessEqual(self.pokemon.xp_till_next_level, 120)
 
     def test_level(self):
         self.assertEqual(self.pokemon.level, 5)
@@ -106,22 +106,23 @@ class PokemonTestClass(unittest.TestCase):
     def test_attack(self):
         # 3 and 18 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.attack, 3)
-        self.assertLess(self.pokemon.attack, 18)
+        self.assertLessEqual(self.pokemon.attack, 18)
 
     def test_defense(self):
         # 3 and 18 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.defense, 3)
-        self.assertLess(self.pokemon.defense, 18)
+        self.assertLessEqual(self.pokemon.defense, 18)
 
     def test_speed(self):
         # 3 and 18 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.speed, 3)
-        self.assertLess(self.pokemon.speed, 18)
+        self.assertLessEqual(self.pokemon.speed, 18)
 
     def test_total_hp(self):
         # 5 and 35 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.total_hp, 15)
-        self.assertLess(self.pokemon.total_hp, 35)
+        print(self.pokemon.total_hp, 'HP')
+        self.assertLessEqual(self.pokemon.total_hp, 35)
 
     def test_current_hp(self):
         # 35 comes from private class variables in Pokemon class
@@ -145,7 +146,7 @@ class PokemonTestClass(unittest.TestCase):
     def test_add_xp(self):
         # 3 and 18 come from private class variables in Pokemon class
         self.assertGreaterEqual(self.pokemon.xp_till_next_level, 80)
-        self.assertLess(self.pokemon.xp_till_next_level, 120)
+        self.assertLessEqual(self.pokemon.xp_till_next_level, 120)
 
         self.assertEqual(self.pokemon.level, 5)
 
