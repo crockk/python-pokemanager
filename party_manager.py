@@ -166,6 +166,16 @@ class PartyManager:
         else:
             return None
 
+    @property
+    def get_all_party_members(self) -> List:
+        """ Gets all party members and puts them into a list
+
+        :return: All party members
+        :rtype: List
+
+        """
+        return list(self._party.values())
+
     @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
         """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
