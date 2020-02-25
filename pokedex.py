@@ -1,3 +1,4 @@
+# Species Name, Types
 Pokedex = {
     1: ("Bulbasaur", "Grass"),
     2: ("Charmander", "Fire"),
@@ -11,9 +12,10 @@ Pokedex = {
     10: ("Rayquaza", "Flying/Dragon")
 }
 
+# Move Name, Damage
 Moves = {
-    1: ('Tail Whip', ),
-    2: ('Growl', ),
-    3: ('Splash', ),
-    4: ('Leer', )
+    1: ('Tail Whip', 0),
+    2: ('Growl', 0),
+    3: ('Splash', 0),
+    4: ('Leer', 0)
 }
