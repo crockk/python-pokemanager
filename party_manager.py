@@ -48,9 +48,9 @@ class PartyManager:
         self._party = {}
         self._pc_pokemon = {}
         self._player_name = player_name
+        self._total_steps = 0
 
     def add_party_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
-        # Add check to see if there are already 6 pokemon in party?
         """ Adds a member (egg or Pokemon) to the player's _pc.
 
         Depending on the type of member, this function adds a new entry to the player's party. It also assigns the
@@ -111,8 +111,8 @@ class PartyManager:
         if id in self._pc_pokemon.keys():
             del self._pc_pokemon[id] # pokemon has been yeeted
 
-    def get_members_by_types(self, types: tuple) -> dict:
-        """ Gets a collection of party members based on a given type or types.
+    def get_members_by_elemental_type(self, types: tuple) -> dict:
+        """ Gets a collection of party members based on a given elemental type or types.
 
         :param tuple types: A tuple containing the desired types.
         :return: Returns a collection of desired types from the party, seperated by type
@@ -121,16 +121,8 @@ class PartyManager:
         """
         members = {}
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-        # for type in types:
-        #     members[type] = []
-        #     for key in self._party.keys():
-        #         these_types = self._POKEDEX[self._party[key].pokedex_num][2].split('/')
-        #         for i in range(len(these_types)):
-        #             if these_types[i] == type:
-        #                 members[key].append(self._party[key])
 
         for member in all_members:
-            # print(id, member,"hi")
             if member.member_type == Pokemon.member_type:
                 for e_type in member.elemental_type:
                     if e_type in types:
@@ -172,3 +164,37 @@ class PartyManager:
             raise TypeError(error_msg + f"\nNot type {type(string)}")
         if not string:
             raise ValueError(error_msg)
+
+    def get_member_by_type(self, type: str) -> List:
+        """ Gets a list of members from pc_storage and party based on indicated type
+
+        :param str type: The type to filter by
+        :return: List of members
+        :rtype: List
+
+        """
+
+        all_members = list(self._pc_pokemon.values()) + list(self._party.values())
+        members = []
+        for member in all_members:
+            if member.member_type == type:
+                members.append(member)
+        return members
+
+    def walk(self, steps: int):
+        """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
+        if necessary
+
+         :param int steps: Steps to walk
+         :return: No return
+         :rtype: None
+
+         """
+        eggs = self.get_member_by_type('Egg')
+
+        for egg in eggs:
+            if egg.in_party:
+                egg.add_steps(steps)
+                if egg.hatched:
+                    self.add_party_member("Pokemon", egg.pokedex_num, egg.source, egg.nickname)
+                    self.release_party_member(egg.id)

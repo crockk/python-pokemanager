@@ -66,7 +66,7 @@ class Egg(PartyMember):
         """ Gets and returns _steps_remaining property """
         return self._steps_remaining
 
-    def walk(self, steps: int) -> None:
+    def add_steps(self, steps: int) -> None:
         """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.
 
         :param int steps: Number of steps to decrement _steps_remaining by.
@@ -82,6 +82,11 @@ class Egg(PartyMember):
     def description(self) -> str:
         return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. " \
                f"{ 'Currently in party.' if self._in_party else 'Not currently in party'}"
+
+    @property
+    def hatched(self):
+        """ Gets and returns hatched property """
+        return self._hatched
     
     @classmethod
     def _rand_steps(cls) -> int:
