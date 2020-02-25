@@ -21,16 +21,12 @@ class PartyManager:
 
     CLASS VARIABLES
     _POKEDEX: Object containing an integer as a key, and a tuple containing species and type as the value.
-    This is used to assign a Pokedex number and allows us to determine the species/type based upon that number.
-
-    _ID: A unique identifier given to each party member, is incremented by 1 each time a new
-         party member is created.
+    This is used to assign a Pokedex number and allows us to determine the species/type based upon that number.    
 
     """
     random.seed(13)
 
     _POKEDEX = Pokedex
-    _ID = 1
 
     def __init__(self, player_name: str) -> None:
         """ Initializes the instance properties
@@ -38,12 +34,17 @@ class PartyManager:
         In addition to setting the player name, this __init__ also sets up _party and _pc_pokemon properties
         as empty objects, which will be populated as the user adds Pokemon to his or her party or storage.
 
+        _ID: A unique identifier given to each party member, is incremented by 1 each time a new
+        party member is created.
+
         :param str player_name: The player's name.
         :return: No return
         :rtype: None
 
         """
         self._validate_string(player_name, "Player Name must be a non blank String")
+
+        self._ID = 1
 
         self._party = {}
         self._pc_pokemon = {}
