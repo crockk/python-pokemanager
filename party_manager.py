@@ -80,12 +80,12 @@ class PartyManager:
         else:
             raise ValueError(f"{member_type} is not a valid Party Member type")
 
-    def move_to_party(self, id: int):
+    def move_to_party(self, id: int) -> bool:
         """ Moves a pokemon from the PC storage into the party
 
         :param int id: Pokemon's ID
-        :return: No return
-        :rtype: None
+        :return: Boolean for testing
+        :rtype: Boolean
 
         """
         if len(self._party) < 6:
@@ -93,41 +93,53 @@ class PartyManager:
             self._party[id] = pokemon
             self._party[id]._in_party = True
             self.release_pc_pokemon(id)
+            return True
         else:
             print('Your party is full')
+            return False
 
-    def move_to_pc(self, id: int) -> None:
+    def move_to_pc(self, id: int) -> bool:
         """ Removes a party member from _party and places it into _pc_storage.
 
         :param int id: The ID of the Pokemon or Egg to be placed into storage.
-        :return: No return
-        :rtype: None
+        :return: Boolean for testing
+        :rtype: Boolean
 
         """
-        self._pc_pokemon[id] = self._party[id]
-        del self._party[id]
+        if id in self._party.keys():
+            self._pc_pokemon[id] = self._party[id]
+            del self._party[id]
+            return True
+        else:
+            return False
 
-    def release_party_member(self, id: int) -> None:
+    def release_party_member(self, id: int) -> bool:
         """ Releases a party member from _party back into the wilderness :'(
 
         :param int id: The ID of the Pokemon or Egg to be released.
-        :return: No return
-        :rtype: None
+        :return: Bool for testing
+        :rtype: Boolean
 
         """
         if id in self._party.keys():
             del self._party[id] # pokemon has been yeeted
+            return True
+        else:
+            return False
 
-    def release_pc_pokemon(self, id: int) -> None:
+    def release_pc_pokemon(self, id: int) -> bool:
         """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
 
         :param int id: The ID of the Pokemon or Egg to be released.
-        :return: No return
-        :rtype: None
+        :return: Bool for testing
+        :rtype: Boolean
 
         """
         if id in self._pc_pokemon.keys():
             del self._pc_pokemon[id] # pokemon has been yeeted
+            return True
+        else:
+            return False
 
     def get_members_by_elemental_type(self, types: tuple) -> dict:
         """ Gets a collection of party members based on a given elemental type or types.
