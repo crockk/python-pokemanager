@@ -25,6 +25,9 @@ class TestPartyManager(unittest.TestCase):
         with self.assertRaises(TypeError):
             manager = PartyManager(123)
 
+        with self.assertRaises(ValueError):
+            manager = PartyManager('')
+
     def test_create_member(self):
         with self.assertRaises(ValueError):
             self.party_manager.create_member('Pakemun', 5, 'Route 55')
@@ -74,20 +77,59 @@ class TestPartyManager(unittest.TestCase):
 
     def test_release_pc_pokemon(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    
+
         self.assertTrue(self.party_manager.release_pc_pokemon(1))
-    
+
         self.assertFalse(self.party_manager.release_pc_pokemon(1))
 
-    # def test_get_members_by_elemental_type(self):
-    #     self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    #     self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    #     self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    #     self.party_manager.create_member('Pokemon', 5, 'Route 55')
-    #
-    #     length = (self.party_manager.get_members_by_elemental_type(tuple('Grass')))
-    #     print(length)
-    #     self.assertEqual(length, 5)
+    def test_get_members_by_elemental_type(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        members = self.party_manager.get_members_by_elemental_type(('Grass', ))
+        self.assertEqual(len(members['Grass']), 4)
+
+        self.party_manager.create_member('Pokemon', 10, 'Route 55')
+        self.party_manager.create_member('Pokemon', 10, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        grass = self.party_manager.get_members_by_elemental_type(('Grass', ))
+        dragon = self.party_manager.get_members_by_elemental_type(('Dragon', ))
+
+        self.assertEqual(len(grass['Grass']), 6)
+        self.assertEqual(len(dragon['Dragon']), 2)
+
+    def test_get_member_by_id(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
+
+        self.assertIsNone(self.party_manager.get_member_by_id(10))
+
+        self.party_manager.move_to_party(1)
+
+        self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
+
+    def test_get_all_party_members(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        self.party_manager.move_to_party(1)
+        self.party_manager.move_to_party(2)
+        self.party_manager.move_to_party(3)
+        self.party_manager.move_to_party(4)
+        self.party_manager.move_to_party(5)
+        self.party_manager.move_to_party(6)
+
+        self.assertEqual(len(self.party_manager.get_all_party_members), 6)
+
 
 
 
