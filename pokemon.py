@@ -242,7 +242,13 @@ class Pokemon(PartyMember):
         return out_str
 
     def display_moves(self, move_index: int = None):
+        """ Displays all the pokemons moves or a single move in a neat table format
+        
+        :param: int move_index: the index of the move you want to display
+        :return: None
+        :rtype: None
 
+        """
         out_str = '\n'
 
         if move_index is not None:
@@ -388,10 +394,22 @@ class Pokemon(PartyMember):
 
     @classmethod
     def _rand_move_set(cls):
+        """ Randomly selects _MOVE_SET_LENGTH number of moves from the Moves stored in pokedex module
+
+        :return: Move tuple from Moves
+        :rtype: Tuple
+
+        """
         move_indices = sample(list(Moves), cls._MOVE_SET_LENGTH)
 
         return [Moves[move_index] for move_index in move_indices]
 
     @classmethod
     def _display_3_column_line(cls, col1, col2, col3):
+        """ Displays a single row in a 3 column table
+
+        :return: a formatted row in the table
+        :rtype: String
+        
+        """
         return f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '\n'
