@@ -231,6 +231,25 @@ class PartyManager:
         """
         return list(self._party.values())
 
+    @property
+    def get_all_pc_members(self) -> List:
+        """ Gets all pc members and puts them into a list
+
+        :return: All party members
+        :rtype: List
+
+        """
+        return list(self._pc_pokemon.values())
+
+    @property
+    def get_all_members(self) -> List:
+        """ Gets all party members and puts them into a list
+
+        :return: All party members
+        :rtype: List
+
+        """
+        return list(self._pc_pokemon.values()) + list(self._party.values())
 
     def get_member_by_type(self, type: str) -> List:
         """ Gets a list of members from pc_storage and party based on indicated type

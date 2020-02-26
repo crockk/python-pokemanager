@@ -130,6 +130,30 @@ class TestPartyManager(unittest.TestCase):
 
         self.assertEqual(len(self.party_manager.get_all_party_members), 6)
 
+    def test_get_all_pc_members(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        self.assertEqual(len(self.party_manager.get_all_pc_members), 6)
+
+    def test_get_all_members(self):
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        self.party_manager.move_to_party(1)
+        self.party_manager.move_to_party(2)
+        self.party_manager.move_to_party(3)
+
+        self.assertEqual(len(self.party_manager.get_all_members), 6)
+
     def test_get_member_by_type(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
         self.party_manager.create_member('Egg', 4, 'Route 55')
