@@ -334,4 +334,3 @@ class PartyManager:
         out_str += '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col4}".ljust(cls._DISPLAY_COLUMN_WIDTH)
 
         return out_str
-

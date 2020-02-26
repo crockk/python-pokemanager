@@ -55,4 +55,3 @@ class EggTestClass(unittest.TestCase):
 
     def test_member_type(self):
         self.assertEqual(self.egg.member_type(), "Egg")
-

@@ -201,4 +201,3 @@ class TestPartyManager(unittest.TestCase):
         self.assertEqual(len(stats.get_total_by_type()), 1)
 
         self.assertEqual(stats.get_total_eggs(), 1)
-
