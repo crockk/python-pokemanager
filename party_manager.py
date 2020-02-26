@@ -323,7 +323,7 @@ class PartyManager:
 
     @classmethod
     def _display_4_column_line(cls, col1, col2, col3, col4):
-         """ Displays a single row in a 4 column table
+        """ Displays a single row in a 4 column table
 
         :return: a formatted row in the table
         :rtype: String
