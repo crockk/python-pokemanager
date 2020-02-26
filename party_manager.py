@@ -28,6 +28,8 @@ class PartyManager:
 
     _POKEDEX = Pokedex
 
+    _DISPLAY_COLUMN_WIDTH = 24
+
     def __init__(self, player_name: str) -> None:
         """ Initializes the instance properties
 
@@ -267,6 +269,24 @@ class PartyManager:
                 members.append(member)
         return members
 
+    def display_members(self) -> None:
+        """ Displays all the members beloning to the Part Manager in a neat table format
+
+        :return: None
+        :rtype: None
+
+        """
+        members = self.get_all_members
+
+        print(self._display_4_column_line("Manager ID", "Nickname", "Elemental Type", "Member Type"))
+        print( '=' * (self._DISPLAY_COLUMN_WIDTH * 4 + 3) )
+        for member in members:
+            if member.member_type() == Pokemon.member_type():
+                print(self._display_4_column_line(member.id, member.nickname, ','.join(member.elemental_type), member.member_type()))
+            else:
+                print(self._display_4_column_line(member.id, member.nickname, 'Unknown', member.member_type()))
+
+
     def get_stats(self) -> PokeStats:
         """ Populates a stats object with statistics about the party manager """
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
@@ -300,3 +320,18 @@ class PartyManager:
         """ Checks to see if the given pokedex number corrisponds to a pokedex entry """
         if pokedex_num not in self._POKEDEX.keys():
             raise ValueError(f'Pokedex Number must be between 1 - {len(self._POKEDEX) + 1}')
+
+    @classmethod
+    def _display_4_column_line(cls, col1, col2, col3, col4):
+         """ Displays a single row in a 4 column table
+
+        :return: a formatted row in the table
+        :rtype: String
+        
+        """
+        out_str = ''
+        out_str += f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH)
+        out_str += '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col4}".ljust(cls._DISPLAY_COLUMN_WIDTH)
+
+        return out_str
+
