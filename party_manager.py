@@ -12,6 +12,7 @@ from typing import List
 import random
 from pokedex import Pokedex
 import os
+import json
 
 
 class PartyManager:
@@ -59,11 +60,15 @@ class PartyManager:
 
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
 
+        self._write_to_file()
+
     def _read_from_file(self):
         pass
 
     def _write_to_file(self):
-        pass
+        data = self.to_dict
+        with open(self._filepath, "w") as file:
+            json.dump(data, file)
 
     def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
         """ Adds a member (egg or Pokemon) to the player's _pc.
