@@ -413,3 +413,36 @@ class Pokemon(PartyMember):
         
         """
         return f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '\n'
+
+    def to_dict(self):
+        """ Create JSON Object to parse to file
+
+        :return: JSON Object of all properties
+        :rtype: Dictionary
+
+        """
+        dikt = {
+            "id": self._id,
+            "pokedex_num": self._pokedex_num,
+            "source": self._source,
+            "nickname": self._nickname,
+            "item": self._item,
+
+            "in_party": self._in_party,
+            "weight": self._weight,
+            "height": self._height,
+            "date_acquired": str(self._date_acquired),
+
+            "ability": self._ability,
+            "elemental type": self._elemental_type,
+            "next level xp": self._next_level_xp,
+            "current level xp" :self._current_level_xp,
+            "level": self._level,
+            "attack": self._attack,
+            "speed": self._speed,
+            "total hp": self._total_hp,
+            "current hp": self._current_hp,
+            "is KO": self._is_KO,
+            "moves": self._moves
+        }
+        return dikt
