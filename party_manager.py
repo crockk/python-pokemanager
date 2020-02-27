@@ -13,6 +13,7 @@ import random
 from pokedex import Pokedex
 import os
 import json
+from datetime import date, datetime
 
 
 class PartyManager:
@@ -49,21 +50,42 @@ class PartyManager:
         :rtype: None
 
         """
-        self._validate_string(player_name, "Player Name must be a non blank String")
-
-        self._ID = 1
-
-        self._party = {}
-        self._pc_pokemon = {}
-        self._player_name = player_name
-        self._total_steps = 0
-
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
+
+        if os.path.exists(self._filepath):
+                self._read_from_file()
+        else:
+            self._validate_string(player_name, "Player Name must be a non blank String")
+
+            self._ID = 1
+            self._player_name = player_name
+            self._party = {}
+            self._pc_pokemon = {}
+            self._total_steps = 0
 
         self._write_to_file()
 
     def _read_from_file(self):
-        pass
+        with open(self._filepath, "r") as file:
+            manager = json.load(file)
+            self._ID = manager["ID_count"]
+            self._player_name = manager["player_name"]
+            self._party = {}
+            self._pc_pokemon = {}
+            for member in manager["party"]:
+                self.create_member(
+                    member["member_type"],
+                    member["pokedex_num"],
+                    member["source"],
+                    member["nickname"],
+                    member["item"],
+                    # id=member["id"],
+
+                )
+                if member["in_party"]:
+                    self.move_to_party(member["id"])
+
+            self._total_steps = manager["total_steps"]
 
     def _write_to_file(self):
         data = self.to_dict()
@@ -74,9 +96,9 @@ class PartyManager:
         dik = {
             "ID_count": self._ID,
             "party": [member.to_dict() for member in self._party.values()],
-            "_pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
-            "_player_name": self._player_name,
-            "_total_steps": self._total_steps,
+            "pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
+            "player_name": self._player_name,
+            "total_steps": self._total_steps,
             "filepath": self._filepath
         }
         return dik
