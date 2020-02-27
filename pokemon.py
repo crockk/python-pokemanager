@@ -434,15 +434,15 @@ class Pokemon(PartyMember):
             "date_acquired": str(self._date_acquired),
 
             "ability": self._ability,
-            "elemental type": self._elemental_type,
-            "next level xp": self._next_level_xp,
-            "current level xp" :self._current_level_xp,
+            "elemental_type": self._elemental_type,
+            "next_level_xp": self._next_level_xp,
+            "current_level_xp" :self._current_level_xp,
             "level": self._level,
             "attack": self._attack,
             "speed": self._speed,
-            "total hp": self._total_hp,
-            "current hp": self._current_hp,
-            "is KO": self._is_KO,
+            "total_hp": self._total_hp,
+            "current_hp": self._current_hp,
+            "is_KO": self._is_KO,
             "moves": self._moves
         }
         return dikt
