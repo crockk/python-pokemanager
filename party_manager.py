@@ -50,11 +50,19 @@ class PartyManager:
         :rtype: None
 
         """
+        # self._ID = None
+        # self._player_name = None
+        # self._party = None
+        # self._pc_pokemon = None
+        # self._total_steps = None
+        
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
 
-        if os.path.exists(self._filepath):
-                self._read_from_file()
-        else:
+        try:
+            self._read_from_file()
+        except json.JSONDecodeError:
+            raise RuntimeError("Error reading pokedata.json file")
+        except FileNotFoundError:
             self._validate_string(player_name, "Player Name must be a non blank String")
 
             self._ID = 1
@@ -62,30 +70,35 @@ class PartyManager:
             self._party = {}
             self._pc_pokemon = {}
             self._total_steps = 0
+        except Exception as err:
+            raise Exception("Unknown error has occured" + err)
 
         self._write_to_file()
 
     def _read_from_file(self):
+        if not os.path.exists(self._filepath):
+            raise FileNotFoundError
+        manager = {}
         with open(self._filepath, "r") as file:
             manager = json.load(file)
-            self._ID = manager["ID_count"]
-            self._player_name = manager["player_name"]
-            self._party = {}
-            self._pc_pokemon = {}
-            for member in manager["party"]:
-                self.create_member(
-                    member["member_type"],
-                    member["pokedex_num"],
-                    member["source"],
-                    member["nickname"],
-                    member["item"],
-                    # id=member["id"],
+        
+        self._ID = manager["ID_count"]
+        self._player_name = manager["player_name"]
+        self._party = {}
+        self._pc_pokemon = {}
+        for member in manager["party"]:
+            self.create_member(
+                member["member_type"],
+                member["pokedex_num"],
+                member["source"],
+                member["nickname"],
+                member["item"],
+                # id=member["id"],
+            )
+            if member["in_party"]:
+                self.move_to_party(member["id"])
 
-                )
-                if member["in_party"]:
-                    self.move_to_party(member["id"])
-
-            self._total_steps = manager["total_steps"]
+        self._total_steps = manager["total_steps"]
 
     def _write_to_file(self):
         data = self.to_dict()
