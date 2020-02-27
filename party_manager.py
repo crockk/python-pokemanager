@@ -66,9 +66,20 @@ class PartyManager:
         pass
 
     def _write_to_file(self):
-        data = self.to_dict
+        data = self.to_dict()
         with open(self._filepath, "w") as file:
             json.dump(data, file)
+
+    def to_dict(self):
+        dik = {
+            "ID_count": self._ID,
+            "party": [member.to_dict() for member in self._party.values()],
+            "_pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
+            "_player_name": self._player_name,
+            "_total_steps": self._total_steps,
+            "filepath": self._filepath
+        }
+        return dik
 
     def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
         """ Adds a member (egg or Pokemon) to the player's _pc.
