@@ -110,6 +110,8 @@ class PartyManager:
             self._ID += 1
         else:
             raise ValueError(f"{member_type} is not a valid Party Member type")
+        
+        self._write_to_file()
 
     def move_to_party(self, id: int) -> bool:
         """ Moves a pokemon from the PC storage into the party
@@ -124,6 +126,9 @@ class PartyManager:
             self._party[id] = pokemon
             self._party[id]._in_party = True
             self.release_pc_pokemon(id)
+            
+            self._write_to_file()
+
             return True
         else:
             print('Your party is full')
@@ -140,6 +145,9 @@ class PartyManager:
         if id in self._party.keys():
             self._pc_pokemon[id] = self._party[id]
             del self._party[id]
+            
+            self._write_to_file()
+
             return True
         else:
             return False
@@ -154,6 +162,9 @@ class PartyManager:
         """
         if id in self._party.keys():
             del self._party[id] # pokemon has been yeeted
+
+            self._write_to_file()
+
             return True
         else:
             return False
@@ -168,6 +179,10 @@ class PartyManager:
         """
         if id in self._pc_pokemon.keys():
             del self._pc_pokemon[id] # pokemon has been yeeted
+
+            
+            self._write_to_file()
+
             return True
         else:
             return False
@@ -193,6 +208,8 @@ class PartyManager:
                     self.move_to_party(self._ID - 1)
 
         self._total_steps += steps
+        
+        self._write_to_file()
 
     def get_members_by_elemental_type(self, types: tuple) -> dict:
         """ Gets a collection of party members based on a given elemental type or types.
