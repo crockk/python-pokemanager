@@ -54,7 +54,6 @@ class Egg(PartyMember):
         self._steps_remaining = self._steps_required
 
         self._hatched = False
-        pass
 
     @property
     def steps_required(self) -> int:
