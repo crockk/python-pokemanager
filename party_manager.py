@@ -53,6 +53,14 @@ class PartyManager:
         self._player_name = player_name
         self._total_steps = 0
 
+        self._filepath = './pokedata.json'
+
+    def _read_from_file(self):
+        pass
+
+    def _write_to_file(self):
+        pass
+
     def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
         """ Adds a member (egg or Pokemon) to the player's _pc.
 
