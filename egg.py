@@ -89,6 +89,26 @@ class Egg(PartyMember):
         """ Gets and returns hatched property """
         return self._hatched
 
+    def to_dict(self):
+        # return {}
+        dik = {
+            "id": self._id,
+            "pokedex_num": self._pokedex_num,
+            "source": self._source,
+            "nickname":  self._nickname,
+            "item": self._item,
+
+            "in_party": self._in_party,
+            "weight": self._weight,
+            "height": self._height,
+            "date_acquired": str(self._date_acquired),
+
+            "steps_required": self._steps_required,
+            "steps_remaining": self._steps_remaining,
+            "hatched": self._hatched
+        }
+        return dik
+
     @classmethod
     def member_type(cls):
         """ Gets and returns class variable _MEMBER_TYPE
