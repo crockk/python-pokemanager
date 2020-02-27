@@ -11,6 +11,7 @@ from poke_stats import PokeStats
 from typing import List
 import random
 from pokedex import Pokedex
+import os
 
 
 class PartyManager:
@@ -29,6 +30,9 @@ class PartyManager:
     _POKEDEX = Pokedex
 
     _DISPLAY_COLUMN_WIDTH = 24
+
+    _DATA_DIRECTORY = "data"
+    _DATA_FILENAME = "pokedata.json"
 
     def __init__(self, player_name: str) -> None:
         """ Initializes the instance properties
@@ -53,7 +57,7 @@ class PartyManager:
         self._player_name = player_name
         self._total_steps = 0
 
-        self._filepath = './pokedata.json'
+        self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
 
     def _read_from_file(self):
         pass
