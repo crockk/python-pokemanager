@@ -253,3 +253,13 @@ class PartyMember(ABC):
         :rtype: None
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def to_dict(self):
+        """ Abstract method to_dict implemented in child classes
+
+        :raise: NotImplementedError
+        :return: None
+        :rtype: None
+        """
+        raise NotImplementedError
