@@ -25,7 +25,7 @@ class PartyMember(ABC):
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None) -> None:
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, in_party: bool = None, weight: float = None, height: float = None, date_acquired: date = None) -> None:
         """ Initalizes instance properties
 
         :param int id: Unique identifier for pokemon
@@ -43,22 +43,41 @@ class PartyMember(ABC):
 
         self._validate_string(source, "Source must be a none-blank String")
 
-        if nickname:
-            self._validate_string(nickname, "Nickname must be a none-blank String")
+        self._validate_string(nickname, "Nickname must be a none-blank String")
 
-        if item:
+        if item is not None:
             self._validate_string(item, "Item must be a none-blank String")
+
+        if in_party is not None:
+            self._validate_bool(in_party, "In Party must be a valid Boolean")
+            self._in_party = in_party
+        else:
+            self._in_party = False
+        
+        if weight is not None:
+            self._validate_float(weight, self._MIN_WEIGHT, f"Weight must be a Float between {self._MIN_WEIGHT} and {self._MAX_WEIGHT}")
+            self._weight = weight
+        else:
+            self._weight = self._rand_weight()
+
+        if height is not None:
+            self._validate_float(height, self._MIN_HEIGHT, f"Height must be a Float between {self._MIN_HEIGHT} and {self._MAX_HEIGHT}")
+            self._height = height
+        else:
+            self._height = self._rand_height()
+
+        if date_acquired is not None:
+            self._validate_date(date_acquired, "Date Acquired must be a valid Date")
+            self._date_acquired = date_acquired
+        else:
+            self._date_acquired = datetime.now().date()
+        
 
         self._id = id
         self._pokedex_num = pokedex_num
         self._source = source
         self._nickname = nickname
         self._item = item
-
-        self._in_party = False
-        self._weight = self._rand_weight()
-        self._height = self._rand_height()
-        self._date_acquired = datetime.now().date()
 
     @property
     def id(self) -> int:
@@ -230,6 +249,40 @@ class PartyMember(ABC):
                 raise ValueError(error_msg)
 
     @staticmethod
+    def _validate_float(num: float, min_val: float, error_msg: str, max_val: float = None) -> None:
+        """ Private method used to validate floats according to a minimum value and type
+
+        :param float num: The number to be validated
+        :param float min_val: The minimum value to be evaluated to
+        :param str error_msg: Error message to be returned if exception raised
+        :raises: TypeError, ValueError
+        :return: No return
+        :rtype: None
+
+        """
+        if type(num) is not float:
+            raise TypeError(error_msg + f"\nNot type {type(num)}")
+        if num < min_val:
+            raise ValueError(error_msg)
+        if max_val is not None:
+            if num > max_val:
+                raise ValueError(error_msg)
+    
+    @staticmethod
+    def _validate_date(dt: date, error_msg: str) -> None:
+        """ Private method used to validate dates
+
+        :param date dt: The number to be validated
+        :param str error_msg: Error message to be returned if exception raised
+        :raises: TypeError, ValueError
+        :return: No return
+        :rtype: None
+
+        """
+        if type(dt) is not date:
+            raise TypeError(error_msg + f"\nNot type {type(dt)}")
+        
+    @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
         """ Private method used to validate strings according to type
 
@@ -243,6 +296,19 @@ class PartyMember(ABC):
             raise TypeError(error_msg + f"\nNot type {type(string)}")
         if not string:
             raise ValueError(error_msg)
+    
+    @staticmethod
+    def _validate_bool(val: bool, error_msg: str) -> None:
+        """ Private method used to validate strings according to type
+
+        :param str val: Boolean to be validated
+        :param str error_msg: Error message to be returned if exception raised
+        :raises: TypeError
+        :return: No return
+        :rtype: None
+        """
+        if type(val) is not bool:
+            raise TypeError(error_msg + f"\nNot type {type(val)}")
 
     @abstractmethod
     def member_type(self):
