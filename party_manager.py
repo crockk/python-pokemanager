@@ -8,7 +8,7 @@ from party_member import PartyMember
 from pokemon import Pokemon
 from egg import Egg
 from poke_stats import PokeStats
-from typing import List
+from typing import List, Dict
 import random
 from pokedex import Pokedex
 import os
@@ -70,8 +70,8 @@ class PartyManager:
             self._party = {}
             self._pc_pokemon = {}
             self._total_steps = 0
-        except Exception as err:
-            raise Exception("Unknown error has occured" + err)
+        # except Exception as err:
+        #     raise Exception(err)
 
         self._write_to_file()
 
@@ -82,23 +82,24 @@ class PartyManager:
         with open(self._filepath, "r") as file:
             manager = json.load(file)
         
-        self._ID = manager["ID_count"]
+        self._ID = 1#manager["ID_count"]
         self._player_name = manager["player_name"]
+        self._total_steps = manager["total_steps"]
         self._party = {}
         self._pc_pokemon = {}
-        for member in manager["party"]:
+        for member in (manager["party"] + manager["pc_pokemon"]):
             self.create_member(
                 member["member_type"],
                 member["pokedex_num"],
                 member["source"],
                 member["nickname"],
-                member["item"],
+                json=member
                 # id=member["id"],
             )
             if member["in_party"]:
                 self.move_to_party(member["id"])
 
-        self._total_steps = manager["total_steps"]
+        
 
     def _write_to_file(self):
         data = self.to_dict()
@@ -107,7 +108,7 @@ class PartyManager:
 
     def to_dict(self):
         dik = {
-            "ID_count": self._ID,
+            # "ID_count": self._ID,
             "party": [member.to_dict() for member in self._party.values()],
             "pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
             "player_name": self._player_name,
@@ -116,7 +117,7 @@ class PartyManager:
         }
         return dik
 
-    def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None) -> None:
+    def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None, json: Dict = None) -> None:
         """ Adds a member (egg or Pokemon) to the player's _pc.
 
         Depending on the type of member, this function adds a new entry to the player's party. It also assigns the
@@ -138,7 +139,7 @@ class PartyManager:
             nickname = self._POKEDEX[pokedex_num][0]
 
         if member_type == Pokemon.member_type():
-            self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability)
+            self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability, json=json)
             self._ID += 1
         elif member_type == Egg.member_type():
             self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item)
@@ -244,6 +245,10 @@ class PartyManager:
 
         self._total_steps += steps
         
+        self._write_to_file()
+
+    def add_xp_to_pokemon(self, id: int, xp: int) -> None:
+        self.get_member_by_id(id).add_xp(xp)
         self._write_to_file()
 
     def get_members_by_elemental_type(self, types: tuple) -> dict:

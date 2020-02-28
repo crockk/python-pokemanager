@@ -5,7 +5,7 @@ Date: 2/17/2020
 """
 
 from party_member import PartyMember
-from typing import List
+from typing import List, Dict
 from random import randint
 
 
@@ -31,7 +31,7 @@ class Egg(PartyMember):
     _MIN_STEPS = 1000  # steps
     _MAX_STEPS = 5000  # steps
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None):
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None, json: Dict = None):
         """ Initializes the instance properties
 
         In addition to the superclass init, this function adds _steps_required, _steps_remaining, and _hatched as
@@ -46,14 +46,18 @@ class Egg(PartyMember):
         :rtype: None
 
         """
-        super().__init__(id, pokedex_num, source, nickname, item)
+        super().__init__(id, pokedex_num, source, nickname, item, json)
+        if json is not None:
+            self._steps_required = json['steps_required']
+            self._steps_remaining = json['steps_remaining']
+            self._hatched = json['hatched']
+        else:
+            self._steps_required = self._rand_steps()
 
-        self._steps_required = self._rand_steps()
+            # This value is decremented by the walk method until it hatches
+            self._steps_remaining = self._steps_required
 
-        # This value is decremented by the walk method until it hatches
-        self._steps_remaining = self._steps_required
-
-        self._hatched = False
+            self._hatched = False
 
     @property
     def steps_required(self) -> int:
@@ -92,6 +96,7 @@ class Egg(PartyMember):
         # return {}
         dik = {
             "id": self._id,
+            "member_type": self.member_type(),
             "pokedex_num": self._pokedex_num,
             "source": self._source,
             "nickname":  self._nickname,

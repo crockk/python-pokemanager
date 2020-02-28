@@ -6,6 +6,7 @@ Date: 2/13/2020
 from abc import abstractmethod, ABC
 from datetime import date, datetime
 from random import uniform
+from typing import Dict
 
 
 class PartyMember(ABC):
@@ -25,7 +26,7 @@ class PartyMember(ABC):
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, in_party: bool = None, weight: float = None, height: float = None, date_acquired: date = None) -> None:
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, json: Dict = None) -> None:
         """ Initalizes instance properties
 
         :param int id: Unique identifier for pokemon
@@ -47,31 +48,17 @@ class PartyMember(ABC):
 
         if item is not None:
             self._validate_string(item, "Item must be a none-blank String")
-
-        if in_party is not None:
-            self._validate_bool(in_party, "In Party must be a valid Boolean")
-            self._in_party = in_party
+        
+        if json is not None:
+            self._in_party = json['in_party']
+            self._weight = json['weight']
+            self._height = json['height']
+            self._date_acquired = json['date_acquired']
         else:
             self._in_party = False
-        
-        if weight is not None:
-            self._validate_float(weight, self._MIN_WEIGHT, f"Weight must be a Float between {self._MIN_WEIGHT} and {self._MAX_WEIGHT}")
-            self._weight = weight
-        else:
             self._weight = self._rand_weight()
-
-        if height is not None:
-            self._validate_float(height, self._MIN_HEIGHT, f"Height must be a Float between {self._MIN_HEIGHT} and {self._MAX_HEIGHT}")
-            self._height = height
-        else:
             self._height = self._rand_height()
-
-        if date_acquired is not None:
-            self._validate_date(date_acquired, "Date Acquired must be a valid Date")
-            self._date_acquired = date_acquired
-        else:
             self._date_acquired = datetime.now().date()
-        
 
         self._id = id
         self._pokedex_num = pokedex_num

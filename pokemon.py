@@ -5,9 +5,10 @@ Date: 2/17/2020
 """
 from party_member import PartyMember
 from pokedex import Pokedex, Moves
-from typing import List
+from typing import List, Dict
 from random import randint, uniform, sample
 from math import ceil
+from datetime import date
 
 
 class Pokemon(PartyMember):
@@ -50,8 +51,7 @@ class Pokemon(PartyMember):
 
     _DISPLAY_COLUMN_WIDTH = 14
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None,
-                 ability: str = None) -> None:
+    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, ability: str = None, json: Dict = None) -> None:
         """ Initializes the instance properties
 
         :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
@@ -65,33 +65,44 @@ class Pokemon(PartyMember):
 
         """
 
-        super().__init__(id, pokedex_num, source, nickname, item)
+        super().__init__(id, pokedex_num, source, nickname, item, json=json)
 
         if ability is not None:
             super()._validate_string(ability, "Ability must be a none-blank String")
-
+            self._ability = ability
+        else:
+            self._ability = "None"
+        
         types = Pokedex[pokedex_num][1].split('/')
         for e_type in types:
             super()._validate_string(e_type, "Elemental Type must be a none-blank String")
-
-        self._ability = ability
-
+        
         self._elemental_type = tuple(types)
 
-        self._next_level_xp = self._rand_base_xp()
-        self._current_level_xp = 0
-        self._level = self._STARTING_LEVEL
+        if json is not None:
+            self._ability = json['ability']
+            self._next_level_xp = json['next_level_xp']
+            self._current_level_xp = json['current_level_xp']
+            self._level = json['level']
+            self._attack = json['attack']
+            self._speed = json['speed']
+            self._total_hp = json['total_hp']
+            self._current_hp = json['current_hp']
+            self._is_KO = json['is_KO']
+            self._moves = json['moves']
+        else:
+            self._next_level_xp = self._rand_base_xp()
+            self._current_level_xp = 0
+            self._level = self._STARTING_LEVEL
 
-        self._attack = self._rand_battle_stat()
-        self._defense = self._rand_battle_stat()
-        self._speed = self._rand_battle_stat()
+            self._attack = self._rand_battle_stat()
+            self._defense = self._rand_battle_stat()
+            self._speed = self._rand_battle_stat()
 
-        self._total_hp = self._rand_base_hp()
-        self._current_hp = self._total_hp
+            self._total_hp = self._rand_base_hp()
+            self._current_hp = self._total_hp
 
-        self._is_KO = False
-
-        self._moves = self._rand_move_set()
+            self._is_KO = False
 
     @property
     def id(self) -> int:
@@ -141,10 +152,7 @@ class Pokemon(PartyMember):
         :rtype: String
 
         """
-        if self._ability:
-            return self._ability
-        else:
-            return "None"
+        return self._ability
 
     @property
     def elemental_type(self) -> tuple:
@@ -423,6 +431,7 @@ class Pokemon(PartyMember):
         """
         dikt = {
             "id": self._id,
+            "member_type": self.member_type(),
             "pokedex_num": self._pokedex_num,
             "source": self._source,
             "nickname": self._nickname,
