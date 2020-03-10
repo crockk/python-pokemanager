@@ -24,6 +24,16 @@ class PokeStats:
 
         self._total_steps = total_steps
 
+    def to_dict(self):
+        data = {}
+
+        data["total_by_type"] = self._total_by_type
+        data["total_eggs"] = self._total_eggs
+        data["total_KO"] = self._total_KO
+        data["total_steps"] = self._total_steps
+
+        return data
+
     def get_total_by_type(self) -> dict:
         """ Gets and returns total pokemon by type
 
