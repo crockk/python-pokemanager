@@ -56,6 +56,8 @@ class PartyManager:
         # self._pc_pokemon = None
         # self._total_steps = None
         
+        self._validate_string(player_name, "Player Name must be a non blank String")
+
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
 
         try:
@@ -63,8 +65,6 @@ class PartyManager:
         except json.JSONDecodeError:
             raise RuntimeError("Error reading pokedata.json file")
         except FileNotFoundError:
-            self._validate_string(player_name, "Player Name must be a non blank String")
-
             self._ID = 1
             self._player_name = player_name
             self._party = {}
@@ -404,7 +404,7 @@ class PartyManager:
             # count_dict[k] = len(v)
 
     @staticmethod
-    def _validate_string(string: str, error_msg: str) -> None:
+    def _validate_string(test_string: str, error_msg: str) -> None:
         """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
 
         :param str string: The string to be validated
@@ -412,9 +412,9 @@ class PartyManager:
         :return: No return
         :rtype: none
         """
-        if type(string) is not str:
-            raise TypeError(error_msg + f"\nNot type {type(string)}")
-        if not string:
+        if not isinstance(test_string, str):
+            raise TypeError(error_msg + f"\nNot type {type(test_string)}")
+        if test_string == '':
             raise ValueError(error_msg)
 
     def _validate_pokedex_number(self, pokedex_num:int) -> None:
