@@ -117,7 +117,7 @@ class PartyManager:
         }
         return dik
 
-    def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None, json: Dict = None) -> None:
+    def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None, json: Dict = None) -> int:
         """ Adds a member (egg or Pokemon) to the player's _pc.
 
         Depending on the type of member, this function adds a new entry to the player's party. It also assigns the
