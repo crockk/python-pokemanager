@@ -103,6 +103,7 @@ class Pokemon(PartyMember):
             self._current_hp = self._total_hp
 
             self._is_KO = False
+            self._moves = self._rand_move_set()
 
     @property
     def id(self) -> int:
