@@ -157,7 +157,16 @@ class PartyManager:
         :rtype: Boolean
 
         """
-        if len(self._party) < 6:
+        if len(self._party) >= 6:
+            print('Your party is full')
+            return False
+        elif id not in self._pc_pokemon:
+            print("This pokemon is not available")
+            return False
+        elif id in self._party:
+            print(f"This {self._party[id].member_type} is already in your party!")
+            return False
+        else:
             pokemon = self._pc_pokemon[id]
             self._party[id] = pokemon
             self._party[id]._in_party = True
@@ -166,9 +175,6 @@ class PartyManager:
             self._write_to_file()
 
             return True
-        else:
-            print('Your party is full')
-            return False
 
     def move_to_pc(self, id: int) -> bool:
         """ Removes a party member from _party and places it into _pc_storage.

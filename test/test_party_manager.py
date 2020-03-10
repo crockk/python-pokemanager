@@ -10,12 +10,19 @@ from pokemon import Pokemon
 import unittest
 import random
 from datetime import datetime, date
+import os
 
 
 class TestPartyManager(unittest.TestCase):
 
+    _FILEPATH = os.path.join("data", "pokedata.json")
+
     def setUp(self) -> None:
         random.seed(13)
+
+        if os.path.exists(self._FILEPATH):
+            os.remove(self._FILEPATH)
+        
         self.party_manager = PartyManager('Nolan')
 
     def test_valid_init(self):
