@@ -383,7 +383,7 @@ class PartyManager:
         """ Populates a stats object with statistics about the party manager """
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
 
-        members_by_type = self.get_all_members_by_elemental_type()
+        members_by_type = self._total_per_elemental_type()
         total_eggs = len(self.get_member_by_type('Egg'))
         total_KO = 0
         total_steps = self._total_steps
@@ -394,6 +394,15 @@ class PartyManager:
 
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
     
+    def _total_per_elemental_type(self):
+        # count_dict = {}
+        members_by_type = self.get_all_members_by_elemental_type()
+
+        return {k:len(v) for k,v in members_by_type.items()}
+
+        # for k, v in members_by_type.items():
+            # count_dict[k] = len(v)
+
     @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
         """ Private method. Used to validate strings according to type. Raises an error with a custom error message.
