@@ -148,6 +148,7 @@ class PartyManager:
             raise ValueError(f"{member_type} is not a valid Party Member type")
         
         self._write_to_file()
+        return self._ID - 1
 
     def move_to_party(self, id: int) -> bool:
         """ Moves a pokemon from the PC storage into the party
