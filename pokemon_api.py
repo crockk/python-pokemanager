@@ -14,16 +14,6 @@ app = Flask(__name__)
 FILEPATH = os.path.join("data", "pokedata.json")
 poke_inventory = PartyManager("Ashy Ketchup")
 
-# I copied this from Tim. Do we need it?
-# @app.route("/validate")
-# def validate_setup():
-#     return jsonify(
-#         {
-#             "method": request.method,
-#             "Content-Type header": request.headers.get("Content-Type"),
-#             "data": request.data.decode(),
-#         }
-#     )
 
 @app.route("/partymanager/member", methods=["POST"])
 def add_pokemon_member():
@@ -94,7 +84,7 @@ def all_members_by_type(member_type):
 
 @app.route("/partymanager/member/stats", methods=["GET"])
 def manager_stats():
-    return make_response("not yet", 404)
+    return jsonify(poke_inventory.get_stats().to_dict())
 
 
 # Useful for testing. Dont think we should keep for final revision?
