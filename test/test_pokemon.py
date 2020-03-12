@@ -189,3 +189,34 @@ class PokemonTestClass(unittest.TestCase):
 
     def test_member_type(self):
         self.assertEqual(self.pokemon.member_type(), "Pokemon")
+
+    def test_to_dict(self):
+        poke_dict = self.pokemon.to_dict()
+
+        test_dict = {
+            "id": self.pokemon.id,
+            "member_type": self.pokemon.member_type(),
+            "pokedex_num": self.pokemon.pokedex_num,
+            "source": self.pokemon.source,
+            "nickname": self.pokemon.nickname,
+            "item": None,
+
+            "in_party": self.pokemon.in_party,
+            "weight": self.pokemon.weight,
+            "height": self.pokemon.height,
+            "date_acquired": str(self.pokemon.date_acquired),
+
+            "ability": self.pokemon.ability,
+            "elemental_type": self.pokemon.elemental_type,
+            "next_level_xp": self.pokemon._next_level_xp,
+            "current_level_xp": self.pokemon._current_level_xp,
+            "level": self.pokemon.level,
+            "attack": self.pokemon.attack,
+            "speed": self.pokemon.speed,
+            "total_hp": self.pokemon.total_hp,
+            "current_hp": self.pokemon.current_hp,
+            "is_KO": self.pokemon.is_KO,
+            "moves": self.pokemon.moves
+        }
+
+        self.assertEqual(poke_dict, test_dict)
