@@ -9,8 +9,8 @@ import unittest
 import random
 from datetime import datetime, date
 
-class EggTestClass(unittest.TestCase):
 
+class EggTestClass(unittest.TestCase):
     _ID = 1
 
     def setUp(self):
@@ -23,7 +23,7 @@ class EggTestClass(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             e = Egg(self._ID, -1, "Calgary")
-        
+
         with self.assertRaises(TypeError):
             e = Egg(self._ID, 6, 2)
 
@@ -47,7 +47,7 @@ class EggTestClass(unittest.TestCase):
 
     def test_description(self):
         print(self.egg.height, self.egg._weight)
-        self.assertEqual(self.egg.description, "Your Flyboy is 1053.07cm tall and 296.06kg. Not currently in party" )
+        self.assertEqual(self.egg.description, "Your Flyboy is 1053.07cm tall and 296.06kg. Not currently in party")
 
     def test_hatched(self):
         self.egg.add_steps(self.egg.steps_remaining)
@@ -55,3 +55,30 @@ class EggTestClass(unittest.TestCase):
 
     def test_member_type(self):
         self.assertEqual(self.egg.member_type(), "Egg")
+
+    def test_to_dict(self):
+        egg_dict = self.egg.to_dict()
+
+        test_dict = {
+                     "id": self.egg.id,
+                     "member_type": self.egg.member_type(),
+                     "pokedex_num": self.egg.pokedex_num,
+                     "source": self.egg.source,
+                     "nickname": self.egg.nickname,
+                     "item": None,
+
+                     "in_party": self.egg.in_party,
+                     "weight": self.egg.weight,
+                     "height": self.egg.height,
+                     "date_acquired": str(self.egg.date_acquired),
+
+                     "steps_required": self.egg.steps_required,
+                     "steps_remaining": self.egg.steps_remaining,
+                     "hatched": self.egg.hatched
+                 }
+
+        self.assertEqual(egg_dict, test_dict)
+
+
+
+
