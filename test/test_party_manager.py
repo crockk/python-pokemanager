@@ -7,13 +7,13 @@ Date: 2/25/2020
 from party_manager import PartyManager
 from egg import Egg
 from pokemon import Pokemon
-import unittest
+from unittest import TestCase, mock
 import random
 from datetime import datetime, date
 import os
 
 
-class TestPartyManager(unittest.TestCase):
+class TestPartyManager(TestCase):
 
     _FILEPATH = os.path.join("data", "pokedata.json")
 
@@ -27,6 +27,8 @@ class TestPartyManager(unittest.TestCase):
 
     def test_valid_init(self):
         self.assertIsInstance(self.party_manager, PartyManager)
+
+        self.assertEqual(self.party_manager._filepath, self._FILEPATH)
 
     def test_invalid_init(self):
         with self.assertRaises(TypeError):
@@ -208,3 +210,15 @@ class TestPartyManager(unittest.TestCase):
         self.assertEqual(len(stats.get_total_by_type()), 1)
 
         self.assertEqual(stats.get_total_eggs(), 1)
+
+    @mock.patch('party_manager.PartyManager._write_to_file')
+    def test_write_to_file(self, mock_save_func):
+        self.party_manager.create_member('Pokemon', 4, 'Route 55')
+        self.assertTrue(mock_save_func.called)
+
+    @mock.patch('party_manager.PartyManager._read_from_file')
+    def test_read_from_file(self, mock_read_func):
+        self.party_manager = PartyManager("Yuto")
+        self.assertTrue(mock_read_func.called)
+
+        

@@ -50,35 +50,35 @@ class PartyManager:
         :rtype: None
 
         """
-        # self._ID = None
-        # self._player_name = None
-        # self._party = None
-        # self._pc_pokemon = None
-        # self._total_steps = None
         
         self._validate_string(player_name, "Player Name must be a non blank String")
 
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
+
+        # print(os.getcwd())
 
         try:
             self._read_from_file()
         except json.JSONDecodeError:
             raise RuntimeError("Error reading pokedata.json file")
         except FileNotFoundError:
+            print('file not found')
             self._ID = 1
             self._player_name = player_name
             self._party = {}
             self._pc_pokemon = {}
             self._total_steps = 0
-        # except Exception as err:
-        #     raise Exception(err)
 
-        self._write_to_file()
+            self._write_to_file()
 
     def _read_from_file(self):
         if not os.path.exists(self._filepath):
             raise FileNotFoundError
+
+        print('file found')
+
         manager = {}
+        
         with open(self._filepath, "r") as file:
             manager = json.load(file)
         
@@ -87,6 +87,7 @@ class PartyManager:
         self._total_steps = manager["total_steps"]
         self._party = {}
         self._pc_pokemon = {}
+
         for member in (manager["party"] + manager["pc_pokemon"]):
             self.create_member(
                 member["member_type"],
@@ -98,8 +99,6 @@ class PartyManager:
             )
             if member["in_party"]:
                 self.move_to_party(member["id"])
-
-        
 
     def _write_to_file(self):
         data = self.to_dict()
