@@ -251,7 +251,7 @@ class PartyMember(ABC):
             raise ValueError(error_msg)
 
     @abstractmethod
-    def member_type(self):
+    def member_type(self) -> None:
         """ Abstract method member_type implemented in child classes
 
         :raise: NotImplementedError
@@ -261,7 +261,7 @@ class PartyMember(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def to_dict(self):
+    def to_dict(self) -> None:
         """ Abstract method to_dict implemented in child classes
 
         :raise: NotImplementedError
