@@ -65,6 +65,10 @@ class TestPartyManager(TestCase):
         self.party_manager.move_to_party(2)
         self.party_manager.move_to_party(3)
         self.party_manager.move_to_party(4)
+        self.assertFalse(self.party_manager.move_to_party(4))
+
+        self.assertFalse(self.party_manager.move_to_party(9))
+
         self.party_manager.move_to_party(5)
         self.party_manager.move_to_party(6)
 
@@ -256,11 +260,18 @@ class TestPartyManager(TestCase):
     #     self.party_manager.create_member('Pokemon', 4, 'Route 55')
     #     self.assertTrue(mock_save_func.called)
 
-    # def test_read_from_file(self):
-    #     self.party_manager = PartyManager("Yuto")
-    #     self.party_manager.create_member('Pokemon', 4, 'Route 55')
-    #     self.party_manager = PartyManager("Bluto")
-    #     self.assertEqual(len(self.party_manager.get_all_members), 1)
+    def test_read_from_file(self):
+        self.party_manager = PartyManager("Yuto")
+        self.party_manager.create_member('Egg', 4, 'Route 55')
+        self.party_manager.move_to_party(1)
+        self.party_manager = PartyManager("Bluto")
+        
+        self.assertEqual(len(self.party_manager.get_all_members), 1)
+
+        os.remove(self._FILEPATH)
+
+        self.party_manager = PartyManager("Yuto")
+
         
 
         
