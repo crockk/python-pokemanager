@@ -141,7 +141,7 @@ class PartyManager:
             self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability, json=json)
             self._ID += 1
         elif member_type == Egg.member_type():
-            self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item)
+            self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item, json=json)
             self._ID += 1
         else:
             raise ValueError(f"{member_type} is not a valid Party Member type")
