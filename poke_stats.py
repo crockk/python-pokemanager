@@ -24,7 +24,12 @@ class PokeStats:
 
         self._total_steps = total_steps
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """ Converts instance attributes to dictionary format and returns it
+
+        :return: Dictionary of instance attributes
+        :rtype: dict
+        """
         return {
             "total_by_type": self._total_by_type,
             "total_eggs": self._total_eggs,
