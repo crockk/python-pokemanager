@@ -55,14 +55,11 @@ class PartyManager:
 
         self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
 
-        # print(os.getcwd())
-
         try:
             self._read_from_file()
         except json.JSONDecodeError:
             raise RuntimeError("Error reading pokedata.json file")
         except FileNotFoundError:
-            print('file not found')
             self._ID = 1
             self._player_name = player_name
             self._party = {}
@@ -71,18 +68,23 @@ class PartyManager:
 
             self._write_to_file()
 
-    def _read_from_file(self):
+    def _read_from_file(self) -> None:
+        """ If the file specified by the filepath exists, read the json data from that file and assign properties
+            accordingly.
+
+        :return: No return
+        :rtype: None
+
+        """
         if not os.path.exists(self._filepath):
             raise FileNotFoundError
-
-        print('file found')
 
         manager = {}
         
         with open(self._filepath, "r") as file:
             manager = json.load(file)
         
-        self._ID = 1#manager["ID_count"]
+        self._ID = 1
         self._player_name = manager["player_name"]
         self._total_steps = manager["total_steps"]
         self._party = {}
@@ -95,17 +97,27 @@ class PartyManager:
                 member["source"],
                 member["nickname"],
                 json=member
-                # id=member["id"],
             )
             if member["in_party"]:
                 self.move_to_party(member["id"])
 
-    def _write_to_file(self):
+    def _write_to_file(self) -> None:
+        """ Writes json data to the file at the specified _filepath
+
+        :return: No return
+        :rtype: None
+
+        """
         data = self.to_dict()
         with open(self._filepath, "w") as file:
             json.dump(data, file)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """ Converts all instance attributes into a single dictionary
+
+        :return: Dictionary populated with instance attributes
+        :rtype: dict
+        """
         dik = {
             # "ID_count": self._ID,
             "party": [member.to_dict() for member in self._party.values()],
@@ -229,7 +241,7 @@ class PartyManager:
         else:
             return False
     
-    def walk(self, steps: int):
+    def walk(self, steps: int) -> None:
         """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
         if necessary
 
@@ -254,6 +266,14 @@ class PartyManager:
         self._write_to_file()
 
     def add_xp_to_pokemon(self, id: int, xp: int) -> None:
+        """ Adds a specified amount of experience points to a given PartyMember
+
+        :param id: The PartyMember to add xp to
+        :param xp: Amount of xp to add
+        :return: No return
+        :rtype: None
+
+        """
         self.get_member_by_id(id).add_xp(xp)
         self._write_to_file()
 
@@ -379,7 +399,11 @@ class PartyManager:
 
 
     def get_stats(self) -> PokeStats:
-        """ Populates a stats object with statistics about the party manager """
+        """ Populates a stats object with statistics about the party manager
+
+        :return: PokeStats object
+        :rtype: PokeStats
+        """
         all_members = list(self._pc_pokemon.values()) + list(self._party.values())
 
         members_by_type = self._total_per_elemental_type()
@@ -393,14 +417,16 @@ class PartyManager:
 
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
     
-    def _total_per_elemental_type(self):
-        # count_dict = {}
+    def _total_per_elemental_type(self) -> dict:
+        """ Populates and returns a dictionary of total amount of members by each elemental type, eg:
+            {'Grass': 5, 'Fire': 1}
+
+        :return: Dictionary of totals
+        :rtype: dict
+        """
         members_by_type = self.get_all_members_by_elemental_type()
 
         return {k:len(v) for k,v in members_by_type.items()}
-
-        # for k, v in members_by_type.items():
-            # count_dict[k] = len(v)
 
     @staticmethod
     def _validate_string(test_string: str, error_msg: str) -> None:
@@ -422,7 +448,7 @@ class PartyManager:
             raise ValueError(f'Pokedex Number must be between 1 - {len(self._POKEDEX) + 1}')
 
     @classmethod
-    def _display_4_column_line(cls, col1, col2, col3, col4):
+    def _display_4_column_line(cls, col1, col2, col3, col4) -> str:
         """ Displays a single row in a 4 column table
 
         :return: a formatted row in the table
