@@ -227,6 +227,16 @@ class TestPartyManager(TestCase):
         self.assertTrue(self.mock_save_func.called)
         self.assertEqual(self.mock_save_func.call_count, 22)
 
+    def test_add_xp(self):
+        self.party_manager.create_member('Pokemon', 4, 'Route 55')
+        xp_to_add = self.party_manager.get_member_by_id(1).xp_till_next_level - 1
+        self.party_manager.add_xp_to_pokemon(1, xp_to_add)
+
+        self.assertEqual(self.party_manager.get_member_by_id(1).xp_till_next_level, 1)
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 2)
+
     def test_get_stats(self):
         self.party_manager.create_member('Egg', 4, 'Route 55')
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -255,18 +265,22 @@ class TestPartyManager(TestCase):
         self.assertTrue(self.mock_save_func.called)
         self.assertEqual(self.mock_save_func.call_count, 9)
 
-    # @mock.patch('party_manager.PartyManager._write_to_file')
-    # def test_write_to_file(self, mock_save_func):
-    #     self.party_manager.create_member('Pokemon', 4, 'Route 55')
-    #     self.assertTrue(mock_save_func.called)
+        stat_check = {
+            'total_by_type': {'Grass': 2}, 
+            'total_eggs': 1, 
+            'total_KO': 2, 
+            'total_steps': 0
+        }
+        self.assertDictEqual(stats.to_dict(), stat_check)
 
     def test_read_from_file(self):
         self.party_manager = PartyManager("Yuto")
         self.party_manager.create_member('Egg', 4, 'Route 55')
+        self.party_manager.create_member('Pokemon', 4, 'Route 55')
         self.party_manager.move_to_party(1)
         self.party_manager = PartyManager("Bluto")
         
-        self.assertEqual(len(self.party_manager.get_all_members), 1)
+        self.assertEqual(len(self.party_manager.get_all_members),2)
 
         os.remove(self._FILEPATH)
 
