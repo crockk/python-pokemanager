@@ -88,12 +88,17 @@ class Egg(PartyMember):
                f"{ 'Currently in party.' if self._in_party else 'Not currently in party'}"
 
     @property
-    def hatched(self):
+    def hatched(self) -> bool:
         """ Gets and returns hatched property """
         return self._hatched
 
-    def to_dict(self):
-        # return {}
+    def to_dict(self) -> dict:
+        """ Converts current instance attributes into dictionary format and returns it
+
+        :return: Dictionary of all instance attributes
+        :rtype: dict
+
+        """
         dik = {
             "id": self._id,
             "member_type": self.member_type(),
@@ -114,7 +119,7 @@ class Egg(PartyMember):
         return dik
 
     @classmethod
-    def member_type(cls):
+    def member_type(cls) -> str:
         """ Gets and returns class variable _MEMBER_TYPE
 
         :return: Member type
