@@ -160,11 +160,11 @@ class PartyManager:
         if len(self._party) >= 6:
             print('Your party is full')
             return False
-        elif id not in self._pc_pokemon:
-            print("This pokemon is not available")
-            return False
         elif id in self._party:
             print(f"This {self._party[id].member_type} is already in your party!")
+            return False
+        elif id not in self._pc_pokemon:
+            print("This pokemon is not available")
             return False
         else:
             pokemon = self._pc_pokemon[id]
