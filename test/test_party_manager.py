@@ -17,12 +17,10 @@ class TestPartyManager(TestCase):
 
     _FILEPATH = os.path.join("data", "pokedata.json")
 
-    def setUp(self) -> None:
+    @mock.patch('party_manager.PartyManager._read_from_file', side_effect = FileNotFoundError)
+    def setUp(self, mock_read_func) -> None:
         random.seed(13)
 
-        # if os.path.exists(self._FILEPATH):
-        #     os.remove(self._FILEPATH)
-        
         self.party_manager = PartyManager('Nolan')
         self.mock_save_func = mock.Mock()
         self.party_manager._write_to_file = self.mock_save_func
