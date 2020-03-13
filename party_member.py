@@ -234,40 +234,6 @@ class PartyMember(ABC):
         if max_val is not None:
             if num > max_val:
                 raise ValueError(error_msg)
-
-    @staticmethod
-    def _validate_float(num: float, min_val: float, error_msg: str, max_val: float = None) -> None:
-        """ Private method used to validate floats according to a minimum value and type
-
-        :param float num: The number to be validated
-        :param float min_val: The minimum value to be evaluated to
-        :param str error_msg: Error message to be returned if exception raised
-        :raises: TypeError, ValueError
-        :return: No return
-        :rtype: None
-
-        """
-        if type(num) is not float:
-            raise TypeError(error_msg + f"\nNot type {type(num)}")
-        if num < min_val:
-            raise ValueError(error_msg)
-        if max_val is not None:
-            if num > max_val:
-                raise ValueError(error_msg)
-    
-    @staticmethod
-    def _validate_date(dt: date, error_msg: str) -> None:
-        """ Private method used to validate dates
-
-        :param date dt: The number to be validated
-        :param str error_msg: Error message to be returned if exception raised
-        :raises: TypeError, ValueError
-        :return: No return
-        :rtype: None
-
-        """
-        if type(dt) is not date:
-            raise TypeError(error_msg + f"\nNot type {type(dt)}")
         
     @staticmethod
     def _validate_string(string: str, error_msg: str) -> None:
@@ -283,19 +249,6 @@ class PartyMember(ABC):
             raise TypeError(error_msg + f"\nNot type {type(string)}")
         if not string:
             raise ValueError(error_msg)
-    
-    @staticmethod
-    def _validate_bool(val: bool, error_msg: str) -> None:
-        """ Private method used to validate strings according to type
-
-        :param str val: Boolean to be validated
-        :param str error_msg: Error message to be returned if exception raised
-        :raises: TypeError
-        :return: No return
-        :rtype: None
-        """
-        if type(val) is not bool:
-            raise TypeError(error_msg + f"\nNot type {type(val)}")
 
     @abstractmethod
     def member_type(self):
