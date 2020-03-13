@@ -20,10 +20,12 @@ class TestPartyManager(TestCase):
     def setUp(self) -> None:
         random.seed(13)
 
-        if os.path.exists(self._FILEPATH):
-            os.remove(self._FILEPATH)
+        # if os.path.exists(self._FILEPATH):
+        #     os.remove(self._FILEPATH)
         
         self.party_manager = PartyManager('Nolan')
+        self.mock_save_func = mock.Mock()
+        self.party_manager._write_to_file = self.mock_save_func
 
     def test_valid_init(self):
         self.assertIsInstance(self.party_manager, PartyManager)
@@ -48,6 +50,8 @@ class TestPartyManager(TestCase):
 
         self.party_manager.create_member('Egg', 5, 'Route 55')
         self.assertIsInstance(self.party_manager.get_member_by_id(2), Egg)
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 2)
 
     def test_move_to_party(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -68,6 +72,9 @@ class TestPartyManager(TestCase):
 
         self.assertFalse(self.party_manager.move_to_party(7))
 
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 19)
+
     def test_move_to_pc(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
         self.party_manager.move_to_party(1)
@@ -75,6 +82,9 @@ class TestPartyManager(TestCase):
         self.assertTrue(self.party_manager.move_to_pc(1))
 
         self.assertFalse(self.party_manager.move_to_pc(1))
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 4)
 
     def test_release_party_member(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -84,12 +94,18 @@ class TestPartyManager(TestCase):
 
         self.assertFalse(self.party_manager.release_party_member(1))
 
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 4)
+
     def test_release_pc_pokemon(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
 
         self.assertTrue(self.party_manager.release_pc_pokemon(1))
 
         self.assertFalse(self.party_manager.release_pc_pokemon(1))
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 2)
 
     def test_get_members_by_elemental_type(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -111,6 +127,9 @@ class TestPartyManager(TestCase):
         self.assertEqual(len(grass['Grass']), 6)
         self.assertEqual(len(dragon['Dragon']), 2)
 
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 8)
+
     def test_get_member_by_id(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
 
@@ -121,6 +140,9 @@ class TestPartyManager(TestCase):
         self.party_manager.move_to_party(1)
 
         self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 3)
 
     def test_get_all_party_members(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -139,6 +161,9 @@ class TestPartyManager(TestCase):
 
         self.assertEqual(len(self.party_manager.get_all_party_members), 6)
 
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 18)
+
     def test_get_all_pc_members(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -148,6 +173,9 @@ class TestPartyManager(TestCase):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
 
         self.assertEqual(len(self.party_manager.get_all_pc_members), 6)
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 6)
 
     def test_get_all_members(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
@@ -163,6 +191,9 @@ class TestPartyManager(TestCase):
 
         self.assertEqual(len(self.party_manager.get_all_members), 6)
 
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 12)
+
     def test_get_member_by_type(self):
         self.party_manager.create_member('Pokemon', 5, 'Route 55')
         self.party_manager.create_member('Egg', 4, 'Route 55')
@@ -170,6 +201,9 @@ class TestPartyManager(TestCase):
         members = self.party_manager.get_member_by_type('Pokemon')
 
         self.assertEqual(len(members), 1)
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 2)
 
     def test_walk(self):
         self.party_manager.create_member('Egg', 4, 'Route 55')
@@ -180,11 +214,16 @@ class TestPartyManager(TestCase):
         self.party_manager.move_to_party(2)
         self.party_manager.move_to_party(3)
 
+        # Mazimum number of steps required to hatch is 5000, therefor all egs should hatch
+        # For each hatched egg there is 3 calls to _write_to_file
         self.party_manager.walk(5000)
 
         stats = self.party_manager.get_stats()
 
         self.assertEqual(stats.get_total_steps(), 5000)
+
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 22)
 
     def test_get_stats(self):
         self.party_manager.create_member('Egg', 4, 'Route 55')
@@ -211,14 +250,19 @@ class TestPartyManager(TestCase):
 
         self.assertEqual(stats.get_total_eggs(), 1)
 
-    @mock.patch('party_manager.PartyManager._write_to_file')
-    def test_write_to_file(self, mock_save_func):
-        self.party_manager.create_member('Pokemon', 4, 'Route 55')
-        self.assertTrue(mock_save_func.called)
+        self.assertTrue(self.mock_save_func.called)
+        self.assertEqual(self.mock_save_func.call_count, 9)
 
-    @mock.patch('party_manager.PartyManager._read_from_file')
-    def test_read_from_file(self, mock_read_func):
-        self.party_manager = PartyManager("Yuto")
-        self.assertTrue(mock_read_func.called)
+    # @mock.patch('party_manager.PartyManager._write_to_file')
+    # def test_write_to_file(self, mock_save_func):
+    #     self.party_manager.create_member('Pokemon', 4, 'Route 55')
+    #     self.assertTrue(mock_save_func.called)
+
+    # def test_read_from_file(self):
+    #     self.party_manager = PartyManager("Yuto")
+    #     self.party_manager.create_member('Pokemon', 4, 'Route 55')
+    #     self.party_manager = PartyManager("Bluto")
+    #     self.assertEqual(len(self.party_manager.get_all_members), 1)
+        
 
         
