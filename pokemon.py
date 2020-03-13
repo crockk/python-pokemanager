@@ -250,7 +250,7 @@ class Pokemon(PartyMember):
         print(out_str)
         return out_str
 
-    def display_moves(self, move_index: int = None):
+    def display_moves(self, move_index: int = None) -> None:
         """ Displays all the pokemons moves or a single move in a neat table format
         
         :param: int move_index: the index of the move you want to display
@@ -328,7 +328,7 @@ class Pokemon(PartyMember):
             self._current_hp -= health_decrease
 
     @classmethod
-    def member_type(cls):
+    def member_type(cls) -> str:
         """ Gets and returns class variable _MEMBER_TYPE
 
         :return: Member type
@@ -402,11 +402,11 @@ class Pokemon(PartyMember):
         return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
 
     @classmethod
-    def _rand_move_set(cls):
+    def _rand_move_set(cls) -> list:
         """ Randomly selects _MOVE_SET_LENGTH number of moves from the Moves stored in pokedex module
 
-        :return: Move tuple from Moves
-        :rtype: Tuple
+        :return: Move list from Moves
+        :rtype: list
 
         """
         move_indices = sample(list(Moves), cls._MOVE_SET_LENGTH)
@@ -414,7 +414,7 @@ class Pokemon(PartyMember):
         return [Moves[move_index] for move_index in move_indices]
 
     @classmethod
-    def _display_3_column_line(cls, col1, col2, col3):
+    def _display_3_column_line(cls, col1, col2, col3) -> str:
         """ Displays a single row in a 3 column table
 
         :return: a formatted row in the table
@@ -423,7 +423,7 @@ class Pokemon(PartyMember):
         """
         return f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '\n'
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """ Create JSON Object to parse to file
 
         :return: JSON Object of all properties
