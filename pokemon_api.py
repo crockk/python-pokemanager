@@ -22,7 +22,7 @@ def add_pokemon_member():
         new_id = poke_inventory.create_member(new_member["member_type"], new_member["pokedex_num"], new_member["source"], nickname=new_member["nickname"], item=new_member["item"], ability=new_member["ability"])
         return make_response(str(new_id), 200)
     except Exception as err:
-        message = str(err)
+        message = "missing attribute " + str(err)
         return make_response(message, 400)
 
 
