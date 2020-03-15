@@ -135,18 +135,5 @@ def manager_stats():
     """
     return jsonify(poke_inventory.get_stats().to_dict())
 
-
-# Useful for testing. Dont think we should keep for final revision?
-@app.route("/reset", methods=["GET"])
-def reset_manager():
-    global poke_inventory
-
-    if os.path.exists(FILEPATH):
-            os.remove(FILEPATH)
-            poke_inventory = PartyManager("Ashy Ketchup")
-
-    return jsonify(poke_inventory.to_dict()) 
-
-
 if __name__ == "__main__":
     app.run(debug=True)
