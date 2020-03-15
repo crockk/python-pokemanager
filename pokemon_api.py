@@ -17,6 +17,13 @@ poke_inventory = PartyManager("Ashy Ketchup")
 
 @app.route("/partymanager/member", methods=["POST"])
 def add_pokemon_member():
+    """ POST method for Party Member
+    Creates a new Party Member with json data from the request
+
+    :return: Response containing the http status code and either the ID of the new member or Error Message
+    :rtype: Response Object
+    
+    """
     new_member = request.json
     try:
         new_id = poke_inventory.create_member(new_member["member_type"], new_member["pokedex_num"], new_member["source"], nickname=new_member["nickname"], item=new_member["item"], ability=new_member["ability"])
@@ -28,6 +35,13 @@ def add_pokemon_member():
 
 @app.route("/partymanager/member/<int:member_id>", methods=["PUT"])
 def update_member(member_id):
+    """ PUT method for Party Member
+    Updates an existing Party Member with json data from the request
+
+    :return: Response containing the http status code and either nothing or Error Message
+    :rtype: Response Object
+    
+    """
     data = request.json
     member = poke_inventory.get_member_by_id(member_id)
     if not member:
@@ -48,6 +62,13 @@ def update_member(member_id):
 
 @app.route("/partymanager/member/<int:member_id>", methods=["DELETE"])
 def remove_member(member_id):
+    """ DELETE method for Party Member
+    Deletes an existing Party Member
+
+    :return: Response containing the http status code and either nothing or Error Message
+    :rtype: Response Object
+    
+    """
     member = poke_inventory.get_member_by_id(member_id)
     if not member:
         return make_response("Party Member not found.", 400)
@@ -65,6 +86,13 @@ def remove_member(member_id):
 
 @app.route("/partymanager/member/<int:member_id>", methods=["GET"])
 def get_member(member_id):
+    """ GET method for Party Member
+    Returns a Party Member in json format 
+
+    :return: Response containing the http status code and either the json representation of the member or Error Message
+    :rtype: Response Object
+    
+    """
     member = poke_inventory.get_member_by_id(member_id)
     if not member:
         return make_response("Party Member not found.", 400)
@@ -74,16 +102,37 @@ def get_member(member_id):
 
 @app.route("/partymanager/member/all", methods=["GET"])
 def all_members():
-    return jsonify(poke_inventory.to_dict())
+    """ GET method for Party Manager
+    Returns the json representation of the Party
+
+    :return: Response containing the http status code and either a list of all the party members or Error Message
+    :rtype: Response Object
+    
+    """
+    return jsonify([member.to_dict() for member in poke_inventory.get_all_members])
 
 
 @app.route("/partymanager/member/all/<string:member_type>", methods=["GET"])
 def all_members_by_type(member_type):
+    """ POST method for Party Manager
+    Returns a json representation of all the members of a specific sub-type. Either 'Pokemon' or 'Egg'
+
+    :return: Response containing the http status code and a list of members of the specified type
+    :rtype: Response Object
+    
+    """
     return jsonify([member.to_dict() for member in poke_inventory.get_member_by_type(member_type)])
 
 
 @app.route("/partymanager/member/stats", methods=["GET"])
 def manager_stats():
+    """ POST method for Party Manager
+    Returns a json representation of the stats for the Party Manager
+
+    :return: Response containing the http status code and the stats of the Party Manager
+    :rtype: Response Object
+    
+    """
     return jsonify(poke_inventory.get_stats().to_dict())
 
 
