@@ -4,7 +4,7 @@ ACIT 2515
 Date: 2/13/2020
 """
 
-from peewee import IntegerField, CharField, AutoField
+from peewee import IntegerField, CharField
 from db import BaseModel
 from party_member import PartyMember
 from pokemon import Pokemon
@@ -31,7 +31,7 @@ class PartyManager(BaseModel):
     """
 
     player_name = CharField(null=False)
-    total_steps: IntegerField(default=0)
+    total_steps = IntegerField(default=0)
 
     random.seed(13)
 
@@ -122,21 +122,21 @@ class PartyManager(BaseModel):
     #     with open(self._filepath, "w") as file:
     #         json.dump(data, file)
 
-    def to_dict(self) -> dict:
-        """ Converts all instance attributes into a single dictionary
-
-        :return: Dictionary populated with instance attributes
-        :rtype: dict
-        """
-        dik = {
-            # "ID_count": self._ID,
-            "party": [member.to_dict() for member in self._party.values()],
-            "pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
-            "player_name": self._player_name,
-            "total_steps": self._total_steps,
-            "filepath": self._filepath
-        }
-        return dik
+    # def to_dict(self) -> dict:
+    #     """ Converts all instance attributes into a single dictionary
+    #
+    #     :return: Dictionary populated with instance attributes
+    #     :rtype: dict
+    #     """
+    #     dik = {
+    #         # "ID_count": self._ID,
+    #         "party": [member.to_dict() for member in self._party.values()],
+    #         "pc_pokemon": [member.to_dict() for member in self._pc_pokemon.values()],
+    #         "player_name": self._player_name,
+    #         "total_steps": self._total_steps,
+    #         "filepath": self._filepath
+    #     }
+    #     return dik
 
     def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None, json: Dict = None) -> int:
         """ Adds a member (egg or Pokemon) to the player's _pc.
