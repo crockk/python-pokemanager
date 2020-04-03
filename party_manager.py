@@ -4,6 +4,8 @@ ACIT 2515
 Date: 2/13/2020
 """
 
+from peewee import IntegerField, CharField, AutoField
+from db import BaseModel
 from party_member import PartyMember
 from pokemon import Pokemon
 from egg import Egg
@@ -16,7 +18,7 @@ import json
 from datetime import date, datetime
 
 
-class PartyManager:
+class PartyManager(BaseModel):
     """ Defines the manager class PartyManager
 
     This class manages one player's Pokemon Party and PC Storage (PC Storage is where Pokemon that are not in a party
@@ -27,90 +29,98 @@ class PartyManager:
     This is used to assign a Pokedex number and allows us to determine the species/type based upon that number.    
 
     """
+
+    player_name = CharField(null=False)
+    total_steps: IntegerField(default=0)
+
     random.seed(13)
 
     _POKEDEX = Pokedex
 
     _DISPLAY_COLUMN_WIDTH = 24
 
-    _DATA_DIRECTORY = "data"
-    _DATA_FILENAME = "pokedata.json"
+    # Obsolete
+    # _DATA_DIRECTORY = "data"
+    # _DATA_FILENAME = "pokedata.json"
 
-    def __init__(self, player_name: str) -> None:
-        """ Initializes the instance properties
 
-        In addition to setting the player name, this __init__ also sets up _party and _pc_pokemon properties
-        as empty objects, which will be populated as the user adds Pokemon to his or her party or storage.
 
-        _ID: A unique identifier given to each party member, is incremented by 1 each time a new
-        party member is created.
+    # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
+    # def __init__(self, player_name: str) -> None:
+    #     """ Initializes the instance properties
+    #
+    #     In addition to setting the player name, this __init__ also sets up _party and _pc_pokemon properties
+    #     as empty objects, which will be populated as the user adds Pokemon to his or her party or storage.
+    #
+    #     _ID: A unique identifier given to each party member, is incremented by 1 each time a new
+    #     party member is created.
+    #
+    #     :param str player_name: The player's name.
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #
+    #     self._validate_string(player_name, "Player Name must be a non blank String")
+    #
+    #     self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
+    #
+    #     try:
+    #         self._read_from_file()
+    #     except json.JSONDecodeError:
+    #         raise RuntimeError("Error reading pokedata.json file")
+    #     except FileNotFoundError:
+    #         self._ID = 1
+    #         self._player_name = player_name
+    #         self._party = {}
+    #         self._pc_pokemon = {}
+    #         self._total_steps = 0
+    #
+    #         self._write_to_file()
 
-        :param str player_name: The player's name.
-        :return: No return
-        :rtype: None
+    # def _read_from_file(self) -> None:
+    #     """ If the file specified by the filepath exists, read the json data from that file and assign properties
+    #         accordingly.
+    #
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #     if not os.path.exists(self._filepath):
+    #         raise FileNotFoundError
+    #
+    #     manager = {}
+    #
+    #     with open(self._filepath, "r") as file:
+    #         manager = json.load(file)
+    #
+    #     self._ID = 1
+    #     self._player_name = manager["player_name"]
+    #     self._total_steps = manager["total_steps"]
+    #     self._party = {}
+    #     self._pc_pokemon = {}
+    #
+    #     for member in (manager["party"] + manager["pc_pokemon"]):
+    #         self.create_member(
+    #             member["member_type"],
+    #             member["pokedex_num"],
+    #             member["source"],
+    #             member["nickname"],
+    #             json=member
+    #         )
+    #         if member["in_party"]:
+    #             self.move_to_party(member["id"])
 
-        """
-        
-        self._validate_string(player_name, "Player Name must be a non blank String")
-
-        self._filepath = os.path.join(self._DATA_DIRECTORY, self._DATA_FILENAME)
-
-        try:
-            self._read_from_file()
-        except json.JSONDecodeError:
-            raise RuntimeError("Error reading pokedata.json file")
-        except FileNotFoundError:
-            self._ID = 1
-            self._player_name = player_name
-            self._party = {}
-            self._pc_pokemon = {}
-            self._total_steps = 0
-
-            self._write_to_file()
-
-    def _read_from_file(self) -> None:
-        """ If the file specified by the filepath exists, read the json data from that file and assign properties
-            accordingly.
-
-        :return: No return
-        :rtype: None
-
-        """
-        if not os.path.exists(self._filepath):
-            raise FileNotFoundError
-
-        manager = {}
-        
-        with open(self._filepath, "r") as file:
-            manager = json.load(file)
-        
-        self._ID = 1
-        self._player_name = manager["player_name"]
-        self._total_steps = manager["total_steps"]
-        self._party = {}
-        self._pc_pokemon = {}
-
-        for member in (manager["party"] + manager["pc_pokemon"]):
-            self.create_member(
-                member["member_type"],
-                member["pokedex_num"],
-                member["source"],
-                member["nickname"],
-                json=member
-            )
-            if member["in_party"]:
-                self.move_to_party(member["id"])
-
-    def _write_to_file(self) -> None:
-        """ Writes json data to the file at the specified _filepath
-
-        :return: No return
-        :rtype: None
-
-        """
-        data = self.to_dict()
-        with open(self._filepath, "w") as file:
-            json.dump(data, file)
+    # def _write_to_file(self) -> None:
+    #     """ Writes json data to the file at the specified _filepath
+    #
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #     data = self.to_dict()
+    #     with open(self._filepath, "w") as file:
+    #         json.dump(data, file)
 
     def to_dict(self) -> dict:
         """ Converts all instance attributes into a single dictionary
