@@ -1,4 +1,4 @@
 from db import db
-from party_manager import PartyManager as Manager
+from party_manager import PartyManager
 
-db.create_tables([Manager])
+db.drop_tables([PartyManager])
