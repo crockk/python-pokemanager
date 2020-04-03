@@ -39,13 +39,10 @@ class PartyManager(BaseModel):
 
     _DISPLAY_COLUMN_WIDTH = 24
 
-    # Obsolete
+    # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
     # _DATA_DIRECTORY = "data"
     # _DATA_FILENAME = "pokedata.json"
 
-
-
-    # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
     # def __init__(self, player_name: str) -> None:
     #     """ Initializes the instance properties
     #
