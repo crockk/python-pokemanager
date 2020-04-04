@@ -3,9 +3,12 @@ Author: Tushya Iyer, Nolan Crooks
 ACIT 2515
 Date: 2/13/2020
 """
+
+from peewee import CharField, IntegerField, DecimalField, DateField, BooleanField, ForeignKeyField
 from abc import abstractmethod, ABC
 from datetime import date, datetime
 from random import uniform
+from party_manager import PartyManager
 from typing import Dict
 
 
@@ -20,51 +23,62 @@ class PartyMember(ABC):
     _MIN_HEIGHT and _MAX_HEIGHT: Range defining the height of the party member
 
     """
+
+    pokedex_num = IntegerField(column_name='pokedex_num')
+    nickname = CharField(column_name='nickname')
+    in_party = BooleanField(default=False)
+    weight = DecimalField(column_name='weight', default=PartyMember._rand_weight)
+    height = DecimalField(column_name='height', default=PartyMember._rand_height)
+    source = CharField(column_name='source', default='')
+    date_acquired = DateField(default=datetime.now())
+    item = CharField(column_name='item', default='')
+    # json: dict
+
     _MIN_WEIGHT = 50  # KG
     _MAX_WEIGHT = 1000  # KG
 
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, json: Dict = None) -> None:
-        """ Initalizes instance properties
-
-        :param int id: Unique identifier for pokemon
-        :param int pokedex_num: Number corresponding with the pokedex entry of that member
-        :param str source: The location that the member was acquired
-        :param str nickname: A given nickname
-        :param str item: The item that the member is holding
-        :return: No return
-        :rtype: None
-
-        """
-        self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
-
-        self._validate_int(pokedex_num, 1, "Pokedex Number must be greater than or equal to 1")
-
-        self._validate_string(source, "Source must be a none-blank String")
-
-        self._validate_string(nickname, "Nickname must be a none-blank String")
-
-        if item is not None:
-            self._validate_string(item, "Item must be a none-blank String")
-        
-        if json is not None:
-            self._in_party = json['in_party']
-            self._weight = json['weight']
-            self._height = json['height']
-            self._date_acquired = json['date_acquired']
-        else:
-            self._in_party = False
-            self._weight = self._rand_weight()
-            self._height = self._rand_height()
-            self._date_acquired = datetime.now().date()
-
-        self._id = id
-        self._pokedex_num = pokedex_num
-        self._source = source
-        self._nickname = nickname
-        self._item = item
+    # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, json: Dict = None) -> None:
+    #     """ Initalizes instance properties
+    #
+    #     :param int id: Unique identifier for pokemon
+    #     :param int pokedex_num: Number corresponding with the pokedex entry of that member
+    #     :param str source: The location that the member was acquired
+    #     :param str nickname: A given nickname
+    #     :param str item: The item that the member is holding
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #     self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
+    #
+    #     self._validate_int(pokedex_num, 1, "Pokedex Number must be greater than or equal to 1")
+    #
+    #     self._validate_string(source, "Source must be a none-blank String")
+    #
+    #     self._validate_string(nickname, "Nickname must be a none-blank String")
+    #
+    #     if item is not None:
+    #         self._validate_string(item, "Item must be a none-blank String")
+    #
+    #     if json is not None:
+    #         self._in_party = json['in_party']
+    #         self._weight = json['weight']
+    #         self._height = json['height']
+    #         self._date_acquired = json['date_acquired']
+    #     else:
+    #         self._in_party = False
+    #         self._weight = self._rand_weight()
+    #         self._height = self._rand_height()
+    #         self._date_acquired = datetime.now().date()
+    #
+    #     self._id = id
+    #     self._pokedex_num = pokedex_num
+    #     self._source = source
+    #     self._nickname = nickname
+    #     self._item = item
 
     @property
     def id(self) -> int:
