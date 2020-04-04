@@ -30,9 +30,9 @@ class PartyMember(BaseModel):
     in_party = BooleanField(default=False)
     weight = DecimalField(column_name='weight', default=PartyMember._rand_weight)
     height = DecimalField(column_name='height', default=PartyMember._rand_height)
-    source = CharField(column_name='source', default='')
-    date_acquired = DateField(default=datetime.now())
-    item = CharField(column_name='item', default='')
+    source = CharField(column_name='source', null=True)
+    date_acquired = DateField(default=datetime.now)
+    item = CharField(column_name='item', null=True)
     # json: dict
 
     _MIN_WEIGHT = 50  # KG
