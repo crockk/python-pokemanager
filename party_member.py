@@ -8,7 +8,6 @@ from peewee import CharField, IntegerField, DecimalField, DateField, BooleanFiel
 from abc import abstractmethod, ABC
 from datetime import date, datetime
 from random import uniform
-from party_manager import PartyManager
 from db import BaseModel
 from typing import Dict
 
