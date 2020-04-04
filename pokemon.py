@@ -3,7 +3,10 @@ Author: Tushya Iyer, Nolan Crooks
 ACIT 2515
 Date: 2/17/2020
 """
+
+from peewee import CharField, IntegerField, DecimalField, DateField, BooleanField, ForeignKeyField
 from party_member import PartyMember
+from party_manager import PartyManager
 from pokedex import Pokedex, Moves
 from typing import List, Dict
 from random import randint, uniform, sample
@@ -31,6 +34,20 @@ class Pokemon(PartyMember):
 
     """
 
+    next_level_xp = IntegerField(column_name='next_level_xp', default=Pokemon._rand_base_xp)
+    current_level_xp = IntegerField(column_name='current_level_xp', default=0)
+    level = IntegerField(column_name='level', default=5)
+    ability = CharField(column_name='ability', null=True)
+    elemental_type = CharField(column_name='elemental_type', default=Pokedex[PartyMember.pokedex_num][1])
+    attack = IntegerField(column_name='attack', default=Pokemon._rand_battle_stat)
+    speed = IntegerField(column_name='speed', default=Pokemon._rand_battle_stat)
+    defense = IntegerField(column_name='defense', default=Pokemon._rand_battle_stat)
+    total_hp = IntegerField(column_name='total_hp', default=Pokemon._rand_base_xp)
+    current_hp = IntegerField(column_name='current_hp', default=total_hp)
+    is_KO = BooleanField(default=False)
+    member_type = CharField(column_name='member_type', default='Pokemon')
+    player = ForeignKeyField(PartyManager, backref='pokemon')
+
     _MEMBER_TYPE = "Pokemon"
 
     _MIN_BASE_XP = 80
@@ -51,59 +68,59 @@ class Pokemon(PartyMember):
 
     _DISPLAY_COLUMN_WIDTH = 14
 
-    def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, ability: str = None, json: Dict = None) -> None:
-        """ Initializes the instance properties
-
-        :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
-        :param int pokedex_num: The Pokedex number of the Pokemon
-        :param str source: The location where the Pokemon was acquired.
-        :param str nickname: The Pokemon's given name
-        :param str item: The item held by the Pokemon
-        :param str ability: The Pokemon's special ability
-        :return: No return
-        :rtype: None
-
-        """
-
-        super().__init__(id, pokedex_num, source, nickname, item, json=json)
-
-        if ability is not None:
-            super()._validate_string(ability, "Ability must be a none-blank String")
-            self._ability = ability
-        else:
-            self._ability = "None"
-        
-        types = Pokedex[pokedex_num][1].split('/')
-        for e_type in types:
-            super()._validate_string(e_type, "Elemental Type must be a none-blank String")
-        
-        self._elemental_type = tuple(types)
-
-        if json is not None:
-            self._ability = json['ability']
-            self._next_level_xp = json['next_level_xp']
-            self._current_level_xp = json['current_level_xp']
-            self._level = json['level']
-            self._attack = json['attack']
-            self._speed = json['speed']
-            self._total_hp = json['total_hp']
-            self._current_hp = json['current_hp']
-            self._is_KO = json['is_KO']
-            self._moves = json['moves']
-        else:
-            self._next_level_xp = self._rand_base_xp()
-            self._current_level_xp = 0
-            self._level = self._STARTING_LEVEL
-
-            self._attack = self._rand_battle_stat()
-            self._defense = self._rand_battle_stat()
-            self._speed = self._rand_battle_stat()
-
-            self._total_hp = self._rand_base_hp()
-            self._current_hp = self._total_hp
-
-            self._is_KO = False
-            self._moves = self._rand_move_set()
+    # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, ability: str = None, json: Dict = None) -> None:
+    #     """ Initializes the instance properties
+    #
+    #     :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
+    #     :param int pokedex_num: The Pokedex number of the Pokemon
+    #     :param str source: The location where the Pokemon was acquired.
+    #     :param str nickname: The Pokemon's given name
+    #     :param str item: The item held by the Pokemon
+    #     :param str ability: The Pokemon's special ability
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #
+    #     super().__init__(id, pokedex_num, source, nickname, item, json=json)
+    #
+    #     if ability is not None:
+    #         super()._validate_string(ability, "Ability must be a none-blank String")
+    #         self._ability = ability
+    #     else:
+    #         self._ability = "None"
+    #
+    #     types = Pokedex[pokedex_num][1].split('/')
+    #     for e_type in types:
+    #         super()._validate_string(e_type, "Elemental Type must be a none-blank String")
+    #
+    #     self._elemental_type = tuple(types)
+    #
+    #     if json is not None:
+    #         self._ability = json['ability']
+    #         self._next_level_xp = json['next_level_xp']
+    #         self._current_level_xp = json['current_level_xp']
+    #         self._level = json['level']
+    #         self._attack = json['attack']
+    #         self._speed = json['speed']
+    #         self._total_hp = json['total_hp']
+    #         self._current_hp = json['current_hp']
+    #         self._is_KO = json['is_KO']
+    #         self._moves = json['moves']
+    #     else:
+    #         self._next_level_xp = self._rand_base_xp()
+    #         self._current_level_xp = 0
+    #         self._level = self._STARTING_LEVEL
+    #
+    #         self._attack = self._rand_battle_stat()
+    #         self._defense = self._rand_battle_stat()
+    #         self._speed = self._rand_battle_stat()
+    #
+    #         self._total_hp = self._rand_base_hp()
+    #         self._current_hp = self._total_hp
+    #
+    #         self._is_KO = False
+    #         self._moves = self._rand_move_set()
 
     @property
     def id(self) -> int:
