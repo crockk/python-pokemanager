@@ -9,10 +9,11 @@ from abc import abstractmethod, ABC
 from datetime import date, datetime
 from random import uniform
 from party_manager import PartyManager
+from db import BaseModel
 from typing import Dict
 
 
-class PartyMember(ABC):
+class PartyMember(BaseModel):
     """ Defines the abstract class PartyMember
 
     This class defines various base stats of the PartyMember that inherits it.
