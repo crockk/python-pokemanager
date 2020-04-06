@@ -14,6 +14,21 @@ Pokedex = {
     10: ("Rayquaza", "Flying/Dragon")
 }
 
+class IdManager():
+
+    def __init__(self):
+        self._e_id = 1
+        self._p_id = 1
+
+    def egg_id(self):
+        id = f"e{str(self._e_id).zfill(4)}"
+        self._e_id += 1
+        return id
+
+    def pokemon_id(self):
+        id = f"p{str(self._p_id).zfill(4)}"
+        self._p_id += 1
+        return id
 
 class RandomStats():
 

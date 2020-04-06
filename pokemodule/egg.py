@@ -4,7 +4,7 @@ ACIT 2515
 Date: 2/17/2020
 """
 
-from peewee import IntegerField, BooleanField, ForeignKeyField
+from peewee import IntegerField, BooleanField, ForeignKeyField, CharField
 from pokemodule.party_member import PartyMember
 from pokemodule.party_manager import PartyManager
 from pokemodule.pokedex import RandomStats
@@ -35,6 +35,7 @@ class Egg(PartyMember):
     steps_required = IntegerField(column_name="steps_required", default=_steps)
     steps_remaining = IntegerField(column_name="steps_remaining", default=_steps)
     player = ForeignKeyField(PartyManager, backref='eggs')
+    id = CharField(primary_key=True)
 
     def add_steps(self, steps: int) -> None:
         """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.

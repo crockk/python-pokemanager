@@ -230,3 +230,4 @@ class Pokemon(PartyMember):
     member_type = CharField(column_name='member_type', default='Pokemon')
     moves = CharField(default=json.dumps(RandomStats.rand_move_set()))
     player = ForeignKeyField(PartyManager, backref='pokemon')
+    id = CharField(primary_key=True)

@@ -7,7 +7,7 @@ Date: 2/13/2020
 from peewee import IntegerField, CharField
 from db_module.db import BaseModel
 import random
-from pokemodule.pokedex import Pokedex
+from pokemodule.pokedex import Pokedex, IdManager
 from typing import List
 from pokemodule.pokestats import PokeStats
 
@@ -25,6 +25,7 @@ class PartyManager(BaseModel):
     total_steps = IntegerField(default=0)
     random.seed(13)
     _POKEDEX = Pokedex
+    _ID_MANAGER = IdManager()
 
     # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
 
