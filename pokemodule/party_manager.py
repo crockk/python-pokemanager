@@ -31,12 +31,12 @@ class PartyManager(BaseModel):
 
     @property
     def pc_members(self):
-        pc = {p.id:p for p in self.pokemon if not p.in_party}
+        pc = {m.id:m for m in self.all_members if not m.in_party}
         return pc
     
     @property
     def party_members(self):
-        party = {p.id:p for p in self.pokemon if p.in_party}
+        party = {m.id:m for m in self.all_members if m.in_party}
         return party
     
     @property
@@ -111,26 +111,20 @@ class PartyManager(BaseModel):
     
     # TODO: HOW DO YOU COMPOSITION STUFF ###################################
   
-    # def walk(self, steps: int) -> None:
-    #     """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
-    #     if necessary
-    #      :param int steps: Steps to walk
-    #      :return: No return
-    #      :rtype: None
-    #      """
-    #     eggs = self.eggs[:]
-    #     for egg in eggs:
-    #         if egg.in_party:
-    #             egg.add_steps(steps)
-    #             if egg.hatched:
-    #                 temp_egg = egg
-    #                 # self.release_party_member(egg.id)
-    #                 # self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
-
-    #                 self.move_to_party(self._ID - 1)
-    #     self.total_steps += steps
+    def walk(self, steps: int) -> None:
+        """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
+        if necessary
+         :param int steps: Steps to walk
+         :return: No return
+         :rtype: None
+         """
+        eggs = self.get_member_by_type("Egg")
+        for egg in eggs:
+            if egg.in_party:
+                egg.add_steps(steps)
+        self.total_steps += steps
       
-    #     self._write_to_file()
+        self.save()
 
     def add_xp_to_pokemon(self, id: int, xp: int) -> None:
         """ Adds a specified amount of experience points to a given PartyMember

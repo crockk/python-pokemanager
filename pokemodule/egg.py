@@ -48,6 +48,9 @@ class Egg(PartyMember):
         self.steps_remaining = self.steps_remaining - steps
         if self.steps_remaining <= 0:
             self.hatched = True
+            self.in_party = False
+            #TODO: Create New pokemon and delete egg
+        print(self.steps_remaining, "egg", self.id)
         self.save()
 
     @property
