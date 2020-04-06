@@ -195,7 +195,6 @@ class Pokemon(PartyMember):
 
         """
         dikt = {
-            "id": self.id,
             "member_type": self.member_type,
             "pokedex_num": self.pokedex_num,
             "source": self.source,
@@ -208,7 +207,6 @@ class Pokemon(PartyMember):
             "date_acquired": str(self.date_acquired),
 
             "ability": self.ability,
-            # "elemental_type": self.elemental_type,
             "next_level_xp": self.next_level_xp,
             "current_level_xp" :self.current_level_xp,
             "level": self.level,

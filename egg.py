@@ -66,7 +66,6 @@ class Egg(PartyMember):
 
         """
         dik = {
-            "id": self.id,
             "member_type": self.member_type,
             "pokedex_num": self.pokedex_num,
             "source": self.source,
