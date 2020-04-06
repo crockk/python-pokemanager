@@ -22,8 +22,6 @@ class RandomStats():
 
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
-    
-    # _MEMBER_TYPE = "Pokemon"
 
     _MIN_BASE_XP = 80
     _MAX_BASE_XP = 120
@@ -40,6 +38,9 @@ class RandomStats():
     _MAX_BASE_HP = 35
 
     _MOVE_SET_LENGTH = 4
+
+    _MIN_STEPS = 1000  # steps
+    _MAX_STEPS = 5000  # steps
     
     # Move Name, Damage
     MOVES = {
@@ -120,3 +121,7 @@ class RandomStats():
 
         return [cls.MOVES[move_index] for move_index in move_indices]
 
+    @classmethod
+    def rand_steps(cls) -> int:
+        """ Class method which calculates a random integer between class variables _MIN_STEPS and _MAX_STEPS """
+        return randint(cls._MIN_STEPS, cls._MAX_STEPS)
