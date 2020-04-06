@@ -36,6 +36,10 @@ class PartyManager(BaseModel):
         party = {p.id:p for p in self.pokemon if p.in_party}
         return party
     
+    @property
+    def all_members(self):
+        return self.pokemon[:] + self.eggs[:]
+    
     def move_to_party(self, id: int) -> bool:
         """ Moves a pokemon from the PC storage into the party
         :param int id: Pokemon's ID
@@ -52,24 +56,25 @@ class PartyManager(BaseModel):
             print("This pokemon is not available")
             return False
         else:
-            # self.pokemon.
+            member = [p for p in self.all_members if p.id == id][0]
+            member.in_party = True
+            member.save()
             return True
 
-
-    # def move_to_pc(self, id: int) -> bool:
-    #     """ Removes a party member from _party and places it into _pc_storage.
-    #     :param int id: The ID of the Pokemon or Egg to be placed into storage.
-    #     :return: Boolean for testing
-    #     :rtype: Boolean
-    #     """
-    #     if id in self._party.keys():
-    #         self._pc_pokemon[id] = self._party[id]
-    #         del self._party[id]
-          
-    #         self._write_to_file()
-    #         return True
-    #     else:
-    #         return False
+    def move_to_pc(self, id: int) -> bool:
+        """ Removes a party member from _party and places it into _pc_storage.
+        :param int id: The ID of the Pokemon or Egg to be placed into storage.
+        :return: Boolean for testing
+        :rtype: Boolean
+        """
+        if id in self.party_members:
+            member = [p for p in self.all_members if p.id == id][0]
+            member.in_party = False
+            member.save()
+            return True
+        else:
+            return False
+    
     # def release_party_member(self, id: int) -> bool:
     #     """ Releases a party member from _party back into the wilderness :'(
     #     :param int id: The ID of the Pokemon or Egg to be released.
