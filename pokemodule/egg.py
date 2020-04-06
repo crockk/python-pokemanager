@@ -27,13 +27,12 @@ class Egg(PartyMember):
 
     """
 
-    # _MEMBER_TYPE = "Egg"
-
     _steps = RandomStats.rand_steps()
 
     hatched = BooleanField(default=False)
     steps_required = IntegerField(column_name="steps_required", default=_steps)
     steps_remaining = IntegerField(column_name="steps_remaining", default=_steps)
+    member_type = CharField(column_name='member_type', default='Egg')
     player = ForeignKeyField(PartyManager, backref='eggs')
     id = CharField(primary_key=True)
 
