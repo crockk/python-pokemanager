@@ -1,6 +1,7 @@
 from peewee import SqliteDatabase, Model
+import os
 
-db = SqliteDatabase("pokemanager.db")
+db = SqliteDatabase(os.path.join("db_module", "pokemanager.db"))
 
 db.connect()
 
