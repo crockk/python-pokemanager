@@ -132,15 +132,14 @@ class PartyManager(BaseModel):
       
     #     self._write_to_file()
 
-    # def add_xp_to_pokemon(self, id: int, xp: int) -> None:
-    #     """ Adds a specified amount of experience points to a given PartyMember
-    #     :param id: The PartyMember to add xp to
-    #     :param xp: Amount of xp to add
-    #     :return: No return
-    #     :rtype: None
-    #     """
-    #     self.get_member_by_id(id).add_xp(xp)
-    #     self._write_to_file()
+    def add_xp_to_pokemon(self, id: int, xp: int) -> None:
+        """ Adds a specified amount of experience points to a given PartyMember
+        :param id: The PartyMember to add xp to
+        :param xp: Amount of xp to add
+        :return: No return
+        :rtype: None
+        """
+        self.get_member_by_id(id).add_xp(xp)
     
     def get_members_by_elemental_type(self, types: tuple) -> dict:
         """ Gets a collection of party members based on a given elemental type or types.
@@ -166,28 +165,27 @@ class PartyManager(BaseModel):
         :rtype: Dictionary
         """
         members = {}
-        all_members = self.pokemon[:] + self.eggs[:]
-        for member in all_members:
-            if member.member_type == "Pokemon": #Pokemon.member_type:
-                for e_type in member.elemental_type:
-                    if e_type in members:
-                        members[e_type].append(member)
-                    else:
-                        members[e_type] = [member]
+
+        for member in self.get_member_by_type("Pokemon"):
+            for e_type in member.elemental_type.split("/"):
+                if e_type in members:
+                    members[e_type].append(member)
+                else:
+                    members[e_type] = [member]
         return members
         
-    # def get_member_by_id(self, id: int) -> PartyMember:
-    #     """ Gets a single member from the party based on id.
-    #     :param int id: The ID of the party member to be retrieved.
-    #     :return: Returns the party member object (Pokemon or Egg) based on the given ID.
-    #     :rtype: Pokemon or Egg
-    #     """
-    #     if id in self._party.keys():    
-    #         return self._party[id]
-    #     elif id in self._pc_pokemon.keys():
-    #         return self._pc_pokemon[id]
-    #     else:
-    #         return None
+    def get_member_by_id(self, id: str):
+        """ Gets a single member from the party based on id.
+        :param int id: The ID of the party member to be retrieved.
+        :return: Returns the party member object (Pokemon or Egg) based on the given ID.
+        :rtype: Pokemon or Egg
+        """
+        if id[0] == "p":
+            return [p for p in self.pokemon if p.id == id][0]
+        elif id[0] == "e":
+            return [e for e in self.eggs if e.id == id][0]
+        else:
+            return None
 
     def get_member_by_type(self, type: str) -> List:
         """ Gets a list of members from pc_storage and party based on indicated type
@@ -198,20 +196,19 @@ class PartyManager(BaseModel):
         if type == "Pokemon":
             return self.pokemon[:]
         elif type == "Egg":
-            return self.egg[:]
+            return self.eggs[:]
         
     def get_stats(self) -> PokeStats:
         """ Populates a stats object with statistics about the party manager
         :return: PokeStats object
         :rtype: PokeStats
         """
-        all_members = self.pokemon[:] + self.eggs[:]
         members_by_type = self._total_per_elemental_type()
         total_eggs = len(self.get_member_by_type('Egg'))
         total_KO = 0
-        total_steps = self._total_steps
-        for member in all_members:
-            if member.member_type() == 'Pokemon' and member.is_KO:
+        total_steps = self.total_steps
+        for member in self.all_members:
+            if member.member_type == 'Pokemon' and member.is_KO:
                 total_KO += 1
         return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
 
@@ -222,4 +219,5 @@ class PartyManager(BaseModel):
         :rtype: dict
         """
         members_by_type = self.get_all_members_by_elemental_type()
+        print(members_by_type)
         return {k:len(v) for k,v in members_by_type.items()}
