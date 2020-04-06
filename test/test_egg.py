@@ -4,10 +4,9 @@ ACIT 2515
 Date: 2/25/2020
 """
 
-from egg import Egg
+from pokemodule.egg import Egg
 import unittest
 import random
-from datetime import datetime, date
 
 
 class EggTestClass(unittest.TestCase):

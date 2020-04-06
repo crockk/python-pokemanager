@@ -4,12 +4,11 @@ ACIT 2515
 Date: 2/25/2020
 """
 
-from party_manager import PartyManager
-from egg import Egg
-from pokemon import Pokemon
+from pokemodule.party_manager import PartyManager
+from pokemodule.egg import Egg
+from pokemodule.pokemon import Pokemon
 from unittest import TestCase, mock
 import random
-from datetime import datetime, date
 import os
 
 

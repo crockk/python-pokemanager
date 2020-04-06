@@ -4,10 +4,11 @@ ACIT 2515
 Date: 2/24/2020
 """
 
-from pokemon import Pokemon
+from pokemodule.pokemon import Pokemon
 import unittest
 import random
-from datetime import datetime, date
+from datetime import datetime
+
 
 class PokemonTestClass(unittest.TestCase):
 

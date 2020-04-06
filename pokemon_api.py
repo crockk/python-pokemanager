@@ -4,9 +4,7 @@ ACIT 2515
 Date: 3/9/2020
 """
 from flask import Flask, jsonify, request, make_response
-from party_manager import PartyManager
-from pokemon import Pokemon
-from egg import Egg
+from pokemodule.party_manager import PartyManager
 import os
 
 app = Flask(__name__)
