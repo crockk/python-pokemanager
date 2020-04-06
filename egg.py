@@ -31,52 +31,11 @@ class Egg(PartyMember):
 
     # _MEMBER_TYPE = "Egg"
 
-    # _MIN_STEPS = 1000  # steps
-    # _MAX_STEPS = 5000  # steps
-
     hatched = BooleanField(default=False)
     steps_required = IntegerField(column_name="steps_required", default=RandomStats.rand_steps())
     steps_remaining = IntegerField(column_name="steps_remaining", default=0)
     player = ForeignKeyField(PartyManager, backref='eggs')
 
-
-    # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str = None, item: str = None, json: Dict = None):
-    #     """ Initializes the instance properties
-
-    #     In addition to the superclass init, this function adds _steps_required, _steps_remaining, and _hatched as
-    #     properties for the class. These properties are defined in the help for the class Egg.
-
-    #     :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
-    #     :param int pokedex_num: The Pokedex number of the Pokemon within the egg, corresponding to a species.
-    #     :param str source: The location where the egg was aquired.
-    #     :param str nickname: The Pokemon's given name (set once the egg hatches, so set to None for now).
-    #     :param str item: The item held by the Pokemon, if any (set once the egg hatches, so set to None for now).
-    #     :return: No return
-    #     :rtype: None
-
-    #     """
-    #     super().__init__(id, pokedex_num, source, nickname, item, json)
-    #     if json is not None:
-    #         self._steps_required = json['steps_required']
-    #         self._steps_remaining = json['steps_remaining']
-    #         self._hatched = json['hatched']
-    #     else:
-    #         self._steps_required = self._rand_steps()
-
-    #         # This value is decremented by the walk method until it hatches
-    #         self._steps_remaining = self._steps_required
-
-    #         self._hatched = False
-
-    # @property
-    # def steps_required(self) -> int:
-    #     """ Gets and returns _steps_required property """
-    #     return self._steps_required
-
-    # @property
-    # def steps_remaining(self) -> int:
-    #     """ Gets and returns _steps_remaining property """
-    #     return self._steps_remaining
 
     # def add_steps(self, steps: int) -> None:
     #     """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.
@@ -95,11 +54,6 @@ class Egg(PartyMember):
     #     """ Returns a description of the Egg """
     #     return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. " \
     #            f"{ 'Currently in party.' if self._in_party else 'Not currently in party'}"
-
-    # @property
-    # def hatched(self) -> bool:
-    #     """ Gets and returns hatched property """
-    #     return self._hatched
 
     # def to_dict(self) -> dict:
     #     """ Converts current instance attributes into dictionary format and returns it
@@ -126,14 +80,3 @@ class Egg(PartyMember):
     #         "hatched": self._hatched
     #     }
     #     return dik
-
-    # @classmethod
-    # def member_type(cls) -> str:
-    #     """ Gets and returns class variable _MEMBER_TYPE
-
-    #     :return: Member type
-    #     :rtype: String
-
-    #     """
-    #     return cls._MEMBER_TYPE
-

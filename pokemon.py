@@ -37,98 +37,6 @@ class Pokemon(PartyMember):
 
     # _MEMBER_TYPE = "Pokemon"
 
-    # _MIN_BASE_XP = 80
-    # _MAX_BASE_XP = 120
-
-    # _MIN_LEVEL_UP_XP_MULT = 1.0
-    # _MAX_LEVEL_UP_XP_MULT = 1.5
-
-    # _STARTING_LEVEL = 5
-
-    # _MIN_BATTLE_STAT = 3
-    # _MAX_BATTLE_STAT = 18
-
-    # _MIN_BASE_HP = 15
-    # _MAX_BASE_HP = 35
-
-    # _MOVE_SET_LENGTH = 4
-
-    # _DISPLAY_COLUMN_WIDTH = 14
-
-    # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, ability: str = None, json: Dict = None) -> None:
-    #     """ Initializes the instance properties
-    #
-    #     :param int id: Automatically assigned id (incremented each time a new Pokemon or egg is created)
-    #     :param int pokedex_num: The Pokedex number of the Pokemon
-    #     :param str source: The location where the Pokemon was acquired.
-    #     :param str nickname: The Pokemon's given name
-    #     :param str item: The item held by the Pokemon
-    #     :param str ability: The Pokemon's special ability
-    #     :return: No return
-    #     :rtype: None
-    #
-    #     """
-    #
-    #     super().__init__(id, pokedex_num, source, nickname, item, json=json)
-    #
-    #     if ability is not None:
-    #         super()._validate_string(ability, "Ability must be a none-blank String")
-    #         self._ability = ability
-    #     else:
-    #         self._ability = "None"
-    #
-    #     types = Pokedex[pokedex_num][1].split('/')
-    #     for e_type in types:
-    #         super()._validate_string(e_type, "Elemental Type must be a none-blank String")
-    #
-    #     self._elemental_type = tuple(types)
-    #
-    #     if json is not None:
-    #         self._ability = json['ability']
-    #         self._next_level_xp = json['next_level_xp']
-    #         self._current_level_xp = json['current_level_xp']
-    #         self._level = json['level']
-    #         self._attack = json['attack']
-    #         self._speed = json['speed']
-    #         self._total_hp = json['total_hp']
-    #         self._current_hp = json['current_hp']
-    #         self._is_KO = json['is_KO']
-    #         self._moves = json['moves']
-    #     else:
-    #         self._next_level_xp = self._rand_base_xp()
-    #         self._current_level_xp = 0
-    #         self._level = self._STARTING_LEVEL
-    #
-    #         self._attack = self._rand_battle_stat()
-    #         self._defense = self._rand_battle_stat()
-    #         self._speed = self._rand_battle_stat()
-    #
-    #         self._total_hp = self._rand_base_hp()
-    #         self._current_hp = self._total_hp
-    #
-    #         self._is_KO = False
-    #         self._moves = self._rand_move_set()
-
-    # @property
-    # def id(self) -> int:
-    #     """ Gets and returns property id
-
-    #     :return: ID
-    #     :rtype: Integer
-
-    #     """
-    #     return self._id
-
-    # @property
-    # def moves(self) -> List:
-    #     """ Gets and returns this pokemon's move list
-
-    #     :return: Pokemon moves
-    #     :rtype: List
-
-    #     """
-    #     return self._moves
-
     # @property
     # def xp_till_next_level(self) -> int:
     #     """ Calculates and returns the Pokemon's xp till next level
@@ -241,16 +149,6 @@ class Pokemon(PartyMember):
     #     else:
     #         self._current_hp -= health_decrease
 
-    # @classmethod
-    # def member_type(cls) -> str:
-    #     """ Gets and returns class variable _MEMBER_TYPE
-
-    #     :return: Member type
-    #     :rtype: String
-
-    #     """
-    #     return cls._MEMBER_TYPE
-
     # def _level_up(self) -> None:
     #     """ Level up the pokemon by 1 and set the current XP to 0
 
@@ -274,68 +172,6 @@ class Pokemon(PartyMember):
     #     """
     #     self._is_KO = True
     #     print(f"{self._nickname} was knocked out")
-
-    # @classmethod
-    # def _rand_base_xp(cls) -> int:
-    #     """ Generates random base xp based on class variables
-
-    #     :return: Base xp level
-    #     :rtype: Integer
-
-    #     """
-    #     return randint(cls._MIN_BASE_XP, cls._MAX_BASE_XP)
-
-    # @classmethod
-    # def _rand_xp_level_up_multiplier(cls) -> float:
-    #     """ Generates xp level up multiplier based on class variables
-
-    #     :return: Xp level up multiplier
-    #     :rtype: Float
-
-    #     """
-    #     return round(uniform(cls._MIN_LEVEL_UP_XP_MULT, cls._MAX_LEVEL_UP_XP_MULT), 2)
-
-    # @classmethod
-    # def _rand_battle_stat(cls) -> int:
-    #     """ Generates random base battle stat based on class variables
-
-    #     :return: Base stat
-    #     :rtype: Integer
-
-    #     """
-    #     return randint(cls._MIN_BATTLE_STAT, cls._MAX_BATTLE_STAT)
-
-    # @classmethod
-    # def _rand_base_hp(cls) -> int:
-    #     """ Generates random base HP based on class variables
-
-    #     :return: Base HP
-    #     :rtype: Integer
-
-    #     """
-    #     return randint(cls._MIN_BASE_HP, cls._MAX_BASE_HP)
-
-    # @classmethod
-    # def _rand_move_set(cls) -> list:
-    #     """ Randomly selects _MOVE_SET_LENGTH number of moves from the Moves stored in pokedex module
-
-    #     :return: Move list from Moves
-    #     :rtype: list
-
-    #     """
-    #     move_indices = sample(list(Moves), cls._MOVE_SET_LENGTH)
-
-    #     return [Moves[move_index] for move_index in move_indices]
-
-    # @classmethod
-    # def _display_3_column_line(cls, col1, col2, col3) -> str:
-    #     """ Displays a single row in a 3 column table
-
-    #     :return: a formatted row in the table
-    #     :rtype: String
-        
-    #     """
-    #     return f"{col1}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col2}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '|' + f"{col3}".ljust(cls._DISPLAY_COLUMN_WIDTH) + '\n'
 
     # def to_dict(self) -> dict:
     #     """ Create JSON Object to parse to file
@@ -371,7 +207,7 @@ class Pokemon(PartyMember):
     #     }
     #     return dikt
 
-    # next_level_xp = IntegerField(column_name='next_level_xp', default=_rand_base_xp)
+    next_level_xp = IntegerField(column_name='next_level_xp', default=RandomStats.rand_base_xp)
     current_level_xp = IntegerField(column_name='current_level_xp', default=0)
     level = IntegerField(column_name='level', default=5)
     ability = CharField(column_name='ability', null=True)
