@@ -25,29 +25,22 @@ class PartyMember(BaseModel):
 
     """
 
-#     @abstractmethod
-#     def member_type(self) -> None:
-#         """ Abstract method member_type implemented in child classes
+    @property
+    def elemental_type(self):
+        return Pokedex[self.pokedex_num][1]
 
-#         :raise: NotImplementedError
-#         :return: None
-#         :rtype: None
-#         """
-#         raise NotImplementedError
+    @abstractmethod
+    def to_dict(self) -> None:
+        """ Abstract method to_dict implemented in child classes
 
-#     @abstractmethod
-#     def to_dict(self) -> None:
-#         """ Abstract method to_dict implemented in child classes
-
-#         :raise: NotImplementedError
-#         :return: None
-#         :rtype: None
-#         """
-#         raise NotImplementedError
+        :raise: NotImplementedError
+        :return: None
+        :rtype: None
+        """
+        raise NotImplementedError
 
 
     pokedex_num = IntegerField(column_name='pokedex_num')
-    elemental_type = CharField(column_name='elemental_type', default=Pokedex[pokedex_num][1])
     nickname = CharField(column_name='nickname')
     in_party = BooleanField(default=False)
     weight = DecimalField(column_name='weight', default=RandomStats.rand_weight)
