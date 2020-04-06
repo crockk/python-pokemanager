@@ -8,6 +8,8 @@ from peewee import IntegerField, CharField
 from db_module.db import BaseModel
 import random
 from pokemodule.pokedex import Pokedex
+from typing import List
+from pokestats import PokeStats
 
 
 class PartyManager(BaseModel):
@@ -75,6 +77,8 @@ class PartyManager(BaseModel):
         else:
             return False
     
+    # TODO: HOW DO YOU DELETE STUFF ###################################
+
     # def release_party_member(self, id: int) -> bool:
     #     """ Releases a party member from _party back into the wilderness :'(
     #     :param int id: The ID of the Pokemon or Egg to be released.
@@ -87,6 +91,9 @@ class PartyManager(BaseModel):
     #         return True
     #     else:
     #         return False
+
+    # TODO: HOW DO YOU DELETE STUFF ###################################
+
     # def release_pc_pokemon(self, id: int) -> bool:
     #     """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
     #     :param int id: The ID of the Pokemon or Egg to be released.
@@ -100,6 +107,8 @@ class PartyManager(BaseModel):
     #         return True
     #     else:
     #         return False
+    
+    # TODO: HOW DO YOU COMPOSITION STUFF ###################################
   
     # def walk(self, steps: int) -> None:
     #     """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
@@ -108,18 +117,20 @@ class PartyManager(BaseModel):
     #      :return: No return
     #      :rtype: None
     #      """
-    #     eggs = self.get_member_by_type('Egg')
+    #     eggs = self.eggs[:]
     #     for egg in eggs:
     #         if egg.in_party:
     #             egg.add_steps(steps)
     #             if egg.hatched:
     #                 temp_egg = egg
-    #                 self.release_party_member(egg.id)
-    #                 self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
+    #                 # self.release_party_member(egg.id)
+    #                 # self.create_member("Pokemon", temp_egg.pokedex_num, temp_egg.source, temp_egg.nickname)
+
     #                 self.move_to_party(self._ID - 1)
-    #     self._total_steps += steps
+    #     self.total_steps += steps
       
     #     self._write_to_file()
+
     # def add_xp_to_pokemon(self, id: int, xp: int) -> None:
     #     """ Adds a specified amount of experience points to a given PartyMember
     #     :param id: The PartyMember to add xp to
@@ -129,38 +140,41 @@ class PartyManager(BaseModel):
     #     """
     #     self.get_member_by_id(id).add_xp(xp)
     #     self._write_to_file()
-    # def get_members_by_elemental_type(self, types: tuple) -> dict:
-    #     """ Gets a collection of party members based on a given elemental type or types.
-    #     :param tuple types: A tuple containing the desired types.
-    #     :return: Returns a collection of desired types from the party, seperated by type
-    #     :rtype: Dictionary
-    #     """
-    #     members = {}
-    #     all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-    #     for member in all_members:
-    #         if member.member_type == Pokemon.member_type:
-    #             for e_type in member.elemental_type:
-    #                 if e_type in types:
-    #                     if e_type in members:
-    #                         members[e_type].append(member)
-    #                     else:
-    #                         members[e_type] = [member]
-    #     return members
-    # def get_all_members_by_elemental_type(self) -> dict:
-    #     """ Gets a collection of party members based on types
-    #     :return: Returns a collection of desired types from the party, seperated by type
-    #     :rtype: Dictionary
-    #     """
-    #     members = {}
-    #     all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-    #     for member in all_members:
-    #         if member.member_type == Pokemon.member_type:
-    #             for e_type in member.elemental_type:
-    #                 if e_type in members:
-    #                     members[e_type].append(member)
-    #                 else:
-    #                     members[e_type] = [member]
-    #     return members
+    
+    def get_members_by_elemental_type(self, types: tuple) -> dict:
+        """ Gets a collection of party members based on a given elemental type or types.
+        :param tuple types: A tuple containing the desired types.
+        :return: Returns a collection of desired types from the party, seperated by type
+        :rtype: Dictionary
+        """
+        members = {}
+        for member in self.pokemon[:]:
+            member_types = member.elemental_type.split('/')
+            for e_type in member_types:
+                if e_type in types:
+                    if e_type in members:
+                        members[e_type].append(member)
+                    else:
+                        members[e_type] = [member]
+        return members
+
+
+    def get_all_members_by_elemental_type(self) -> dict:
+        """ Gets a collection of party members based on types
+        :return: Returns a collection of desired types from the party, seperated by type
+        :rtype: Dictionary
+        """
+        members = {}
+        all_members = self.pokemon[:] + self.eggs[:]
+        for member in all_members:
+            if member.member_type == "Pokemon": #Pokemon.member_type:
+                for e_type in member.elemental_type:
+                    if e_type in members:
+                        members[e_type].append(member)
+                    else:
+                        members[e_type] = [member]
+        return members
+        
     # def get_member_by_id(self, id: int) -> PartyMember:
     #     """ Gets a single member from the party based on id.
     #     :param int id: The ID of the party member to be retrieved.
@@ -173,37 +187,38 @@ class PartyManager(BaseModel):
     #         return self._pc_pokemon[id]
     #     else:
     #         return None
-    # def get_member_by_type(self, type: str) -> List:
-    #     """ Gets a list of members from pc_storage and party based on indicated type
-    #     :param str type: The type to filter by
-    #     :return: List of members
-    #     :rtype: List
-    #     """
-    #     all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-    #     members = []
-    #     for member in all_members:
-    #         if member.member_type() == type:
-    #             members.append(member)
-    #     return members
-    # def get_stats(self) -> PokeStats:
-    #     """ Populates a stats object with statistics about the party manager
-    #     :return: PokeStats object
-    #     :rtype: PokeStats
-    #     """
-    #     all_members = list(self._pc_pokemon.values()) + list(self._party.values())
-    #     members_by_type = self._total_per_elemental_type()
-    #     total_eggs = len(self.get_member_by_type('Egg'))
-    #     total_KO = 0
-    #     total_steps = self._total_steps
-    #     for member in all_members:
-    #         if member.member_type() == 'Pokemon' and member.is_KO:
-    #             total_KO += 1
-    #     return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
-    # def _total_per_elemental_type(self) -> dict:
-    #     """ Populates and returns a dictionary of total amount of members by each elemental type, eg:
-    #         {'Grass': 5, 'Fire': 1}
-    #     :return: Dictionary of totals
-    #     :rtype: dict
-    #     """
-    #     members_by_type = self.get_all_members_by_elemental_type()
-    #     return {k:len(v) for k,v in members_by_type.items()}
+
+    def get_member_by_type(self, type: str) -> List:
+        """ Gets a list of members from pc_storage and party based on indicated type
+        :param str type: The type to filter by
+        :return: List of members
+        :rtype: List
+        """
+        if type == "Pokemon":
+            return self.pokemon[:]
+        elif type == "Egg":
+            return self.egg[:]
+        
+    def get_stats(self) -> PokeStats:
+        """ Populates a stats object with statistics about the party manager
+        :return: PokeStats object
+        :rtype: PokeStats
+        """
+        all_members = self.pokemon[:] + self.eggs[:]
+        members_by_type = self._total_per_elemental_type()
+        total_eggs = len(self.get_member_by_type('Egg'))
+        total_KO = 0
+        total_steps = self._total_steps
+        for member in all_members:
+            if member.member_type() == 'Pokemon' and member.is_KO:
+                total_KO += 1
+        return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
+
+    def _total_per_elemental_type(self) -> dict:
+        """ Populates and returns a dictionary of total amount of members by each elemental type, eg:
+            {'Grass': 5, 'Fire': 1}
+        :return: Dictionary of totals
+        :rtype: dict
+        """
+        members_by_type = self.get_all_members_by_elemental_type()
+        return {k:len(v) for k,v in members_by_type.items()}
