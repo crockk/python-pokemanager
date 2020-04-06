@@ -8,7 +8,7 @@ from peewee import CharField, IntegerField, DecimalField, DateField, BooleanFiel
 from abc import abstractmethod
 from datetime import datetime
 from db import BaseModel
-from pokedex import Pokedex, RandomStats
+from pokemodule.pokedex import Pokedex, RandomStats
 
 
 class PartyMember(BaseModel):

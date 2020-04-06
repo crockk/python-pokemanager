@@ -6,13 +6,8 @@ Date: 2/13/2020
 
 from peewee import IntegerField, CharField
 from db import BaseModel
-from poke_stats import PokeStats
-from typing import List, Dict
 import random
-from pokedex import Pokedex
-import os
-import json
-from datetime import date, datetime
+from pokemodule.pokedex import Pokedex
 
 
 class PartyManager(BaseModel):
