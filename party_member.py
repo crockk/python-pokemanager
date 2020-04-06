@@ -4,12 +4,10 @@ ACIT 2515
 Date: 2/13/2020
 """
 
-from peewee import CharField, IntegerField, DecimalField, DateField, BooleanField, ForeignKeyField
-from abc import abstractmethod, ABC
-from datetime import date, datetime
-from random import uniform
+from peewee import CharField, IntegerField, DecimalField, DateField, BooleanField
+from abc import abstractmethod
+from datetime import datetime
 from db import BaseModel
-from typing import Dict
 from pokedex import Pokedex, RandomStats
 
 
@@ -38,7 +36,6 @@ class PartyMember(BaseModel):
         :rtype: None
         """
         raise NotImplementedError
-
 
     pokedex_num = IntegerField(column_name='pokedex_num')
     nickname = CharField(column_name='nickname')
