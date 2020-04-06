@@ -31,52 +31,55 @@ class Egg(PartyMember):
 
     # _MEMBER_TYPE = "Egg"
 
+    _steps = RandomStats.rand_steps()
+
     hatched = BooleanField(default=False)
-    steps_required = IntegerField(column_name="steps_required", default=RandomStats.rand_steps())
-    steps_remaining = IntegerField(column_name="steps_remaining", default=0)
+    steps_required = IntegerField(column_name="steps_required", default=_steps)
+    steps_remaining = IntegerField(column_name="steps_remaining", default=_steps)
     player = ForeignKeyField(PartyManager, backref='eggs')
 
+    def add_steps(self, steps: int) -> None:
+        """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.
 
-    # def add_steps(self, steps: int) -> None:
-    #     """ Decrements _steps_remaining by param steps. If _steps_remaining <= 0, _hatched property is set to True.
+        :param int steps: Number of steps to decrement _steps_remaining by.
+        :return: No return
+        :rtype: None
 
-    #     :param int steps: Number of steps to decrement _steps_remaining by.
-    #     :return: No return
-    #     :rtype: None
+        """
 
-    #     """
-    #     self._steps_remaining -= steps
-    #     if self._steps_remaining <= 0:
-    #         self._hatched = True
+        self.steps_remaining = self.steps_remaining - steps
+        if self.steps_remaining <= 0:
+            self.hatched = True
+        self.save()
 
-    # @property
-    # def description(self) -> str:
-    #     """ Returns a description of the Egg """
-    #     return f"Your {self._nickname} is {self._height}cm tall and {self._weight}kg. " \
-    #            f"{ 'Currently in party.' if self._in_party else 'Not currently in party'}"
+    @property
+    def description(self) -> str:
+        """ Returns a description of the Egg """
+        return f"Your {self.nickname} is {self.height}cm tall and {self.weight}kg. " \
+               f"{ 'Currently in party.' if self.in_party else 'Not currently in party'}"
 
-    # def to_dict(self) -> dict:
-    #     """ Converts current instance attributes into dictionary format and returns it
+    def to_dict(self) -> dict:
+        """ Converts current instance attributes into dictionary format and returns it
 
-    #     :return: Dictionary of all instance attributes
-    #     :rtype: dict
+        :return: Dictionary of all instance attributes
+        :rtype: dict
 
-    #     """
-    #     dik = {
-    #         "id": self._id,
-    #         "member_type": self.member_type(),
-    #         "pokedex_num": self._pokedex_num,
-    #         "source": self._source,
-    #         "nickname":  self._nickname,
-    #         "item": self._item,
+        """
+        dik = {
+            "id": self.id,
+            "member_type": self.member_type,
+            "pokedex_num": self.pokedex_num,
+            "source": self.source,
+            "nickname":  self.nickname,
+            "item": self.item,
 
-    #         "in_party": self._in_party,
-    #         "weight": self._weight,
-    #         "height": self._height,
-    #         "date_acquired": str(self._date_acquired),
+            "in_party": self.in_party,
+            "weight": self.weight,
+            "height": self.height,
+            "date_acquired": str(self.date_acquired),
 
-    #         "steps_required": self._steps_required,
-    #         "steps_remaining": self._steps_remaining,
-    #         "hatched": self._hatched
-    #     }
-    #     return dik
+            "steps_required": self.steps_required,
+            "steps_remaining": self.steps_remaining,
+            "hatched": self.hatched
+        }
+        return dik
