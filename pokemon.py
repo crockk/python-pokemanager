@@ -127,6 +127,7 @@ class Pokemon(PartyMember):
             self._level_up()
         else:
             self.current_level_xp += xp_increase
+        self.save()
 
     def heal(self, health_increase: int) -> None:
         """ Heals Pokemon based on given increase
@@ -142,6 +143,7 @@ class Pokemon(PartyMember):
             self.current_hp = self.total_hp
         else:
             self.current_hp += health_increase
+        self.save()
 
     def damage(self, health_decrease: int) -> None:
         """ Damages the Pokemon (decreases current HP) by a given value
@@ -157,6 +159,7 @@ class Pokemon(PartyMember):
             self._knock_out()
         else:
             self.current_hp -= health_decrease
+        self.save()
 
     def _level_up(self) -> None:
         """ Level up the pokemon by 1 and set the current XP to 0
@@ -169,6 +172,7 @@ class Pokemon(PartyMember):
         self.level += 1
         self.current_level_xp = 0
         self.next_level_xp = ceil(self.next_level_xp * RandomStats.rand_xp_level_up_multiplier())
+        self.save()
 
         print(f"{self.nickname} has leveled up to level {self.level}!!")
 
@@ -180,6 +184,7 @@ class Pokemon(PartyMember):
 
         """
         self.is_KO = True
+        self.save()
         print(f"{self.nickname} was knocked out")
 
     def to_dict(self) -> dict:
