@@ -31,45 +31,36 @@ class PartyManager(BaseModel):
 
     # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
 
-    # def create_member(self, member_type: str, pokedex_num: int, source: str, nickname: str = None, item: str = None, ability: str = None, json: Dict = None) -> int:
-    #     self._validate_pokedex_number(pokedex_num)
-    #     if not nickname:
-    #         nickname = self._POKEDEX[pokedex_num][0]
-    #     if member_type == Pokemon.member_type():
-    #         self._pc_pokemon[self._ID] = Pokemon(self._ID, pokedex_num, source, nickname=nickname, item=item, ability=ability, json=json)
-    #         self._ID += 1
-    #     elif member_type == Egg.member_type():
-    #         self._pc_pokemon[self._ID] = Egg(self._ID, pokedex_num, source, nickname=nickname, item=item, json=json)
-    #         self._ID += 1
-    #     else:
-    #         raise ValueError(f"{member_type} is not a valid Party Member type")
-      
-    #     self._write_to_file()
-    #     return self._ID - 1
+    @property
+    def pc_members(self):
+        pc = {p.id:p for p in self.pokemon if not p.in_party}
+        return pc
     
-    # def move_to_party(self, id: int) -> bool:
-    #     """ Moves a pokemon from the PC storage into the party
-    #     :param int id: Pokemon's ID
-    #     :return: Boolean for testing
-    #     :rtype: Boolean
-    #     """
-    #     if len(self._party) >= 6:
-    #         print('Your party is full')
-    #         return False
-    #     elif id in self._party:
-    #         print(f"This {self._party[id].member_type} is already in your party!")
-    #         return False
-    #     elif id not in self._pc_pokemon:
-    #         print("This pokemon is not available")
-    #         return False
-    #     else:
-    #         pokemon = self._pc_pokemon[id]
-    #         self._party[id] = pokemon
-    #         self._party[id]._in_party = True
-    #         self.release_pc_pokemon(id)
-          
-    #         self._write_to_file()
-    #         return True
+    @property
+    def party_members(self):
+        party = {p.id:p for p in self.pokemon if p.in_party}
+        return party
+    
+    def move_to_party(self, id: int) -> bool:
+        """ Moves a pokemon from the PC storage into the party
+        :param int id: Pokemon's ID
+        :return: Boolean for testing
+        :rtype: Boolean
+        """
+        if len(self.party_members) >= 6:
+            print('Your party is full')
+            return False
+        elif id in self.party_members:
+            print(f"This {self._party[id].member_type} is already in your party!")
+            return False
+        elif id not in self.pc_members:
+            print("This pokemon is not available")
+            return False
+        else:
+            # self.pokemon.
+            return True
+
+
     # def move_to_pc(self, id: int) -> bool:
     #     """ Removes a party member from _party and places it into _pc_storage.
     #     :param int id: The ID of the Pokemon or Egg to be placed into storage.
