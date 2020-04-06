@@ -44,6 +44,8 @@ class Egg(PartyMember):
         :rtype: None
 
         """
+        if type(steps) != int:
+            raise ValueError('Steps must be integer.')
 
         self.steps_remaining = self.steps_remaining - steps
         if self.steps_remaining <= 0:
