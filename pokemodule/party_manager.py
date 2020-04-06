@@ -9,7 +9,7 @@ from db_module.db import BaseModel
 import random
 from pokemodule.pokedex import Pokedex
 from typing import List
-from pokestats import PokeStats
+from pokemodule.pokestats import PokeStats
 
 
 class PartyManager(BaseModel):
