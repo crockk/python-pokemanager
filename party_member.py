@@ -10,6 +10,7 @@ from datetime import date, datetime
 from random import uniform
 from db import BaseModel
 from typing import Dict
+from pokedex import RandomStats
 
 
 class PartyMember(BaseModel):
@@ -31,46 +32,47 @@ class PartyMember(BaseModel):
 
     _MIN_HEIGHT = 80  # CM
     _MAX_HEIGHT = 1500  # CM
+    
 
-#     # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, json: Dict = None) -> None:
-#     #     """ Initalizes instance properties
-#     #
-#     #     :param int id: Unique identifier for pokemon
-#     #     :param int pokedex_num: Number corresponding with the pokedex entry of that member
-#     #     :param str source: The location that the member was acquired
-#     #     :param str nickname: A given nickname
-#     #     :param str item: The item that the member is holding
-#     #     :return: No return
-#     #     :rtype: None
-#     #
-#     #     """
-#     #     self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
-#     #
-#     #     self._validate_int(pokedex_num, 1, "Pokedex Number must be greater than or equal to 1")
-#     #
-#     #     self._validate_string(source, "Source must be a none-blank String")
-#     #
-#     #     self._validate_string(nickname, "Nickname must be a none-blank String")
-#     #
-#     #     if item is not None:
-#     #         self._validate_string(item, "Item must be a none-blank String")
-#     #
-#     #     if json is not None:
-#     #         self._in_party = json['in_party']
-#     #         self._weight = json['weight']
-#     #         self._height = json['height']
-#     #         self._date_acquired = json['date_acquired']
-#     #     else:
-#     #         self._in_party = False
-#     #         self._weight = self._rand_weight()
-#     #         self._height = self._rand_height()
-#     #         self._date_acquired = datetime.now().date()
-#     #
-#     #     self._id = id
-#     #     self._pokedex_num = pokedex_num
-#     #     self._source = source
-#     #     self._nickname = nickname
-#     #     self._item = item
+    # def __init__(self, id: int, pokedex_num: int, source: str, nickname: str, item: str = None, json: Dict = None) -> None:
+    #     """ Initalizes instance properties
+    #
+    #     :param int id: Unique identifier for pokemon
+    #     :param int pokedex_num: Number corresponding with the pokedex entry of that member
+    #     :param str source: The location that the member was acquired
+    #     :param str nickname: A given nickname
+    #     :param str item: The item that the member is holding
+    #     :return: No return
+    #     :rtype: None
+    #
+    #     """
+    #     self._validate_int(id, 1, "ID must be an Integer greater than or equal to 1")
+    #
+    #     self._validate_int(pokedex_num, 1, "Pokedex Number must be greater than or equal to 1")
+    #
+    #     self._validate_string(source, "Source must be a none-blank String")
+    #
+    #     self._validate_string(nickname, "Nickname must be a none-blank String")
+    #
+    #     if item is not None:
+    #         self._validate_string(item, "Item must be a none-blank String")
+    #
+    #     if json is not None:
+    #         self._in_party = json['in_party']
+    #         self._weight = json['weight']
+    #         self._height = json['height']
+    #         self._date_acquired = json['date_acquired']
+    #     else:
+    #         self._in_party = False
+    #         self._weight = self._rand_weight()
+    #         self._height = self._rand_height()
+    #         self._date_acquired = datetime.now().date()
+    #
+    #     self._id = id
+    #     self._pokedex_num = pokedex_num
+    #     self._source = source
+    #     self._nickname = nickname
+    #     self._item = item
 
 #     @property
 #     def id(self) -> int:
@@ -201,61 +203,6 @@ class PartyMember(BaseModel):
 
 #         self._item = item
 
-    @classmethod
-    def _rand_weight(cls) -> float:
-        """ Classmethod that calculates a random weight
-
-        :return: Returns random weight
-        :rtype: Float
-
-        """
-        return round(uniform(cls._MIN_WEIGHT, cls._MAX_WEIGHT), 2)
-
-    @classmethod
-    def _rand_height(cls) -> float:
-        """ Classmethod that calculates a random height
-
-        :return: Returns random height
-        :rtype: Float
-
-        """
-        return round(uniform(cls._MIN_HEIGHT, cls._MAX_HEIGHT), 2)
-
-#     @staticmethod
-#     def _validate_int(num: int, min_val: int, error_msg: str, max_val: int = None) -> None:
-#         """ Private method used to validate integers according to a minimum value and type
-
-#         :param int num: The number to be validated
-#         :param int min_val: The minimum value to be evaluated to
-#         :param str error_msg: Error message to be returned if exception raised
-#         :raises: TypeError, ValueError
-#         :return: No return
-#         :rtype: None
-
-#         """
-#         if type(num) is not int:
-#             raise TypeError(error_msg + f"\nNot type {type(num)}")
-#         if num < min_val:
-#             raise ValueError(error_msg)
-#         if max_val is not None:
-#             if num > max_val:
-#                 raise ValueError(error_msg)
-        
-#     @staticmethod
-#     def _validate_string(string: str, error_msg: str) -> None:
-#         """ Private method used to validate strings according to type
-
-#         :param str string: String to be validated
-#         :param str error_msg: Error message to be returned if exception raised
-#         :raises: TypeError, ValueError
-#         :return: No return
-#         :rtype: None
-#         """
-#         if type(string) is not str:
-#             raise TypeError(error_msg + f"\nNot type {type(string)}")
-#         if not string:
-#             raise ValueError(error_msg)
-
 #     @abstractmethod
 #     def member_type(self) -> None:
 #         """ Abstract method member_type implemented in child classes
@@ -276,11 +223,12 @@ class PartyMember(BaseModel):
 #         """
 #         raise NotImplementedError
 
+
     pokedex_num = IntegerField(column_name='pokedex_num')
     nickname = CharField(column_name='nickname')
     in_party = BooleanField(default=False)
-    weight = DecimalField(column_name='weight', default=_rand_weight)
-    height = DecimalField(column_name='height', default=_rand_height)
+    weight = DecimalField(column_name='weight', default=RandomStats.rand_weight)
+    height = DecimalField(column_name='height', default=RandomStats.rand_height)
     source = CharField(column_name='source', null=True)
     date_acquired = DateField(default=datetime.now)
     item = CharField(column_name='item', null=True)
