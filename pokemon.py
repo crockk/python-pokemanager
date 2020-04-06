@@ -211,7 +211,6 @@ class Pokemon(PartyMember):
     current_level_xp = IntegerField(column_name='current_level_xp', default=0)
     level = IntegerField(column_name='level', default=5)
     ability = CharField(column_name='ability', null=True)
-    # elemental_type = CharField(column_name='elemental_type', default=Pokedex[PartyMember.pokedex_num][1])
     attack = IntegerField(column_name='attack', default=RandomStats.rand_battle_stat())
     speed = IntegerField(column_name='speed', default=RandomStats.rand_battle_stat())
     defense = IntegerField(column_name='defense', default=RandomStats.rand_battle_stat)

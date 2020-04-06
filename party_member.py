@@ -10,7 +10,7 @@ from datetime import date, datetime
 from random import uniform
 from db import BaseModel
 from typing import Dict
-from pokedex import RandomStats
+from pokedex import Pokedex, RandomStats
 
 
 class PartyMember(BaseModel):
@@ -47,6 +47,7 @@ class PartyMember(BaseModel):
 
 
     pokedex_num = IntegerField(column_name='pokedex_num')
+    elemental_type = CharField(column_name='elemental_type', default=Pokedex[pokedex_num][1])
     nickname = CharField(column_name='nickname')
     in_party = BooleanField(default=False)
     weight = DecimalField(column_name='weight', default=RandomStats.rand_weight)
