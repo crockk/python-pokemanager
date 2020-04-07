@@ -7,7 +7,7 @@ Date: 2/13/2020
 from peewee import CharField, IntegerField, DecimalField, DateField, BooleanField
 from abc import abstractmethod
 from datetime import datetime
-from db_module.db import BaseModel
+from db.db import BaseModel
 from pokemodule.pokedex import Pokedex, RandomStats
 
 

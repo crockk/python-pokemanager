@@ -5,7 +5,7 @@ Date: 2/13/2020
 """
 
 from peewee import IntegerField, CharField
-from db_module.db import BaseModel
+from db.db import BaseModel
 import random
 from pokemodule.pokedex import Pokedex, IdManager
 from typing import List
