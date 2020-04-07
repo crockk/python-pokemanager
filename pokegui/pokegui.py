@@ -59,7 +59,7 @@ class MainAppController(ThemedTk):
 
         tk.Label(top_frame, text="Player").grid(row=5, column=1)
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *managers, command=self._update_all)
-        self._dropdown.grid(row=1, column=1)
+        self._dropdown.grid(row=1, column=2)
 
         # Call this on select
         self._pc_list.bind("<<ListboxSelect>>", self._update_textbox)
