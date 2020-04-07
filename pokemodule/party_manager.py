@@ -210,6 +210,7 @@ class PartyManager(BaseModel):
     def to_dict(self):
         dikt = {
             "player_name": self.player_name,
-            "total_steps": self.total_steps
+            "total_steps": self.total_steps,
+            "id": self.id
         }
         return dikt
