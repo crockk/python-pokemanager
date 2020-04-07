@@ -90,8 +90,8 @@ class Egg(PartyMember):
             "item": self.item,
 
             "in_party": self.in_party,
-            "weight": self.weight,
-            "height": self.height,
+            "weight": str(self.weight),
+            "height": str(self.height),
             "date_acquired": str(self.date_acquired),
 
             "steps_required": self.steps_required,
