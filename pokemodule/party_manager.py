@@ -157,11 +157,14 @@ class PartyManager(BaseModel):
         :rtype: Pokemon or Egg
         """
         if id[0] == "p":
-            return [p for p in self.pokemon if p.id == id][0]
+            result = [p for p in self.pokemon if p.id == id]
         elif id[0] == "e":
-            return [e for e in self.eggs if e.id == id][0]
+            result = [e for e in self.eggs if e.id == id]
         else:
-            return None
+            result = None
+        
+        if result:
+            return result[0]
 
     def get_member_by_type(self, type: str) -> List:
         """ Gets a list of members from pc_storage and party based on indicated type
