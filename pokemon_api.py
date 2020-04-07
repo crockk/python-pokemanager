@@ -17,6 +17,9 @@ create_tables()
 poke_inventory = PartyManager(player_name="Ashy Ketchup")
 poke_inventory.save()
 
+nolan = PartyManager(player_name="Nolan")
+nolan.save()
+
 poke1 = Pokemon.create(pokedex_num=10, nickname='Slimjim', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 poke1.save()
 poke2 = Pokemon.create(pokedex_num=5, nickname='Bubbs', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='pomo', item='rock')
@@ -190,6 +193,13 @@ def manager_stats(manager_id):
     player = PartyManager.get_by_id(manager_id)
     return jsonify(player.get_stats().to_dict())
 
+@app.route('/managers', methods=["GET"])
+def all_managers():
+    """ GET method for Party Manager
+    Returns a json of all the managers in the DB
+
+    """
+    # return jsonify(PartyManager.)
 
 if __name__ == "__main__":
     app.run(debug=True)
