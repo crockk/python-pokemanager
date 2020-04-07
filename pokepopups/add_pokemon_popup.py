@@ -4,7 +4,7 @@ from tkinter import ttk, messagebox
 import re
 
 
-class AddStudentPopup(tk.Frame):
+class AddPokemonPopup(tk.Frame):
     """ Popup Frame to Add a Student """
 
     def __init__(self, parent, close_callback):
