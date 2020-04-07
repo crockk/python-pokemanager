@@ -178,9 +178,9 @@ class MainAppController(ThemedTk):
         self._party_list.delete(0, tk.END)
         for m in r.json():
             if m['in_party']:
-                self._party_list.insert(tk.END, m['id'] + '-' + m['nickname'])
+                self._party_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
             else:
-                self._pc_list.insert(tk.END, m['id'] + '-' + m['nickname'])
+                self._pc_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
 
 
 if __name__ == "__main__":
