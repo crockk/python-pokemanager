@@ -4,13 +4,11 @@ ACIT 2515
 Date: 3/9/2020
 """
 from flask import Flask, jsonify, request, make_response
-import simplejson as json
 from pokemodule.party_manager import PartyManager
 from pokemodule.pokemon import Pokemon
 from pokemodule.egg import Egg
 from create_tables import create_tables
 from drop_tables import drop_tables
-import os
 
 app = Flask(__name__)
 drop_tables()
@@ -19,8 +17,12 @@ create_tables()
 poke_inventory = PartyManager(player_name="Ashy Ketchup")
 poke_inventory.save()
 
-poke1 = Pokemon.create(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
+poke1 = Pokemon.create(pokedex_num=10, nickname='Slimjim', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 poke1.save()
+poke2 = Pokemon.create(pokedex_num=5, nickname='Bubbs', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='pomo', item='rock')
+poke2.save()
+poke2 = Pokemon.create(pokedex_num=7, nickname='Hideyoshi', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='tokyo', item='sakura')
+poke2.save()
 
 egg1 = Egg.create(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='house', item='pee')
 egg1.save()
@@ -78,7 +80,6 @@ def add_egg(manager_id):
         return make_response(message, 400)
 
 
-### BROKEN ##########################
 @app.route("/<int:manager_id>/member/<member_id>", methods=["PUT"])
 def update_member(manager_id, member_id):
     """ PUT method for Party Member
@@ -161,7 +162,7 @@ def all_members(manager_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
-    return json.JSONEncoder().encode([member.to_dict() for member in player.all_members])
+    return jsonify([member.to_dict() for member in player.all_members])
 
 
 @app.route("/<int:manager_id>/member/all/<string:member_type>", methods=["GET"])
@@ -176,9 +177,9 @@ def all_members_by_type(manager_id, member_type):
     player = PartyManager.get_by_id(manager_id)
     return jsonify([member.to_dict() for member in player.get_member_by_type(member_type)])
 
-### TODO
-@app.route("/partymanager/member/stats", methods=["GET"])
-def manager_stats():
+
+@app.route("/<int:manager_id>/member/stats", methods=["GET"])
+def manager_stats(manager_id):
     """ POST method for Party Manager
     Returns a json representation of the stats for the Party Manager
 
@@ -186,7 +187,9 @@ def manager_stats():
     :rtype: Response Object
     
     """
-    return jsonify(poke_inventory.get_stats().to_dict())
+    player = PartyManager.get_by_id(manager_id)
+    return jsonify(player.get_stats().to_dict())
+
 
 if __name__ == "__main__":
     app.run(debug=True)
