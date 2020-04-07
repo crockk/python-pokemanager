@@ -188,7 +188,7 @@ def manager_stats(manager_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
-    return jsonify(poke_inventory.get_stats().to_dict())
+    return jsonify(player.get_stats().to_dict())
 
 
 if __name__ == "__main__":
