@@ -29,6 +29,12 @@ class PartyManager(BaseModel):
 
     # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
 
+    @classmethod
+    def get_by_id(cls, id: int):
+        result = [pm for pm in  cls.select()[:] if pm.id == id]
+        if result:
+            return result[0]
+
     @property
     def pc_members(self):
         pc = {m.id:m for m in self.all_members if not m.in_party}
