@@ -92,7 +92,7 @@ class PartyManager(BaseModel):
         :return: Bool for testing
         :rtype: Boolean
         """
-        members = self.all_members
+        members = {m.id:m for m in self.all_members}
         if id in members.keys():
             members[id].delete_instance() # pokemon has been yeeted
             return True
