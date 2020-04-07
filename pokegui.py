@@ -5,8 +5,8 @@ import requests
 import re
 import json
 from ttkthemes import ThemedTk, THEMES
-from add_pokemon_popup import AddPokemonPopup
-from add_egg_popup import AddEggPopup
+from pokepopups.add_pokemon_popup import AddPokemonPopup
+from pokepopups.add_egg_popup import AddEggPopup
 
 
 class MainAppController(ThemedTk):
