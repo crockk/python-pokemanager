@@ -132,12 +132,12 @@ def remove_member(manager_id, member_id):
     if not member:
         return make_response(f"Party Member with id '{member_id}' not found.", 400)
 
-    result = poke_inventory.release_member(member_id)
+    result = player.release_member(member_id)
     
     if result:
         return make_response("", 204)
     else:
-        return make_response(f"Could not delete member with id '{member_id}'")
+        return make_response(f"Could not delete member with id '{member_id}'", 401)
 
 
 @app.route("/<int:manager_id>/member/<member_id>", methods=["GET"])
@@ -223,6 +223,7 @@ def all_managers():
     """
     return jsonify([manager.to_dict() for manager in PartyManager.select()])
 
+
 @app.route('/managers/<int:manager_id>', methods=["GET"])
 def get_manager(manager_id):
     """ GET method for Party Manager
@@ -230,6 +231,28 @@ def get_manager(manager_id):
 
     """
     return jsonify((PartyManager.select().where(PartyManager.id == manager_id))[0].to_dict())
+
+
+@app.route('/<int:manager_id>/<member_id>/move', methods=["PUT"])
+def move_member(manager_id, member_id):
+    """ PUT method for moving a member to the manager's party, or removing from the party, depending on it's status """
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
+    if not member:
+        return make_response("Party Member not found.", 400)
+
+    try:
+        if member.in_party:
+            member.in_party = False
+            member.save()
+            return make_response("Member moved to party", 204)
+        else:
+            member.in_party = True
+            member.save()
+            return make_response("Member moved to party", 204)
+    except Exception as err:
+        return make_response(str(err), 400)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
