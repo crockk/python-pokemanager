@@ -20,10 +20,10 @@ poke_inventory = PartyManager(player_name="Ashy Ketchup")
 poke_inventory.save()
 
 poke1 = Pokemon(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id())
-poke1.save()
+poke1.save(force_insert=True)
 
 egg1 = Egg(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id())
-egg1.save()
+egg1.save(force_insert=True)
 
 
 @app.route("/partymanager/pokemon", methods=["POST"])
