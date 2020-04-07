@@ -124,10 +124,7 @@ def remove_member(manager_id, member_id):
     if not member:
         return make_response("Party Member not found.", 400)
 
-    if member.in_party:
-        result = poke_inventory.release_party_member(member_id)
-    else:
-        result = poke_inventory.release_pc_pokemon(member_id)
+    result = poke_inventory.release_member(member_id)
     
     if result:
         return make_response("", 204)

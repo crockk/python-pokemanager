@@ -80,26 +80,13 @@ class PartyManager(BaseModel):
     
     # TODO: HOW DO YOU DELETE STUFF ###################################
 
-    def release_party_member(self, id: str) -> bool:
-        """ Releases a party member from _party back into the wilderness :'(
+    def release_member(self, id: str) -> bool:
+        """ Releases a party member from pc or party back into the wilderness :'(
         :param int id: The ID of the Pokemon or Egg to be released.
         :return: Bool for testing
         :rtype: Boolean
         """
-        members = self.party_members
-        if id in members.keys():
-            members[id].delete_instance() # pokemon has been yeeted
-            return True
-        else:
-            return False
-
-    def release_pc_pokemon(self, id: int) -> bool:
-        """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
-        :param int id: The ID of the Pokemon or Egg to be released.
-        :return: Bool for testing
-        :rtype: Boolean
-        """
-        members = self.pc_members
+        members = self.all_members
         if id in members.keys():
             members[id].delete_instance() # pokemon has been yeeted
             return True
