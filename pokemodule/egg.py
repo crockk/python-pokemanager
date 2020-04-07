@@ -6,6 +6,7 @@ Date: 2/17/2020
 
 from peewee import IntegerField, BooleanField, ForeignKeyField, CharField
 from pokemodule.party_member import PartyMember
+from pokemodule.pokemon import Pokemon
 from pokemodule.party_manager import PartyManager
 from pokemodule.pokedex import RandomStats
 
@@ -48,11 +49,8 @@ class Egg(PartyMember):
             raise ValueError('Steps must be integer.')
 
         self.steps_remaining = self.steps_remaining - steps
-        if self.steps_remaining <= 0:
-            self.hatched = True
-            self.in_party = False
-            #TODO: Create New pokemon and delete egg
-        print(self.steps_remaining, "egg", self.id)
+        if self.steps_remaining <= 0 and not self.hatched:
+            self._hatch()
         self.save()
 
     @property
@@ -60,6 +58,20 @@ class Egg(PartyMember):
         """ Returns a description of the Egg """
         return f"Your {self.nickname} is {self.height}cm tall and {self.weight}kg. " \
                f"{ 'Currently in party.' if self.in_party else 'Not currently in party'}"
+
+    def _hatch(self):
+        # self.hatched = True
+        # self.in_party = False
+        # self.save()
+        new_pokemon = Pokemon.create(id=self.player._ID_MANAGER.pokemon_id(), pokedex_num=self.pokedex_num, 
+                        nickname=self.nickname, source=self.source,
+                        date_acquired=self.date_acquired, item=self.item, player=self.player)
+        new_pokemon.save()
+        
+        # self.player.release_pc_pokemon(self.id)
+        # self.save()
+        self.player.release_party_member(self.id)
+
 
     def to_dict(self) -> dict:
         """ Converts current instance attributes into dictionary format and returns it

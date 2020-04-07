@@ -46,7 +46,7 @@ def add_pokemon(manager_id):
         new_id = Pokemon.create(pokedex_num=new_member["pokedex_num"],
                          nickname=new_member["nickname"],
                          player=player,
-                         id=poke_inventory._ID_MANAGER.egg_id(),
+                         id=poke_inventory._ID_MANAGER.pokemon_id(),
                          source=new_member["source"],
                          item=new_member["item"],
                          ability=new_member["ability"])
