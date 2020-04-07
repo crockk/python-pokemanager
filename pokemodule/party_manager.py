@@ -206,3 +206,10 @@ class PartyManager(BaseModel):
         members_by_type = self.get_all_members_by_elemental_type()
         print(members_by_type)
         return {k:len(v) for k,v in members_by_type.items()}
+
+    def to_dict(self):
+        dikt = {
+            "player_name": self.player_name,
+            "total_steps": self.total_steps
+        }
+        return dikt
