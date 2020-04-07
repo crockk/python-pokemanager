@@ -4,27 +4,72 @@ ACIT 2515
 Date: 3/9/2020
 """
 from flask import Flask, jsonify, request, make_response
+import simplejson as json
 from pokemodule.party_manager import PartyManager
+from pokemodule.pokemon import Pokemon
+from pokemodule.egg import Egg
+from create_tables import create_tables
+from drop_tables import drop_tables
 import os
 
 app = Flask(__name__)
+drop_tables()
+create_tables()
 
-FILEPATH = os.path.join("data", "pokedata.json")
-poke_inventory = PartyManager("Ashy Ketchup")
+poke_inventory = PartyManager(player_name="Ashy Ketchup")
+poke_inventory.save()
+
+poke1 = Pokemon(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id())
+poke1.save()
+
+egg1 = Egg(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id())
+egg1.save()
 
 
-@app.route("/partymanager/member", methods=["POST"])
-def add_pokemon_member():
-    """ POST method for Party Member
-    Creates a new Party Member with json data from the request
+@app.route("/partymanager/pokemon", methods=["POST"])
+def add_pokemon():
+    """ POST method for Pokemon
+    Creates a new Pokemon with json data from the request
 
-    :return: Response containing the http status code and either the ID of the new member or Error Message
+    :return: Response containing the http status code and either the ID of the new pokemon or Error Message
     :rtype: Response Object
     
     """
     new_member = request.json
     try:
-        new_id = poke_inventory.create_member(new_member["member_type"], new_member["pokedex_num"], new_member["source"], nickname=new_member["nickname"], item=new_member["item"], ability=new_member["ability"])
+        new_id = Pokemon(pokedex_num=new_member["pokedex_num"],
+                         nickname=new_member["nickname"],
+                         player=poke_inventory,
+                         id=poke_inventory._ID_MANAGER.egg_id(),
+                         source=new_member["source"],
+                         item=new_member["item"],
+                         ability=new_member["ability"])
+        new_id.save()
+        return make_response(str(new_id), 200)
+    except Exception as err:
+        message = "missing attribute " + str(err)
+        return make_response(message, 400)
+
+
+@app.route("/partymanager/egg", methods=["POST"])
+def add_egg():
+    """ POST method for Egg
+    Creates a new Egg with json data from the request
+
+    :return: Response containing the http status code and either the ID of the new egg or Error Message
+    :rtype: Response Object
+
+    """
+    new_member = request.json
+    try:
+        new_id = Egg(pokedex_num=new_member["pokedex_num"],
+                     nickname=new_member["nickname"],
+                     player=poke_inventory,
+                     id=poke_inventory._ID_MANAGER.egg_id(),
+                     source=new_member["source"],
+                     item=new_member["item"],
+                     ability=new_member["ability"])
+        new_id.save()
         return make_response(str(new_id), 200)
     except Exception as err:
         message = "missing attribute " + str(err)
@@ -107,7 +152,7 @@ def all_members():
     :rtype: Response Object
     
     """
-    return jsonify([member.to_dict() for member in poke_inventory.get_all_members])
+    return json.JSONEncoder().encode([member.to_dict() for member in poke_inventory.all_members])
 
 
 @app.route("/partymanager/member/all/<string:member_type>", methods=["GET"])
