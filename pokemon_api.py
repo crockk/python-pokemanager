@@ -123,16 +123,18 @@ def remove_member(manager_id, member_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
+    if not player:
+        return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
     member = player.get_member_by_id(member_id)
     if not member:
-        return make_response("Party Member not found.", 400)
+        return make_response(f"Party Member with id '{member_id}' not found.", 400)
 
     result = poke_inventory.release_member(member_id)
     
     if result:
         return make_response("", 204)
     else:
-        return make_response(f"Could not delete member with id: {member_id}")
+        return make_response(f"Could not delete member with id '{member_id}'")
 
 
 @app.route("/<int:manager_id>/member/<member_id>", methods=["GET"])
@@ -145,9 +147,11 @@ def get_member(manager_id, member_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
+    if not player:
+        return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
     member = player.get_member_by_id(member_id)
     if not member:
-        return make_response("Party Member not found.", 400)
+        return make_response(f"Party Member with id '{member_id}' not found.", 400)
     else:
         return jsonify(member.to_dict())
 
@@ -162,7 +166,14 @@ def all_members(manager_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
-    return jsonify([member.to_dict() for member in player.all_members])
+    if not player:
+        return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
+    
+    members = player.all_members
+    # if not members:
+    #     return make_response(f"No Members found.", 400)
+    
+    return jsonify([member.to_dict() for member in members])
 
 
 @app.route("/<int:manager_id>/member/all/<string:member_type>", methods=["GET"])
@@ -175,7 +186,14 @@ def all_members_by_type(manager_id, member_type):
     
     """
     player = PartyManager.get_by_id(manager_id)
-    return jsonify([member.to_dict() for member in player.get_member_by_type(member_type)])
+    if not player:
+        return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
+    
+    members = player.get_member_by_type(member_type)
+    if not members:
+        return make_response(f"No Members found for with type '{member_type}'.", 400)
+
+    return jsonify([member.to_dict() for member in members])
 
 
 @app.route("/<int:manager_id>/member/stats", methods=["GET"])
@@ -188,7 +206,10 @@ def manager_stats(manager_id):
     
     """
     player = PartyManager.get_by_id(manager_id)
-    return jsonify(player.get_stats().to_dict())
+    if player:
+        return jsonify(player.get_stats().to_dict())
+    else:
+        return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
 
 @app.route('/managers', methods=["GET"])
 def all_managers():
