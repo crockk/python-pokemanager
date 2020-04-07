@@ -52,13 +52,13 @@ class MainAppController(ThemedTk):
 
         # Create dropdown to choose manager
         managers = requests.get('http://127.0.0.1:5000/managers').json()
-        managers = [str(manager["id"]) + ' - ' + manager['player_name'] for manager in managers]
+        self._managers = {m['player_name']:m for m in managers}
 
         self._dropdown_var = StringVar(self)
-        self._dropdown_var.set(managers[0][0])
+        self._dropdown_var.set(managers[0]['player_name'])
 
         tk.Label(top_frame, text="Player").grid(row=5, column=1)
-        self._dropdown = tk.OptionMenu(self, self._dropdown_var, *managers, command=self._update_all)
+        self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
         self._dropdown.grid(row=1, column=2)
 
         # Call this on select
@@ -129,7 +129,7 @@ class MainAppController(ThemedTk):
         manager_id = requests.get(f"http://127.0.0.1:5000/managers/{self._dropdown_var.get()[0]}")
         manager_id = manager_id.json()['id']
 
-        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/" + member_id)
+        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
 
         # Clear the text box
         self._info_text.delete(1.0, tk.END)
@@ -194,7 +194,7 @@ class MainAppController(ThemedTk):
     #
     def _update_lists(self):
         """ Update the Lists"""
-        id = self._dropdown_var.get()[0]
+        id = self._managers[self._dropdown_var.get()]['id']
         manager_id = requests.get(f"http://127.0.0.1:5000/managers/{id}")
         manager_id = manager_id.json()['id']
 
