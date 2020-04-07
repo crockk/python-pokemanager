@@ -74,14 +74,14 @@ def add_egg(manager_id):
     """
     player = PartyManager.get_by_id(manager_id)
     new_member = request.json
+    if new_member['nickname'] == '':
+        new_member['nickname'] = 'Egg'
     try:
         new_id = Egg.create(pokedex_num=new_member["pokedex_num"],
                              nickname=new_member["nickname"],
                              player=player,
                              id=poke_inventory._ID_MANAGER.egg_id(),
-                             source=new_member["source"],
-                             item=new_member["item"],
-                             ability=new_member["ability"])
+                             source=new_member["source"])
         new_id.save()
         return make_response(str(new_id), 200)
     except Exception as err:
