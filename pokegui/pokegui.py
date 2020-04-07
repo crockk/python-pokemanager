@@ -1,6 +1,6 @@
 import tkinter as tk
 import tkinter.font
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, StringVar
 import requests
 import re
 import json
@@ -17,13 +17,17 @@ class MainAppController(ThemedTk):
         ThemedTk.__init__(self, themebg=True)
         self.geometry('900x550')
 
+        # Top frame, row 1
+        top_frame = tk.Frame(master=self)
+        top_frame.grid(row=1, column=1)
+
         # Left frame, column 1
         left_frame = tk.Frame(master=self)
-        left_frame.grid(row=1, column=1)
+        left_frame.grid(row=2, column=1)
 
         # Right frame (info text, column 2)
         right_frame = tk.Frame(master=self)
-        right_frame.grid(row=1, column=2)
+        right_frame.grid(row=2, column=2)
 
         tk.Label(left_frame, text="Your Party:").grid(row=1, column=1, columnspan=3)
         self._party_list= tk.Listbox(left_frame, width=20, height=7)
@@ -33,26 +37,40 @@ class MainAppController(ThemedTk):
         self._pc_list= tk.Listbox(left_frame, width=20)
         self._pc_list.grid(row=5, column=1, columnspan=3)
 
-        # Call this on select
-        self._pc_list.bind("<<ListboxSelect>>", self._update_textbox)
-        self._party_list.bind("<<ListboxSelect>>", self._update_textbox)
-
-
         # A couple buttons - using TTK
         ttk.Button(left_frame, text="Add to party", command=None).grid(row=6, column=1)
         ttk.Button(left_frame, text="Remove from party", command=None).grid(row=6, column=3)
         ttk.Button(left_frame, text="Player Stats", command=None).grid(row=7, column=1)
         ttk.Button(left_frame, text="Release", command=None).grid(row=7, column=3)
-        ttk.Button(left_frame, text="Quit", command=None).grid(row=8, column=1, columnspan=3)
+        ttk.Button(left_frame, text="Quit", command=self._quit_callback).grid(row=8, column=1, columnspan=3)
 
         # Right frame widgets
         self._info_text = tk.Text(master=right_frame, height=20, width=70, font=("TkTextFont", 10))
-        self._info_text.grid(row=1, column=1, columnspan=2)
+        self._info_text.grid(row=3, column=1, columnspan=2)
         self._info_text.tag_configure("bold", font=("TkTextFont", 10, "bold"))
-        ttk.Button(right_frame, text="Edit member", command=None).grid(row=2, column=1, columnspan=3)
+        ttk.Button(right_frame, text="Edit member", command=None).grid(row=4, column=1, columnspan=3)
+
+        # Create dropdown to choose manager
+        managers = requests.get('http://127.0.0.1:5000/managers').json()
+        managers = [str(manager["id"]) + ' - ' + manager['player_name'] for manager in managers]
+
+        self._dropdown_var = StringVar(self)
+        self._dropdown_var.set(managers[0][0])
+
+        tk.Label(top_frame, text="Player").grid(row=5, column=1)
+        self._dropdown = tk.OptionMenu(self, self._dropdown_var, *managers, command=self._update_all)
+        self._dropdown.grid(row=1, column=1)
+
+        # Call this on select
+        self._pc_list.bind("<<ListboxSelect>>", self._update_textbox)
+        self._party_list.bind("<<ListboxSelect>>", self._update_textbox)
 
         # Now update the list
         self._update_lists()
+
+    def _update_all(self, event):
+        self._update_lists()
+        self._update_textbox(event)
 
     # def _get_stats(self):
     #     r = requests.get("http://127.0.0.1:5000/school/stats")
@@ -105,10 +123,13 @@ class MainAppController(ThemedTk):
         else:
             selected_index = selected_values[0]
             member_id = self._party_list.get(selected_index)[0:5]
-
         print(member_id)
-        # Make a GET request
-        r = requests.get("http://127.0.0.1:5000/1/member/" + member_id)
+
+        # Make some GET requests
+        manager_id = requests.get(f"http://127.0.0.1:5000/managers/{self._dropdown_var.get()[0]}")
+        manager_id = manager_id.json()['id']
+
+        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/" + member_id)
 
         # Clear the text box
         self._info_text.delete(1.0, tk.END)
@@ -167,13 +188,17 @@ class MainAppController(ThemedTk):
     #     self._popup_win.destroy()
     #     self._update_people_list()
     #
-    # def _quit_callback(self):
-    #     """ Quit """
-    #     self.quit()
+    def _quit_callback(self):
+        """ Quit """
+        self.quit()
     #
     def _update_lists(self):
         """ Update the Lists"""
-        r = requests.get("http://127.0.0.1:5000/1/member/all")
+        id = self._dropdown_var.get()[0]
+        manager_id = requests.get(f"http://127.0.0.1:5000/managers/{id}")
+        manager_id = manager_id.json()['id']
+
+        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/all")
         self._pc_list.delete(0, tk.END)
         self._party_list.delete(0, tk.END)
         for m in r.json():

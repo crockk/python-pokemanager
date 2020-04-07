@@ -20,6 +20,9 @@ poke_inventory.save()
 nolan = PartyManager(player_name="Nolan")
 nolan.save()
 
+pika = Pokemon.create(pokedex_num=10, nickname="Nolan's Pikachu", player=nolan, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
+pika.save()
+
 poke1 = Pokemon.create(pokedex_num=10, nickname='Slimjim', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 poke1.save()
 poke2 = Pokemon.create(pokedex_num=5, nickname='Bubbs', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='pomo', item='rock')
@@ -211,13 +214,22 @@ def manager_stats(manager_id):
     else:
         return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
 
+
 @app.route('/managers', methods=["GET"])
 def all_managers():
     """ GET method for Party Manager
     Returns a json of all the managers in the DB
 
     """
-    # return jsonify(PartyManager.)
+    return jsonify([manager.to_dict() for manager in PartyManager.select()])
+
+@app.route('/managers/<int:manager_id>', methods=["GET"])
+def get_manager(manager_id):
+    """ GET method for Party Manager
+    Returns a json of all the managers in the DB
+
+    """
+    return jsonify((PartyManager.select().where(PartyManager.id == manager_id))[0].to_dict())
 
 if __name__ == "__main__":
     app.run(debug=True)
