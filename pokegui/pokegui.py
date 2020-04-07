@@ -48,6 +48,7 @@ class MainAppController(ThemedTk):
         self._info_text = tk.Text(master=right_frame, height=20, width=70, font=("TkTextFont", 10))
         self._info_text.grid(row=3, column=1, columnspan=2)
         self._info_text.tag_configure("bold", font=("TkTextFont", 10, "bold"))
+        self._disable_text_insert(self._info_text)
         ttk.Button(right_frame, text="Edit member", command=None).grid(row=4, column=1, columnspan=3)
 
         # Create dropdown to choose manager
@@ -132,6 +133,7 @@ class MainAppController(ThemedTk):
         r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/" + member_id)
 
         # Clear the text box
+        self._enable_text_insert(self._info_text)
         self._info_text.delete(1.0, tk.END)
 
         # Check the request status code
@@ -142,6 +144,8 @@ class MainAppController(ThemedTk):
         for k, v in json.loads(r.text).items():
             self._info_text.insert(tk.END, f"{k}\t\t", "bold")
             self._info_text.insert(tk.END, f"{v}\n")
+
+        self._disable_text_insert(self._info_text)
     #
     # def _quarantine_cb(self):
     #     selected_values = self._people_list.curselection()
@@ -206,6 +210,16 @@ class MainAppController(ThemedTk):
                 self._party_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
             else:
                 self._pc_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
+
+    @staticmethod
+    def _enable_text_insert(textbox):
+        """ Toggles the textbox to allow insertion """
+        textbox.config(state=tk.NORMAL)
+
+    @staticmethod
+    def _disable_text_insert(textbox):
+        """ Toggles the textbox to not allow insertion """
+        textbox.config(state=tk.DISABLED)
 
 
 if __name__ == "__main__":
