@@ -87,9 +87,14 @@ class MainAppController(ThemedTk):
 
     def _release_member(self):
         """ Release selected member into the wild """
+        try:
+            self._id_to_remove = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to release.')
+            return
+
         self._popup_win = tk.Toplevel()
         self._error_msg = ''
-        self._id_to_remove = self._get_member_id_from_list()
 
         ttk.Label(self._popup_win, text=f'Are you sure you would like to release member {self._id_to_remove}?').grid(row=0)
 
