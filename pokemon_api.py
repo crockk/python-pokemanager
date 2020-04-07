@@ -19,15 +19,15 @@ create_tables()
 poke_inventory = PartyManager(player_name="Ashy Ketchup")
 poke_inventory.save()
 
-poke1 = Pokemon(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id())
-poke1.save(force_insert=True)
+poke1 = Pokemon.create(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id())
+poke1.save()
 
-egg1 = Egg(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id())
-egg1.save(force_insert=True)
+egg1 = Egg.create(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id())
+egg1.save()
 
 
-@app.route("/partymanager/pokemon", methods=["POST"])
-def add_pokemon():
+@app.route("/<int:manager_id>/pokemon", methods=["POST"])
+def add_pokemon(manager_id):
     """ POST method for Pokemon
     Creates a new Pokemon with json data from the request
 
@@ -35,11 +35,12 @@ def add_pokemon():
     :rtype: Response Object
     
     """
+    player = PartyManager.get_by_id(manager_id)
     new_member = request.json
     try:
-        new_id = Pokemon(pokedex_num=new_member["pokedex_num"],
+        new_id = Pokemon.create(pokedex_num=new_member["pokedex_num"],
                          nickname=new_member["nickname"],
-                         player=poke_inventory,
+                         player=player,
                          id=poke_inventory._ID_MANAGER.egg_id(),
                          source=new_member["source"],
                          item=new_member["item"],
@@ -51,8 +52,8 @@ def add_pokemon():
         return make_response(message, 400)
 
 
-@app.route("/partymanager/egg", methods=["POST"])
-def add_egg():
+@app.route("/<int:manager_id>/egg", methods=["POST"])
+def add_egg(manager_id):
     """ POST method for Egg
     Creates a new Egg with json data from the request
 
@@ -60,11 +61,12 @@ def add_egg():
     :rtype: Response Object
 
     """
+    player = PartyManager.get_by_id(manager_id)
     new_member = request.json
     try:
         new_id = Egg(pokedex_num=new_member["pokedex_num"],
                      nickname=new_member["nickname"],
-                     player=poke_inventory,
+                     player=player,
                      id=poke_inventory._ID_MANAGER.egg_id(),
                      source=new_member["source"],
                      item=new_member["item"],
@@ -76,8 +78,9 @@ def add_egg():
         return make_response(message, 400)
 
 
-@app.route("/partymanager/member/<int:member_id>", methods=["PUT"])
-def update_member(member_id):
+### BROKEN ##########################
+@app.route("/<int:manager_id>/member/<member_id>", methods=["PUT"])
+def update_member(manager_id, member_id):
     """ PUT method for Party Member
     Updates an existing Party Member with json data from the request
 
@@ -86,7 +89,8 @@ def update_member(member_id):
     
     """
     data = request.json
-    member = poke_inventory.get_member_by_id(member_id)
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
     if not member:
         return make_response("Party Member not found.", 400)
 
