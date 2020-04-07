@@ -80,37 +80,32 @@ class PartyManager(BaseModel):
     
     # TODO: HOW DO YOU DELETE STUFF ###################################
 
-    # def release_party_member(self, id: int) -> bool:
-    #     """ Releases a party member from _party back into the wilderness :'(
-    #     :param int id: The ID of the Pokemon or Egg to be released.
-    #     :return: Bool for testing
-    #     :rtype: Boolean
-    #     """
-    #     if id in self._party.keys():
-    #         del self._party[id] # pokemon has been yeeted
-    #         self._write_to_file()
-    #         return True
-    #     else:
-    #         return False
+    def release_party_member(self, id: str) -> bool:
+        """ Releases a party member from _party back into the wilderness :'(
+        :param int id: The ID of the Pokemon or Egg to be released.
+        :return: Bool for testing
+        :rtype: Boolean
+        """
+        members = self.party_members
+        if id in members.keys():
+            members[id].delete_instance() # pokemon has been yeeted
+            return True
+        else:
+            return False
 
-    # TODO: HOW DO YOU DELETE STUFF ###################################
+    def release_pc_pokemon(self, id: int) -> bool:
+        """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
+        :param int id: The ID of the Pokemon or Egg to be released.
+        :return: Bool for testing
+        :rtype: Boolean
+        """
+        members = self.pc_members
+        if id in members.keys():
+            members[id].delete_instance() # pokemon has been yeeted
+            return True
+        else:
+            return False
 
-    # def release_pc_pokemon(self, id: int) -> bool:
-    #     """ Releases a pokemon stored in _pc_pokemon back into the wilderness :'(
-    #     :param int id: The ID of the Pokemon or Egg to be released.
-    #     :return: Bool for testing
-    #     :rtype: Boolean
-    #     """
-    #     if id in self._pc_pokemon.keys():
-    #         del self._pc_pokemon[id] # pokemon has been yeeted
-          
-    #         self._write_to_file()
-    #         return True
-    #     else:
-    #         return False
-    
-    # TODO: HOW DO YOU COMPOSITION STUFF ###################################
-  
     def walk(self, steps: int) -> None:
         """ Player walks a given amount of steps, which is added to the steps of all eggs in party. Hatches eggs
         if necessary

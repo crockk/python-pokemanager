@@ -19,10 +19,10 @@ create_tables()
 poke_inventory = PartyManager(player_name="Ashy Ketchup")
 poke_inventory.save()
 
-poke1 = Pokemon.create(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id())
+poke1 = Pokemon.create(pokedex_num=10, nickname='Poke1', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 poke1.save()
 
-egg1 = Egg.create(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id())
+egg1 = Egg.create(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='house', item='pee')
 egg1.save()
 
 
@@ -64,7 +64,7 @@ def add_egg(manager_id):
     player = PartyManager.get_by_id(manager_id)
     new_member = request.json
     try:
-        new_id = Egg(pokedex_num=new_member["pokedex_num"],
+        new_id = Egg.create(pokedex_num=new_member["pokedex_num"],
                      nickname=new_member["nickname"],
                      player=player,
                      id=poke_inventory._ID_MANAGER.egg_id(),
@@ -100,15 +100,17 @@ def update_member(manager_id, member_id):
     try:
         if data["nickname"]:
             member.nickname = data["nickname"]
+            member.save()
         if data["item"]:
-            member.held_item = data["item"]
+            member.item = data["item"]
+            member.save()
         return make_response("", 204)
     except Exception as err:
         return make_response(str(err), 400)
 
 
-@app.route("/partymanager/member/<int:member_id>", methods=["DELETE"])
-def remove_member(member_id):
+@app.route("/<int:manager_id>/member/<member_id>", methods=["DELETE"])
+def remove_member(manager_id, member_id):
     """ DELETE method for Party Member
     Deletes an existing Party Member
 
@@ -116,7 +118,8 @@ def remove_member(member_id):
     :rtype: Response Object
     
     """
-    member = poke_inventory.get_member_by_id(member_id)
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
     if not member:
         return make_response("Party Member not found.", 400)
 
@@ -131,8 +134,8 @@ def remove_member(member_id):
         return make_response(f"Could not delete member with id: {member_id}")
 
 
-@app.route("/partymanager/member/<int:member_id>", methods=["GET"])
-def get_member(member_id):
+@app.route("/<int:manager_id>/member/<member_id>", methods=["GET"])
+def get_member(manager_id, member_id):
     """ GET method for Party Member
     Returns a Party Member in json format 
 
@@ -140,15 +143,16 @@ def get_member(member_id):
     :rtype: Response Object
     
     """
-    member = poke_inventory.get_member_by_id(member_id)
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
     if not member:
         return make_response("Party Member not found.", 400)
     else:
         return jsonify(member.to_dict())
 
 
-@app.route("/partymanager/member/all", methods=["GET"])
-def all_members():
+@app.route("/<int:manager_id>/member/all", methods=["GET"])
+def all_members(manager_id):
     """ GET method for Party Manager
     Returns the json representation of the Party
 
@@ -156,11 +160,12 @@ def all_members():
     :rtype: Response Object
     
     """
-    return json.JSONEncoder().encode([member.to_dict() for member in poke_inventory.all_members])
+    player = PartyManager.get_by_id(manager_id)
+    return json.JSONEncoder().encode([member.to_dict() for member in player.all_members])
 
 
-@app.route("/partymanager/member/all/<string:member_type>", methods=["GET"])
-def all_members_by_type(member_type):
+@app.route("/<int:manager_id>/member/all/<string:member_type>", methods=["GET"])
+def all_members_by_type(manager_id, member_type):
     """ POST method for Party Manager
     Returns a json representation of all the members of a specific sub-type. Either 'Pokemon' or 'Egg'
 
@@ -168,9 +173,10 @@ def all_members_by_type(member_type):
     :rtype: Response Object
     
     """
-    return jsonify([member.to_dict() for member in poke_inventory.get_member_by_type(member_type)])
+    player = PartyManager.get_by_id(manager_id)
+    return jsonify([member.to_dict() for member in player.get_member_by_type(member_type)])
 
-
+### TODO
 @app.route("/partymanager/member/stats", methods=["GET"])
 def manager_stats():
     """ POST method for Party Manager
