@@ -148,15 +148,13 @@ class MainAppController(ThemedTk):
         print('pokemon create')
         """ Add Student Popup """
         self._popup_win = tk.Toplevel()
-        self._popup = AddPokemonPopup(self._popup_win, self._close_popup)
-        pass
+        self._popup = AddPokemonPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _add_egg(self):
         print('egg create')
         """ Add Student Popup """
         self._popup_win = tk.Toplevel()
-        self._popup = AddEggPopup(self._popup_win, self._close_popup)
-        pass
+        self._popup = AddEggPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     # def _get_stats(self):
     #     r = requests.get("http://127.0.0.1:5000/school/stats")

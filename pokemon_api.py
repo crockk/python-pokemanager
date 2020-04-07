@@ -7,6 +7,7 @@ from flask import Flask, jsonify, request, make_response
 from pokemodule.party_manager import PartyManager
 from pokemodule.pokemon import Pokemon
 from pokemodule.egg import Egg
+from pokemodule.pokedex import Pokedex
 from create_tables import create_tables
 from drop_tables import drop_tables
 
@@ -45,14 +46,16 @@ def add_pokemon(manager_id):
     """
     player = PartyManager.get_by_id(manager_id)
     new_member = request.json
+    if new_member['nickname'] == '':
+        new_member['nickname'] = Pokedex[int(new_member['pokedex_num'])][0]
     try:
         new_id = Pokemon.create(pokedex_num=new_member["pokedex_num"],
-                         nickname=new_member["nickname"],
-                         player=player,
-                         id=poke_inventory._ID_MANAGER.pokemon_id(),
-                         source=new_member["source"],
-                         item=new_member["item"],
-                         ability=new_member["ability"])
+                                 nickname=new_member["nickname"],
+                                 player=player,
+                                 id=poke_inventory._ID_MANAGER.pokemon_id(),
+                                 source=new_member["source"],
+                                 item=new_member["item"],
+                                 ability=new_member["ability"])
         new_id.save()
         return make_response(str(new_id), 200)
     except Exception as err:
@@ -73,12 +76,12 @@ def add_egg(manager_id):
     new_member = request.json
     try:
         new_id = Egg.create(pokedex_num=new_member["pokedex_num"],
-                     nickname=new_member["nickname"],
-                     player=player,
-                     id=poke_inventory._ID_MANAGER.egg_id(),
-                     source=new_member["source"],
-                     item=new_member["item"],
-                     ability=new_member["ability"])
+                             nickname=new_member["nickname"],
+                             player=player,
+                             id=poke_inventory._ID_MANAGER.egg_id(),
+                             source=new_member["source"],
+                             item=new_member["item"],
+                             ability=new_member["ability"])
         new_id.save()
         return make_response(str(new_id), 200)
     except Exception as err:
