@@ -193,7 +193,7 @@ class Pokemon(PartyMember):
         """
         dikt = {
             "id": self.id,
-            "player": self.player.name,
+            "player": self.player.player_name,
             "member_type": self.member_type,
             "pokedex_num": self.pokedex_num,
             "source": self.source,
