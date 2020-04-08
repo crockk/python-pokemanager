@@ -145,7 +145,59 @@ def update_member(manager_id, member_id):
         return make_response(str(err), 400)
 
 
-@app.route("/<int:manager_id>/member/<member_id>", methods=["DELETE"])
+@app.route("/<int:manager_id>/member/<member_id>/add_xp", methods=["PUT"])
+def add_xp(manager_id, member_id):
+    """ PUT method for Party Member
+    Adds a set amount of XP to the party member
+
+    :return: Response containing the http status code and either nothing or Error Message
+    :rtype: Response Object
+
+    """
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
+    if not member:
+        return make_response("Party Member not found.", 400)
+    member.add_xp(100)
+    return make_response("", 204)
+
+
+@app.route("/<int:manager_id>/member/<member_id>/damage", methods=["PUT"])
+def damage(manager_id, member_id):
+    """ PUT method for Party Member
+    Damages a party member by a set amount
+
+    :return: Response containing the http status code and either nothing or Error Message
+    :rtype: Response Object
+
+    """
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
+    if not member:
+        return make_response("Party Member not found.", 400)
+    member.damage(10)
+    return make_response("", 204)
+
+
+@app.route("/<int:manager_id>/member/<member_id>/heal", methods=["PUT"])
+def heal(manager_id, member_id):
+    """ PUT method for Party Member
+    Heal a party member by a set amount
+
+    :return: Response containing the http status code and either nothing or Error Message
+    :rtype: Response Object
+
+    """
+    player = PartyManager.get_by_id(manager_id)
+    member = player.get_member_by_id(member_id)
+    if not member:
+        return make_response("Party Member not found.", 400)
+    member.heal(10)
+    return make_response("", 204)
+
+
+@app.route("/<"
+           "int:manager_id>/member/<member_id>", methods=["DELETE"])
 def remove_member(manager_id, member_id):
     """ DELETE method for Party Member
     Deletes an existing Party Member

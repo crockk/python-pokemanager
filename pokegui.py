@@ -264,16 +264,8 @@ class MainAppController(ThemedTk):
         if r.status_code != 200:
             self._info_text.insert(tk.END, "Error running the request!")
 
-        # For every item (key, value) in the JSON response, display them:
         data = json.loads(r.text)
         self._generate_info(data)
-
-        # scroll = tk.Scrollbar(root, command=self._info_text.yview)
-        # self._info_text.configure(yscrollcommand=scroll.set)
-        # for k, v in json.loads(r.text).items():
-        #     self._info_text.insert(tk.END, f"{k}\t\t", "bold")
-        #     self._info_text.insert(tk.END, f"{v}\n")
-
         self._disable_text_insert(self._info_text)
 
     def _generate_info(self, data):
@@ -318,7 +310,6 @@ class MainAppController(ThemedTk):
             else:
                 self._info_text.insert(tk.END, f"{' '.join([c.strip() for c in key.split('_')]).capitalize()}\t\t{data[key]}\n")
         self._info_text.tag_add('left', '1.0', 'end')
-
 
     def _close_popup(self):
         """ Close Generic Popup """
@@ -368,20 +359,94 @@ class MainAppController(ThemedTk):
             self._lvl_btn.grid_forget()
             self._heal_btn.grid_forget()
         except AttributeError:
-            print('Attribute error handled')
+            print('Attribute error handled. Dont even stress')
 
         if member_id[0] == 'p':
             self._bottom_frame.config(background='indian red')
-            self._lvl_btn = tk.Button(self._bottom_frame, text="Level up", command=None, bg=self._button_bg,
+            self._lvl_btn = tk.Button(self._bottom_frame, text="Add XP", command=self._add_xp, bg=self._button_bg,
                                       fg=self._button_fg, cursor=self._button_select)
             self._lvl_btn.grid(row=4, column=0)
-            self._dmg_btn = tk.Button(self._bottom_frame, text="Damage", command=None, bg=self._button_bg,
+            self._dmg_btn = tk.Button(self._bottom_frame, text="Damage", command=self._damage, bg=self._button_bg,
                                       fg=self._button_fg, cursor=self._button_select)
             self._dmg_btn.grid(row=4, column=2)
-            self._heal_btn = tk.Button(self._bottom_frame, text="Heal", command=None, bg=self._button_bg,
+            self._heal_btn = tk.Button(self._bottom_frame, text="Heal", command=self._heal, bg=self._button_bg,
                                       fg=self._button_fg, cursor=self._button_select)
             self._heal_btn.grid(row=4, column=3)
             return
+
+    def _heal(self):
+        try:
+            member_id = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to heal.')
+            return
+        manager_id = self._get_manager_id()
+
+        # Check the pokemons KO status before healing
+        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        ko_before = poke_r.json()['is_KO']
+
+        # Heal the pokemon
+        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/heal")
+        if r.status_code == 400:
+            messagebox.showerror(title='Error', message='Member not found')
+
+        # Update the textbox
+        self._update_textbox(evt='')
+
+        # Check to see if the pokemon was revived
+        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        ko_after = poke_r.json()['is_KO']
+        if ko_before != ko_after:
+            messagebox.showinfo(title='KO!', message=f"{poke_r.json()['nickname']} was revived!")
+
+    def _damage(self):
+        try:
+            member_id = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to damage.')
+            return
+        manager_id = self._get_manager_id()
+
+        # Deal damage to the pokemon
+        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/damage")
+        if r.status_code == 400:
+            messagebox.showerror(title='Error', message='Member not found')
+
+        # Update the textbox
+        self._update_textbox(evt='')
+
+        # Check to see if the pokemon was knocked out
+        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        if r.json()['is_KO']:
+            messagebox.showinfo(title='KO!', message=f"{r.json()['nickname']} was knocked out!")
+
+    def _add_xp(self):
+        try:
+            member_id = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to add XP.')
+            return
+        manager_id = self._get_manager_id()
+
+        # Get the pokemon's level before adding XP
+        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        lvl_before = poke_r.json()['level']
+
+        # Add XP to the pokemon
+        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/add_xp")
+        if r.status_code == 400:
+            messagebox.showerror(title='Error', message='Member not found')
+
+        # Update the textbox
+        self._update_textbox(evt='')
+
+        # Check to see if the pokemon leveled up
+        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        lvl_after = poke_r.json()['level']
+        if lvl_after != lvl_before:
+            messagebox.showinfo(title='Level up!', message=f"{poke_r.json()['nickname']} leveled up to level {lvl_after}!")
+
 
     def _update_dropdown(self):
         managers = requests.get('http://127.0.0.1:5000/managers').json()

@@ -135,7 +135,7 @@ class Pokemon(PartyMember):
 
         """
         # super()._validate_int(health_increase, 1, "Health increase must be an Integer greater than or equal to 1")
-
+        self.is_KO = False
         if health_increase + self.current_hp >= self.total_hp:
             self.current_hp = self.total_hp
         else:
@@ -154,6 +154,7 @@ class Pokemon(PartyMember):
 
         if self.current_hp - health_decrease <= 0:
             self._knock_out()
+            self.current_hp = 0
         else:
             self.current_hp -= health_decrease
         self.save()
