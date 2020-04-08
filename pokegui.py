@@ -31,7 +31,7 @@ class MainAppController(ThemedTk):
         self._button_fg = 'black'
         self._button_select = 'hand2'
 
-        tk.Label(self, text='Choose Player', bg=self._widget_bg, fg='white').grid(row=0,column=3, pady=(10,0))
+        tk.Label(self, text='Choose Player', bg=self._widget_bg, fg='white').grid(row=0,column=3, pady=(30,0))
         # Top frame, row 1
         self._top_frame = tk.Frame(master=self, bg=self._widget_bg)
         self._top_frame.grid(row=1, column=2, padx=(40,0))
