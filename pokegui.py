@@ -20,7 +20,7 @@ class MainAppController(ThemedTk):
     def __init__(self):
         """ Initialize Main Application """
         ThemedTk.__init__(self, theme='ubuntu', themebg=True)
-        self.geometry('900x550')
+        self.geometry('980x600')
         self.config(background='indian red')
         self._widget_bg = 'gray14'
         self._text_bg = 'light sky blue'
@@ -31,38 +31,51 @@ class MainAppController(ThemedTk):
         self._button_select = 'hand2'
 
         # Top frame, row 1
-        top_frame = tk.Frame(master=self, bg=self._text_bg)
-        top_frame.grid(row=1, column=1)
+        self._top_frame = tk.Frame(master=self, bg=self._text_bg)
+        self._top_frame.grid(row=1, column=1)
 
         # Left frame, column 1
-        left_frame = tk.Frame(master=self, bg=self._widget_bg)
-        left_frame.grid(row=2, column=1)
+        self._left_frame = tk.Frame(master=self, bg=self._widget_bg)
+        self._left_frame.grid(row=2, column=1)
 
         # Right frame (info text, column 2)
-        right_frame = tk.Frame(master=self, bg=self._widget_bg)
-        right_frame.grid(row=2, column=2)
+        self._right_frame = tk.Frame(master=self, bg=self._widget_bg)
+        self._right_frame.grid(row=2, column=3)
 
-        tk.Label(left_frame, text="Current Party:", bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
-        self._party_list= tk.Listbox(left_frame, width=20, height=7, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        # Under text frame
+        self._under_frame = tk.Frame(master=self, bg=self._widget_bg)
+        self._under_frame.grid(row=3, column=3)
+
+        # Bottom frame
+        self._bottom_frame = tk.Frame(master=self, bg=self._widget_bg)
+        self._bottom_frame.grid(row=4, column=3)
+
+        tk.Label(self._left_frame, text="Current Party:", bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
+        self._party_list= tk.Listbox(self._left_frame, width=20, height=7, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
         self._party_list.grid(row=2, column=1, columnspan=3)
 
-        tk.Label(left_frame, text="PC Pokemon:", bg=self._widget_bg, fg='white').grid(row=4, column=1, columnspan=3)
-        self._pc_list= tk.Listbox(left_frame, width=20, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        tk.Label(self._left_frame, text="PC Pokemon:", bg=self._widget_bg, fg='white').grid(row=4, column=1, columnspan=3)
+        self._pc_list= tk.Listbox(self._left_frame, width=20, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
         self._pc_list.grid(row=5, column=1, columnspan=3)
 
         # A couple buttons - using TTK
-        tk.Button(left_frame, text="Move Member", command=self._move_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=1)
-        tk.Button(left_frame, text="Create Member", command=self._create_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=3)
-        tk.Button(left_frame, text="Player Stats", command=self._get_stats, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=1)
-        tk.Button(left_frame, text="Release", command=self._release_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=3)
-        tk.Button(left_frame, text="Quit", command=self._quit_callback, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=8, column=1, columnspan=3)
+        tk.Button(self._left_frame, text="Move Member", command=self._move_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=1)
+        tk.Button(self._left_frame, text="Create Member", command=self._create_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=3)
+        tk.Button(self._left_frame, text="Player Stats", command=self._get_stats, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=1)
+        tk.Button(self._left_frame, text="Release", command=self._release_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=3)
+        tk.Button(self._left_frame, text="Quit", command=self._quit_callback, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=8, column=1, columnspan=3)
 
         # Right frame widgets
-        tk.Label(right_frame, text='Member Info', bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
-        self._info_text = tk.Text(master=right_frame, height=20, width=70, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
-        self._info_text.grid(row=2, column=2, columnspan=1)
+        tk.Label(self._right_frame, text='Member Info', bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
+        self._info_text = tk.Text(master=self._right_frame, height=20, width=70, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        self._info_text.grid(row=2, column=1, columnspan=1)
         self._disable_text_insert(self._info_text)
-        tk.Button(right_frame, text="Edit member", command=self._edit_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=4, column=1, columnspan=3)
+
+        # Under text frame widgets
+        self._edit_btn = tk.Button(self._under_frame, text="Edit member", command=self._edit_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
+        self._edit_btn.grid(row=2, column=1)
+        self._walk_btn = tk.Button(self._under_frame, text="Walk", command=None, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
+        self._walk_btn.grid(row=2, column=2)
 
         # Create dropdown to choose manager
         managers = requests.get('http://127.0.0.1:5000/managers').json()
@@ -71,10 +84,10 @@ class MainAppController(ThemedTk):
         self._dropdown_var = StringVar(self)
         self._dropdown_var.set(managers[0]['player_name'])
 
-        tk.Label(top_frame, text="Player", bg=self._widget_bg, fg='white').grid(row=5, column=1)
+        tk.Label(self._top_frame, text="Player", bg=self._widget_bg, fg='white').grid(row=5, column=1)
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
         self._dropdown.config(background=self._button_bg, foreground=self._button_fg, activebackground='yellow', cursor=self._button_select)
-        self._dropdown.grid(row=1, column=2)
+        self._dropdown.grid(row=1, column=3)
 
         # Call this on select
         self._pc_list.bind("<<ListboxSelect>>", self._update_textbox)
@@ -87,6 +100,7 @@ class MainAppController(ThemedTk):
         """ Updates both lists and textbox for when manager changes """
         self._update_lists()
         self._update_textbox(event)
+        self._update_right_buttons()
 
     def _move_member(self):
         """ Moved selected member to party, or remove from party depending on their status"""
@@ -206,6 +220,7 @@ class MainAppController(ThemedTk):
 
     def _update_textbox(self, evt):
         """ Updates the info text box on the right, based on the current ID selected """
+        self._update_right_buttons()
         member_id = self._get_member_id_from_list()
 
         # Make some GET requests
@@ -316,6 +331,29 @@ class MainAppController(ThemedTk):
                 self._party_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
             else:
                 self._pc_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
+
+    def _update_right_buttons(self):
+        member_id = self._get_member_id_from_list()
+        try:
+
+            self._dmg_btn.grid_forget()
+            self._lvl_btn.grid_forget()
+            self._heal_btn.grid_forget()
+        except AttributeError:
+            print('Attribute error handled')
+
+        if member_id[0] == 'p':
+            self._bottom_frame.config(background='indian red')
+            self._lvl_btn = tk.Button(self._bottom_frame, text="Level up", command=None, bg=self._button_bg,
+                                      fg=self._button_fg, cursor=self._button_select)
+            self._lvl_btn.grid(row=4, column=0)
+            self._dmg_btn = tk.Button(self._bottom_frame, text="Damage", command=None, bg=self._button_bg,
+                                      fg=self._button_fg, cursor=self._button_select)
+            self._dmg_btn.grid(row=4, column=2)
+            self._heal_btn = tk.Button(self._bottom_frame, text="Heal", command=None, bg=self._button_bg,
+                                      fg=self._button_fg, cursor=self._button_select)
+            self._heal_btn.grid(row=4, column=3)
+            return
 
     @staticmethod
     def _enable_text_insert(textbox):
