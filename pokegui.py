@@ -30,13 +30,14 @@ class MainAppController(ThemedTk):
         self._button_fg = 'black'
         self._button_select = 'hand2'
 
+        tk.Label(self, text='Choose Player', bg=self._widget_bg, fg='white').grid(row=0,column=3)
         # Top frame, row 1
-        self._top_frame = tk.Frame(master=self, bg=self._text_bg)
-        self._top_frame.grid(row=1, column=1)
+        self._top_frame = tk.Frame(master=self, bg=self._widget_bg)
+        self._top_frame.grid(row=1, column=2)
 
         # Left frame, column 1
         self._left_frame = tk.Frame(master=self, bg=self._widget_bg)
-        self._left_frame.grid(row=2, column=1)
+        self._left_frame.grid(row=2, column=2)
 
         # Right frame (info text, column 2)
         self._right_frame = tk.Frame(master=self, bg=self._widget_bg)
@@ -84,7 +85,7 @@ class MainAppController(ThemedTk):
         self._dropdown_var = StringVar(self)
         self._dropdown_var.set(managers[0]['player_name'])
 
-        tk.Label(self._top_frame, text="Player", bg=self._widget_bg, fg='white').grid(row=5, column=1)
+        tk.Button(self._top_frame, text="New Player", command=self._create_player, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=1, column=2)
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
         self._dropdown.config(background=self._button_bg, foreground=self._button_fg, activebackground='yellow', cursor=self._button_select)
         self._dropdown.grid(row=1, column=3)
@@ -95,6 +96,7 @@ class MainAppController(ThemedTk):
 
         # Now update the list
         self._update_lists()
+        self._update_dropdown()
 
     def _update_all(self, event):
         """ Updates both lists and textbox for when manager changes """
@@ -159,6 +161,32 @@ class MainAppController(ThemedTk):
             self._error_msg = ttk.Label(self._popup_win,
                                         text=f'Member with ID: {self._id_to_remove} could not be released (It has become too attached to you).')
             self._error_msg.grid(row=2, column=1)
+
+    def _create_player(self):
+        """ CREATES NEW PLAYER!!! """
+        self._popup_win = tk.Toplevel(bg='indian red')
+        self._popup_win.geometry('250x100')
+        self._error_msg = ''
+
+        tk.Label(self._popup_win, text='Player Name', bg=self._widget_bg, fg='white').grid(row=0, column=1)
+        self._new_player_name = tk.Entry(self._popup_win, bg=self._text_bg, fg='black')
+        self._new_player_name.grid(row=0, column=2)
+
+        confirm = tk.Button(self._popup_win, text='Create New Player', command=self._confirm_player, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
+        confirm.grid(row=1, column=1,columnspan=2)
+
+    def _confirm_player(self):
+        data = {'player_name': self._new_player_name.get()}
+        r = requests.post('http://127.0.0.1:5000/create_manager', json=data)
+        if r.status_code == 200:
+            messagebox.showinfo(title='Success',
+                                message=f'Player {self._new_player_name.get()} created. Choose your new player from the drop down menu "Choose Player"')
+            self._update_dropdown()
+            self._close_popup()
+        elif r.status_code == 400 or r.status_code == 401:
+            self._error_msg = tk.Label(self._popup_win,
+                                        text=f'Please enter a name for your new player.')
+            self._error_msg.grid(row=3, column=1, columnspan=2)
 
     def _create_member(self):
         """ Creates popup to choose which type of member to create """
@@ -354,6 +382,14 @@ class MainAppController(ThemedTk):
                                       fg=self._button_fg, cursor=self._button_select)
             self._heal_btn.grid(row=4, column=3)
             return
+
+    def _update_dropdown(self):
+        managers = requests.get('http://127.0.0.1:5000/managers').json()
+        self._managers = {m['player_name']:m for m in managers}
+        self._dropdown.destroy()
+        self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
+        self._dropdown.config(background=self._button_bg, foreground=self._button_fg, activebackground='yellow', cursor=self._button_select)
+        self._dropdown.grid(row=1, column=3)
 
     @staticmethod
     def _enable_text_insert(textbox):

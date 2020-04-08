@@ -37,6 +37,25 @@ poke2.save()
 egg1 = Egg.create(pokedex_num=2, nickname=Pokedex[2][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='house', item='pee')
 egg1.save()
 
+@app.route('/create_manager', methods=["POST"])
+def add_manager():
+    """ POST method for Manager
+    Creates a new Manager with json data from the request
+
+    :return: Response containing the http status code and either the ID of the new pokemon or Error Message
+    :rtype: Response Object
+
+    """
+    data = request.json
+    if data['player_name'] == '':
+        return make_response('no name', 401)
+    try:
+        new_player = PartyManager.create(player_name=data['player_name'])
+        new_player.save()
+        return make_response(str(new_player), 200)
+    except Exception as err:
+        message = "missing attribute " + str(err)
+        return make_response(message, 400)
 
 @app.route("/<int:manager_id>/pokemon", methods=["POST"])
 def add_pokemon(manager_id):
