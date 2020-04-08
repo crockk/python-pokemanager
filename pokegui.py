@@ -2,9 +2,8 @@ import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk, messagebox, StringVar
 import requests
-import re
 import json
-from ttkthemes import ThemedTk, THEMES
+from ttkthemes import ThemedTk
 from pokemodule.pokedex import Pokedex
 from pokepopups.add_pokemon_popup import AddPokemonPopup
 from pokepopups.add_egg_popup import AddEggPopup
@@ -149,19 +148,20 @@ class MainAppController(ThemedTk):
 
     def _create_member(self):
         """ Creates popup to choose which type of member to create """
-        self._popup_win = tk.Toplevel()
+        self._popup_win = tk.Toplevel(bg='indian red')
         self._popup_win.geometry('150x100')
         self._error_msg = ''
         options = ['Pokemon', 'Egg']
 
-        ttk.Label(self._popup_win, text='Choose type to create').grid(row=0, column=1)
+        tk.Label(self._popup_win, text='Choose type to create', bg=self._widget_bg, fg='white').grid(row=0, column=1)
 
         self._type_dropdown_var = StringVar(self)
         self._type_dropdown_var.set(options[0])
         self._type_to_create = tk.OptionMenu(self._popup_win, self._type_dropdown_var, *options)
+        self._type_to_create.config(background=self._button_bg, foreground=self._button_fg, activebackground='yellow', cursor=self._button_select)
         self._type_to_create.grid(row=1, column=1)
 
-        confirm = ttk.Button(self._popup_win, text='Create', command=self._choose_popup)
+        confirm = tk.Button(self._popup_win, text='Create', command=self._choose_popup, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
         confirm.grid(row=2, column=1)
 
     def _choose_popup(self):

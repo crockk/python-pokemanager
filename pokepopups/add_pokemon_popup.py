@@ -11,32 +11,39 @@ class AddPokemonPopup(tk.Frame):
         """ Constructor """
 
         tk.Frame.__init__(self, parent)
+        self.config(background='indian red')
+        self._text_bg = 'indian red'
+        self._entry_bg = 'light sky blue'
+        self._entry_fg = 'white'
+        self._button_bg = 'light goldenrod'
+        self._button_fg = 'black'
+        self._button_select = 'hand2'
 
         self._manager_id = manager_id
 
         self._close_cb = close_callback
         self.grid(rowspan=2, columnspan=2)
 
-        ttk.Label(self, text="Pokedex Number*:").grid(row=1, column=1)
-        self._pokedex_num = ttk.Entry(self, validate='key')
+        tk.Label(self, text="Pokedex Number*:", bg=self._text_bg, fg='black').grid(row=1, column=1)
+        self._pokedex_num = tk.Entry(self, validate='key', bg=self._entry_bg, fg=self._entry_fg)
         self._pokedex_num.grid(row=1, column=2)
-        ttk.Label(self, text="Nickname:").grid(row=2, column=1)
-        self._nickname = ttk.Entry(self)
+        tk.Label(self, text="Nickname:", bg=self._text_bg, fg='black').grid(row=2, column=1)
+        self._nickname = tk.Entry(self, bg=self._entry_bg, fg=self._entry_fg)
         self._nickname.grid(row=2, column=2)
-        ttk.Label(self, text="Source:").grid(row=3, column=1)
-        self._source = ttk.Entry(self)
+        tk.Label(self, text="Source:", bg=self._text_bg, fg='black').grid(row=3, column=1)
+        self._source = tk.Entry(self, bg=self._entry_bg, fg=self._entry_fg)
         self._source.grid(row=3, column=2)
-        ttk.Label(self, text="Item:").grid(row=4, column=1)
-        self._item = ttk.Entry(self)
+        tk.Label(self, text="Item:", bg=self._text_bg, fg='black').grid(row=4, column=1)
+        self._item = tk.Entry(self, bg=self._entry_bg, fg=self._entry_fg)
         self._item.grid(row=4, column=2)
-        ttk.Label(self, text="Ability:").grid(row=5, column=1)
-        self._ability = ttk.Entry(self)
+        tk.Label(self, text="Ability:", bg=self._text_bg, fg='black').grid(row=5, column=1)
+        self._ability = tk.Entry(self, bg=self._entry_bg, fg=self._entry_fg)
         self._ability.grid(row=5, column=2)
 
-        ttk.Label(self, text='*Required field').grid(row=6, column=1)
+        tk.Label(self, text='*Required field', bg=self._text_bg, fg='black').grid(row=6, column=1)
 
-        ttk.Button(self, text="Submit", command=self._submit_cb).grid(row=7, column=1)
-        ttk.Button(self, text="Close", command=self._close_cb).grid(row=7, column=2)
+        tk.Button(self, text="Submit", command=self._submit_cb, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=1)
+        tk.Button(self, text="Close", command=self._close_cb, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=2)
 
     def _submit_cb(self):
         """ Submit the Add Student """
