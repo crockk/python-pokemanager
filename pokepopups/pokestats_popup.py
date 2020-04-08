@@ -6,7 +6,7 @@ import re
 import string
 
 
-class StatsPopup(tk.Frame):
+class PokeStatsPopup(tk.Frame):
 
     def __init__(self, stats, parent, close_callback):
 
@@ -15,30 +15,32 @@ class StatsPopup(tk.Frame):
 
         self._close_cb = close_callback
 
-        self._num_quarantined_stu = stats['num_quarantined_students']
-        self._num_quarantined_teach = stats['num_quarantined_teachers']
-        self._total_people = stats['total_people']
-        self._total_quarantined = stats['total_quarantined']
-        self._num_students = stats['num_students']
-        self._num_teachers = stats['num_teachers']
-        self._name = stats['name']
+        self._total_by_type = stats['total_by_type']
+        self._total_eggs = stats['total_eggs']
+        self._total_KO = stats['total_KO']
+        self._total_steps = stats['total_steps']
+        self._player_name = stats['player_name']
 
-        w = tk.Label(self, text=f"Statistics for: {self._name}", bg="gold", fg="black")
+        w = tk.Label(self, text=f"Statistics for: {self._player_name}", bg="snow3", fg="black")
         w.pack(fill=X)
-        w = tk.Label(self, text=f"Total people: {self._total_people}", bg="deep sky blue", fg="white")
+        w = tk.Label(self, text=f"Total KO'd: {self._total_KO}", bg="pink2", fg="black")
         w.pack(fill=X)
-        w = tk.Label(self, text=f"Number of students: {self._num_students}", bg="light sky blue", fg="white")
+        w = tk.Label(self, text=f"Total steps walked: {self._total_steps}", bg="pink2", fg="black")
         w.pack(fill=X)
-        w = tk.Label(self, text=f"Number of teachers: {self._num_teachers}", bg="light sky blue", fg="white")
+        w = tk.Label(self, text=f"Total eggs: {self._total_eggs}", bg="pink2", fg="black")
         w.pack(fill=X)
-        w = tk.Label(self, text=f"Total quarantined: {self._total_quarantined}", bg="red", fg="white")
+        w = tk.Label(self, text=f"Total by type:", bg="pink2", fg="black")
         w.pack(fill=X)
-        w = tk.Label(self, text=f"Number of quarantined students: {self._num_quarantined_stu}", bg="IndianRed1", fg="white")
-        w.pack(fill=X)
-        w = tk.Label(self, text=f"Number of quarantined teachers: {self._num_quarantined_teach}", bg="IndianRed1", fg="white")
-        w.pack(fill=X)
+
+        text = tk.Text(self, width=20, height=5, font='Arial 8')
+        text.tag_configure("center", justify='center')
+        for type, num in self._total_by_type.items():
+            text.insert("1.0", f'{type} type: {num}\n')
+        text.tag_add("center", "1.0", "end")
+        text.config(state=tk.DISABLED)
+        text.pack(fill=X)
 
         w = ttk.Button(self, text="Close", command=self._close_cb)
-        w.pack(fill=X)
+        w.pack()
 
 

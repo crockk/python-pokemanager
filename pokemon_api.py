@@ -250,6 +250,8 @@ def move_member(manager_id, member_id):
             member.save()
             return make_response("Member moved to party", 204)
         else:
+            if len(player.party_members) == 6:
+                return make_response('Your party is full', 401)
             member.in_party = True
             member.save()
             return make_response("Member moved to party", 204)

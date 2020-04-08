@@ -7,6 +7,7 @@ import json
 from ttkthemes import ThemedTk, THEMES
 from pokepopups.add_pokemon_popup import AddPokemonPopup
 from pokepopups.add_egg_popup import AddEggPopup
+from pokepopups.pokestats_popup import PokeStatsPopup
 
 
 class MainAppController(ThemedTk):
@@ -42,7 +43,7 @@ class MainAppController(ThemedTk):
         # A couple buttons - using TTK
         ttk.Button(left_frame, text="Move Member", command=self._move_member).grid(row=6, column=1)
         ttk.Button(left_frame, text="Create Member", command=self._create_member).grid(row=6, column=3)
-        ttk.Button(left_frame, text="Player Stats", command=None).grid(row=7, column=1)
+        ttk.Button(left_frame, text="Player Stats", command=self._get_stats).grid(row=7, column=1)
         ttk.Button(left_frame, text="Release", command=self._release_member).grid(row=7, column=3)
         ttk.Button(left_frame, text="Quit", command=self._quit_callback).grid(row=8, column=1, columnspan=3)
 
@@ -78,11 +79,21 @@ class MainAppController(ThemedTk):
 
     def _move_member(self):
         """ Moved selected member to party, or remove from party depending on their status"""
-        member_id = self._get_member_id_from_list()
+        try:
+            member_id = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to move.')
+            return
         manager_id = self._get_manager_id()
 
         r = requests.put(f"http://127.0.0.1:5000/{manager_id}/{member_id}/move")
 
+        if r.status_code == 400:
+            messagebox.showerror(title='Error', message='Could not move member to party.')
+            return
+        if r.status_code == 401:
+            messagebox.showerror(title='Party Full', message='Your party is full! Please remove a member from your party if you would like to add this member to your party.')
+            return
         self._update_lists()
 
     def _release_member(self):
@@ -151,23 +162,23 @@ class MainAppController(ThemedTk):
 
     def _add_pokemon(self):
         print('pokemon create')
-        """ Add Student Popup """
+        """ Add Pokemon Popup """
         self._popup_win = tk.Toplevel()
         self._popup = AddPokemonPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _add_egg(self):
         print('egg create')
-        """ Add Student Popup """
+        """ Add Egg Popup """
         self._popup_win = tk.Toplevel()
         self._popup = AddEggPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
-    # def _get_stats(self):
-    #     r = requests.get("http://127.0.0.1:5000/school/stats")
-    #     stats = r.json()
-    #
-    #     self._popup_win = tk.Toplevel()
-    #     self._popup = StatsPopup(stats, self._popup_win, self._close_student_cb)
-    #
+    def _get_stats(self):
+        """ Pokestats Popup """
+        r = requests.get(f"http://127.0.0.1:5000/{self._get_manager_id()}/member/stats")
+        stats = r.json()
+
+        self._popup_win = tk.Toplevel()
+        self._popup = PokeStatsPopup(stats, self._popup_win, self._close_popup)
 
     def _update_textbox(self, evt):
         """ Updates the info text box on the right, based on the current ID selected """
@@ -197,21 +208,11 @@ class MainAppController(ThemedTk):
     #     """ Add Student Popup """
     #     self._popup_win = tk.Toplevel()
     #     self._popup = AddStudentPopup(self._popup_win, self._close_student_cb)
-    #
-    # def _close_student_cb(self):
-    #     """ Close Add Student Popup """
-    #     self._popup_win.destroy()
-    #     self._update_people_list()
-    #
+
     # def _add_teacher(self):
     #     """ Add Teacher Popup """
     #     self._popup_win = tk.Toplevel()
     #     self._popup = AddTeacherPopup(self._popup_win, self._close_teacher_cb)
-    #
-    # def _close_teacher_cb(self):
-    #     """ Close Add Teacher Popup """
-    #     self._popup_win.destroy()
-    #     self._update_people_list()
 
     def _close_popup(self):
         """ Close Generic Popup """

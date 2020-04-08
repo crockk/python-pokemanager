@@ -27,8 +27,6 @@ class PartyManager(BaseModel):
     _POKEDEX = Pokedex
     _ID_MANAGER = IdManager()
 
-    # IT'S ALL OBSOLETE BAYBEE WOOOOOO SHOULDA DONE DB FROM THE VERY START WOOOO USELESS CODE
-
     @classmethod
     def get_by_id(cls, id: int):
         result = [pm for pm in  cls.select()[:] if pm.id == id]
@@ -83,8 +81,6 @@ class PartyManager(BaseModel):
             return True
         else:
             return False
-    
-    # TODO: HOW DO YOU DELETE STUFF ###################################
 
     def release_member(self, id: str) -> bool:
         """ Releases a party member from pc or party back into the wilderness :'(
@@ -140,7 +136,6 @@ class PartyManager(BaseModel):
                         members[e_type] = [member]
         return members
 
-
     def get_all_members_by_elemental_type(self) -> dict:
         """ Gets a collection of party members based on types
         :return: Returns a collection of desired types from the party, seperated by type
@@ -195,7 +190,7 @@ class PartyManager(BaseModel):
         for member in self.all_members:
             if member.member_type == 'Pokemon' and member.is_KO:
                 total_KO += 1
-        return PokeStats(members_by_type, total_eggs, total_KO, total_steps)
+        return PokeStats(members_by_type, total_eggs, total_KO, total_steps, self.player_name)
 
     def _total_per_elemental_type(self) -> dict:
         """ Populates and returns a dictionary of total amount of members by each elemental type, eg:
