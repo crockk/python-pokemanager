@@ -1,10 +1,11 @@
 import tkinter as tk
-import tkinter.font
+import tkinter.font as font
 from tkinter import ttk, messagebox, StringVar
 import requests
 import re
 import json
 from ttkthemes import ThemedTk, THEMES
+from pokemodule.pokedex import Pokedex
 from pokepopups.add_pokemon_popup import AddPokemonPopup
 from pokepopups.add_egg_popup import AddEggPopup
 from pokepopups.pokestats_popup import PokeStatsPopup
@@ -19,42 +20,50 @@ class MainAppController(ThemedTk):
 
     def __init__(self):
         """ Initialize Main Application """
-        ThemedTk.__init__(self, themebg=True)
+        ThemedTk.__init__(self, theme='ubuntu', themebg=True)
         self.geometry('900x550')
+        self.config(background='indian red')
+        self._widget_bg = 'gray14'
+        self._text_bg = 'light sky blue'
+        self._text_fg = 'black'
+        self._text_font = font.Font(size=12, weight='bold')
+        self._button_bg = 'light goldenrod'
+        self._button_fg = 'black'
+        self._button_select = 'hand2'
 
         # Top frame, row 1
-        top_frame = tk.Frame(master=self)
+        top_frame = tk.Frame(master=self, bg=self._text_bg)
         top_frame.grid(row=1, column=1)
 
         # Left frame, column 1
-        left_frame = tk.Frame(master=self)
+        left_frame = tk.Frame(master=self, bg=self._widget_bg)
         left_frame.grid(row=2, column=1)
 
         # Right frame (info text, column 2)
-        right_frame = tk.Frame(master=self)
+        right_frame = tk.Frame(master=self, bg=self._widget_bg)
         right_frame.grid(row=2, column=2)
 
-        tk.Label(left_frame, text="Current Party:").grid(row=1, column=1, columnspan=3)
-        self._party_list= tk.Listbox(left_frame, width=20, height=7)
+        tk.Label(left_frame, text="Current Party:", bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
+        self._party_list= tk.Listbox(left_frame, width=20, height=7, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
         self._party_list.grid(row=2, column=1, columnspan=3)
 
-        tk.Label(left_frame, text="PC Pokemon:").grid(row=4, column=1, columnspan=3)
-        self._pc_list= tk.Listbox(left_frame, width=20)
+        tk.Label(left_frame, text="PC Pokemon:", bg=self._widget_bg, fg='white').grid(row=4, column=1, columnspan=3)
+        self._pc_list= tk.Listbox(left_frame, width=20, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
         self._pc_list.grid(row=5, column=1, columnspan=3)
 
         # A couple buttons - using TTK
-        ttk.Button(left_frame, text="Move Member", command=self._move_member).grid(row=6, column=1)
-        ttk.Button(left_frame, text="Create Member", command=self._create_member).grid(row=6, column=3)
-        ttk.Button(left_frame, text="Player Stats", command=self._get_stats).grid(row=7, column=1)
-        ttk.Button(left_frame, text="Release", command=self._release_member).grid(row=7, column=3)
-        ttk.Button(left_frame, text="Quit", command=self._quit_callback).grid(row=8, column=1, columnspan=3)
+        tk.Button(left_frame, text="Move Member", command=self._move_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=1)
+        tk.Button(left_frame, text="Create Member", command=self._create_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=6, column=3)
+        tk.Button(left_frame, text="Player Stats", command=self._get_stats, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=1)
+        tk.Button(left_frame, text="Release", command=self._release_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=7, column=3)
+        tk.Button(left_frame, text="Quit", command=self._quit_callback, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=8, column=1, columnspan=3)
 
         # Right frame widgets
-        self._info_text = tk.Text(master=right_frame, height=20, width=70, font=("TkTextFont", 10))
-        self._info_text.grid(row=3, column=1, columnspan=2)
-        self._info_text.tag_configure("bold", font=("TkTextFont", 10, "bold"))
+        tk.Label(right_frame, text='Member Info', bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
+        self._info_text = tk.Text(master=right_frame, height=20, width=70, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        self._info_text.grid(row=2, column=2)
         self._disable_text_insert(self._info_text)
-        ttk.Button(right_frame, text="Edit member", command=self._edit_member).grid(row=4, column=1, columnspan=3)
+        tk.Button(right_frame, text="Edit member", command=self._edit_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=4, column=1, columnspan=3)
 
         # Create dropdown to choose manager
         managers = requests.get('http://127.0.0.1:5000/managers').json()
@@ -63,8 +72,9 @@ class MainAppController(ThemedTk):
         self._dropdown_var = StringVar(self)
         self._dropdown_var.set(managers[0]['player_name'])
 
-        tk.Label(top_frame, text="Player").grid(row=5, column=1)
+        tk.Label(top_frame, text="Player", bg=self._widget_bg, fg='white').grid(row=5, column=1)
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
+        self._dropdown.config(background=self._button_bg, foreground=self._button_fg, activebackground='yellow', cursor=self._button_select)
         self._dropdown.grid(row=1, column=2)
 
         # Call this on select
@@ -212,11 +222,19 @@ class MainAppController(ThemedTk):
             self._info_text.insert(tk.END, "Error running the request!")
 
         # For every item (key, value) in the JSON response, display them:
+        # data = json.loads(r.text)
+        # self._generate_info(data)
+
+        scroll = tk.Scrollbar(root, command=self._info_text.yview)
+        self._info_text.configure(yscrollcommand=scroll.set)
         for k, v in json.loads(r.text).items():
             self._info_text.insert(tk.END, f"{k}\t\t", "bold")
             self._info_text.insert(tk.END, f"{v}\n")
 
         self._disable_text_insert(self._info_text)
+
+    def _generate_info(self, data):
+        self._info_text.insert(tk.END, data['nickname'], )
 
     def _close_popup(self):
         """ Close Generic Popup """
@@ -271,6 +289,6 @@ class MainAppController(ThemedTk):
 
 if __name__ == "__main__":
     root = MainAppController()
-    root.set_theme("ubuntu")
+    # root.set_theme("ubuntu")
     root.mainloop()
 
