@@ -24,7 +24,7 @@ nolan.save()
 rival = PartyManager(player_name='Rival Tushya')
 rival.save()
 
-pika = Pokemon.create(pokedex_num=10, nickname=Pokedex[10][0], player=nolan, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
+pika = Pokemon.create(pokedex_num=10, nickname=Pokedex[10][0], player=nolan, id=nolan._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 pika.save()
 
 poke1 = Pokemon.create(pokedex_num=10, nickname=Pokedex[10][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
@@ -55,7 +55,7 @@ def add_pokemon(manager_id):
         new_id = Pokemon.create(pokedex_num=new_member["pokedex_num"],
                                  nickname=new_member["nickname"],
                                  player=player,
-                                 id=poke_inventory._ID_MANAGER.pokemon_id(),
+                                 id=player._ID_MANAGER.pokemon_id(),
                                  source=new_member["source"],
                                  item=new_member["item"],
                                  ability=new_member["ability"])
@@ -83,7 +83,7 @@ def add_egg(manager_id):
         new_id = Egg.create(pokedex_num=new_member["pokedex_num"],
                              nickname=new_member["nickname"],
                              player=player,
-                             id=poke_inventory._ID_MANAGER.egg_id(),
+                             id=player._ID_MANAGER.egg_id(),
                              source=new_member["source"])
         new_id.save()
         return make_response(str(new_id), 200)
