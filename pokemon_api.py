@@ -15,6 +15,7 @@ app = Flask(__name__)
 drop_tables()
 create_tables()
 
+
 @app.route('/create_manager', methods=["POST"])
 def add_manager():
     """ POST method for Manager
@@ -34,6 +35,7 @@ def add_manager():
     except Exception as err:
         message = "missing attribute " + str(err)
         return make_response(message, 400)
+
 
 @app.route("/<int:manager_id>/pokemon", methods=["POST"])
 def add_pokemon(manager_id):
