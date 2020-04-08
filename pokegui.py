@@ -1,3 +1,11 @@
+"""
+Dynamic GUI for the Pokemon Management System
+Author: Nolan Crooks, Tushya Iyer
+
+Assignment 4 - Python Object Oriented Programming ACIT2515
+Date: 4/8/2020
+"""
+
 import tkinter as tk
 import tkinter.font as font
 from tkinter import ttk, messagebox, StringVar
