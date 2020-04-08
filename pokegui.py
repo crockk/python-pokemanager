@@ -234,11 +234,41 @@ class MainAppController(ThemedTk):
         self._disable_text_insert(self._info_text)
 
     def _generate_info(self, data):
-        self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
+        if data['member_type'] == 'Pokemon':
+            self._species = Pokedex[data['pokedex_num']][0]
+            self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
+            ordered_keys = [
+                'nickname',
+                'source',
+                'date_acquired',
+                'current_hp',
+                'level',
+                'attack',
+                'defense',
+                'speed',
+                'moves',
+                'height',
+                'weight',
+                'item',
+                'ability'
+            ]
+        else:
+            self._species = 'Egg'
+            self._sprite = tk.PhotoImage(file='img/egg.png')
+            ordered_keys = [
+                'source',
+                'date_acquired',
+                'steps_remaining',
+            ]
+
         self._info_text.image_create(tk.END, image=self._sprite)
-        self._info_text.tag_configure('center', justify='center')
-        self._info_text.insert(tk.END, data['nickname'])
-        self._info_text.tag_add('center', '1.0', 'end')
+        self._info_text.insert(tk.END, f'{self._species}\n')
+
+        self._info_text.tag_configure('left', justify='left')
+        for key in ordered_keys:
+            self._info_text.insert(tk.END, f'{key.capitalize()}\t\t{data[key]}\n')
+        self._info_text.tag_add('left', '1.0', 'end')
+
 
     def _close_popup(self):
         """ Close Generic Popup """

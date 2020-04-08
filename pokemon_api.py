@@ -51,6 +51,8 @@ def add_pokemon(manager_id):
     new_member = request.json
     if new_member['nickname'] == '':
         new_member['nickname'] = Pokedex[int(new_member['pokedex_num'])][0]
+    if new_member['source'] == '':
+        new_member['source'] = 'Pallet Town'
     try:
         new_id = Pokemon.create(pokedex_num=new_member["pokedex_num"],
                                  nickname=new_member["nickname"],
@@ -79,6 +81,8 @@ def add_egg(manager_id):
     new_member = request.json
     if new_member['nickname'] == '':
         new_member['nickname'] = 'Egg'
+    if new_member['source'] == '':
+        new_member['source'] = 'Pallet Town'
     try:
         new_id = Egg.create(pokedex_num=new_member["pokedex_num"],
                              nickname=new_member["nickname"],

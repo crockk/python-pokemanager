@@ -46,6 +46,6 @@ class PartyMember(BaseModel):
     in_party = BooleanField(default=False)
     weight = DecimalField(column_name='weight', default=RandomStats.rand_weight)
     height = DecimalField(column_name='height', default=RandomStats.rand_height)
-    source = CharField(column_name='source', null=True)
+    source = CharField(column_name='source', null=True, default='Pallet Town')
     date_acquired = DateField(default=datetime.now)
     item = CharField(column_name='item', null=True)

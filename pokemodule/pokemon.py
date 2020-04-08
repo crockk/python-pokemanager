@@ -211,6 +211,7 @@ class Pokemon(PartyMember):
             "level": self.level,
             "attack": self.attack,
             "speed": self.speed,
+            "defense": self.defense,
             "total_hp": self.total_hp,
             "current_hp": self.current_hp,
             "is_KO": self.is_KO,
