@@ -26,10 +26,10 @@ class EditPokemonPopup(tk.Frame):
         self._item = ttk.Entry(self)
         self._item.grid(row=3, column=2)
 
-        ttk.Label(self, text='*Required field').grid(row=3, column=1)
+        ttk.Label(self, text='*Required field').grid(row=4, column=1)
 
-        ttk.Button(self, text="Submit", command=self._submit_cb).grid(row=4, column=1)
-        ttk.Button(self, text="Close", command=self._close_cb).grid(row=4, column=2)
+        ttk.Button(self, text="Submit", command=self._submit_cb).grid(row=5, column=1)
+        ttk.Button(self, text="Close", command=self._close_cb).grid(row=5, column=2)
 
     def _submit_cb(self):
         """ Submit the Add Student """
