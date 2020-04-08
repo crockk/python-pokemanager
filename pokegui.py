@@ -266,7 +266,7 @@ class MainAppController(ThemedTk):
 
         self._info_text.tag_configure('left', justify='left')
         for key in ordered_keys:
-            self._info_text.insert(tk.END, f'{key.capitalize()}\t\t{data[key]}\n')
+            self._info_text.insert(tk.END, f"{' '.join([c.strip() for c in key.split('_')]).capitalize()}\t\t{data[key]}\n")
         self._info_text.tag_add('left', '1.0', 'end')
 
 
