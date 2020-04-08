@@ -8,7 +8,7 @@ Date: 2/17/2020
 class PokeStats:
     """ Defines the PokeStats class for use in PartyManager """
 
-    def __init__(self, total_by_type: dict, total_eggs: int, total_KO: int, total_steps: int) -> None:
+    def __init__(self, total_by_type: dict, total_eggs: int, total_KO: int, total_steps: int, player_name: str) -> None:
         """ Initalizes instance properties
 
         :return: No return
@@ -24,6 +24,8 @@ class PokeStats:
 
         self._total_steps = total_steps
 
+        self._player_name = player_name
+
     def to_dict(self) -> dict:
         """ Converts instance attributes to dictionary format and returns it
 
@@ -31,6 +33,7 @@ class PokeStats:
         :rtype: dict
         """
         return {
+            "player_name": self._player_name,
             "total_by_type": self._total_by_type,
             "total_eggs": self._total_eggs,
             "total_KO": self._total_KO,
