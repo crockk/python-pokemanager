@@ -11,6 +11,7 @@ from pokepopups.add_egg_popup import AddEggPopup
 from pokepopups.pokestats_popup import PokeStatsPopup
 from pokepopups.edit_pokemon_popup import EditPokemonPopup
 from pokepopups.edit_egg_popup import EditEggPopup
+import ast
 
 
 class MainAppController(ThemedTk):
@@ -266,7 +267,14 @@ class MainAppController(ThemedTk):
 
         self._info_text.tag_configure('left', justify='left')
         for key in ordered_keys:
-            self._info_text.insert(tk.END, f"{' '.join([c.strip() for c in key.split('_')]).capitalize()}\t\t{data[key]}\n")
+            if key == 'moves':
+                moves_list = ast.literal_eval(data['moves'])
+                moves_list = [move[0] for move in moves_list]
+                self._info_text.insert(tk.END,
+                                       f"{' '.join([c.strip() for c in key.split('_')]).capitalize()}:\n")
+                self._info_text.insert(tk.END, f"   {moves_list[0]} | {moves_list[1]} | {moves_list[2]} | {moves_list[3]}\n")
+            else:
+                self._info_text.insert(tk.END, f"{' '.join([c.strip() for c in key.split('_')]).capitalize()}\t\t{data[key]}\n")
         self._info_text.tag_add('left', '1.0', 'end')
 
 
