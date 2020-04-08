@@ -408,7 +408,7 @@ class MainAppController(ThemedTk):
         poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
         ko_after = poke_r.json()['is_KO']
         if ko_before != ko_after:
-            messagebox.showinfo(title='KO!', message=f"{poke_r.json()['nickname']} was revived!")
+            messagebox.showinfo(title=f"{poke_r.json()['nickname']} was revived!", message=f'Nurse Joy healed your Pokemon back to health!')
 
     def _damage(self):
         try:
