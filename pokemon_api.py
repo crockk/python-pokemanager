@@ -314,6 +314,7 @@ def move_member(manager_id, member_id):
     except Exception as err:
         return make_response(str(err), 400)
 
+
 def initialize_default_managers():
     poke_inventory = PartyManager(player_name="Dash Ketchup")
     poke_inventory.save()
@@ -371,6 +372,7 @@ def initialize_default_managers():
     egg1.save()
     egg2 = Egg.create(pokedex_num=10, nickname='Egg', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='Victory Road')
     egg2.save()
+
 
 if __name__ == "__main__":
     initialize_default_managers()
