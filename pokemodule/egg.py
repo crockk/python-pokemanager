@@ -70,7 +70,7 @@ class Egg(PartyMember):
         
         # self.player.release_pc_pokemon(self.id)
         # self.save()
-        self.player.release_party_member(self.id)
+        self.player.release_member(self.id)
 
 
     def to_dict(self) -> dict:
