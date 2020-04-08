@@ -25,7 +25,7 @@ class MainAppController(ThemedTk):
         self.config(background='indian red')
         self._widget_bg = 'gray14'
         self._text_bg = 'light sky blue'
-        self._text_fg = 'black'
+        self._text_fg = 'RoyalBlue1'
         self._text_font = font.Font(size=12, weight='bold')
         self._button_bg = 'light goldenrod'
         self._button_fg = 'black'
@@ -222,19 +222,21 @@ class MainAppController(ThemedTk):
             self._info_text.insert(tk.END, "Error running the request!")
 
         # For every item (key, value) in the JSON response, display them:
-        # data = json.loads(r.text)
-        # self._generate_info(data)
+        data = json.loads(r.text)
+        self._generate_info(data)
 
-        scroll = tk.Scrollbar(root, command=self._info_text.yview)
-        self._info_text.configure(yscrollcommand=scroll.set)
-        for k, v in json.loads(r.text).items():
-            self._info_text.insert(tk.END, f"{k}\t\t", "bold")
-            self._info_text.insert(tk.END, f"{v}\n")
+        # scroll = tk.Scrollbar(root, command=self._info_text.yview)
+        # self._info_text.configure(yscrollcommand=scroll.set)
+        # for k, v in json.loads(r.text).items():
+        #     self._info_text.insert(tk.END, f"{k}\t\t", "bold")
+        #     self._info_text.insert(tk.END, f"{v}\n")
 
         self._disable_text_insert(self._info_text)
 
     def _generate_info(self, data):
-        self._info_text.insert(tk.END, data['nickname'], )
+        self._sprite = tk.PhotoImage(file='img/bulbasaur.png')
+        self._info_text.image_create(tk.END, image=self._sprite)
+        self._info_text.insert(tk.END, data['nickname'] )
 
     def _close_popup(self):
         """ Close Generic Popup """
