@@ -20,7 +20,8 @@ class MainAppController(ThemedTk):
     def __init__(self):
         """ Initialize Main Application """
         ThemedTk.__init__(self, theme='ubuntu', themebg=True)
-        self.geometry('980x600')
+        self.geometry('580x650')
+        self.resizable(False, False)
         self.config(background='indian red')
         self._widget_bg = 'gray14'
         self._text_bg = 'light sky blue'
@@ -30,14 +31,14 @@ class MainAppController(ThemedTk):
         self._button_fg = 'black'
         self._button_select = 'hand2'
 
-        tk.Label(self, text='Choose Player', bg=self._widget_bg, fg='white').grid(row=0,column=3)
+        tk.Label(self, text='Choose Player', bg=self._widget_bg, fg='white').grid(row=0,column=3, pady=(10,0))
         # Top frame, row 1
         self._top_frame = tk.Frame(master=self, bg=self._widget_bg)
-        self._top_frame.grid(row=1, column=2)
+        self._top_frame.grid(row=1, column=2, padx=(40,0))
 
         # Left frame, column 1
         self._left_frame = tk.Frame(master=self, bg=self._widget_bg)
-        self._left_frame.grid(row=2, column=2)
+        self._left_frame.grid(row=2, column=2, padx=(40,0))
 
         # Right frame (info text, column 2)
         self._right_frame = tk.Frame(master=self, bg=self._widget_bg)
@@ -52,7 +53,7 @@ class MainAppController(ThemedTk):
         self._bottom_frame.grid(row=4, column=3)
 
         tk.Label(self._left_frame, text="Current Party:", bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
-        self._party_list= tk.Listbox(self._left_frame, width=20, height=7, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        self._party_list= tk.Listbox(self._left_frame, width=20, height=6, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
         self._party_list.grid(row=2, column=1, columnspan=3)
 
         tk.Label(self._left_frame, text="PC Pokemon:", bg=self._widget_bg, fg='white').grid(row=4, column=1, columnspan=3)
@@ -68,8 +69,8 @@ class MainAppController(ThemedTk):
 
         # Right frame widgets
         tk.Label(self._right_frame, text='Member Info', bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
-        self._info_text = tk.Text(master=self._right_frame, height=20, width=70, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
-        self._info_text.grid(row=2, column=1, columnspan=1)
+        self._info_text = tk.Text(master=self._right_frame, height=18.5, width=30, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
+        self._info_text.grid(row=2, column=2)
         self._disable_text_insert(self._info_text)
 
         # Under text frame widgets
@@ -133,10 +134,10 @@ class MainAppController(ThemedTk):
 
         self._popup_win = tk.Toplevel()
         self._error_msg = ''
+        self._popup_win.config(bg='indian red')
+        tk.Label(self._popup_win, text=f'Are you sure you would like to release member {self._id_to_remove}?', bg=self._widget_bg, fg='white').grid(row=0)
 
-        ttk.Label(self._popup_win, text=f'Are you sure you would like to release member {self._id_to_remove}?').grid(row=0)
-
-        confirm = ttk.Button(self._popup_win, text='I am sure', command=self._confirm_removal)
+        confirm = tk.Button(self._popup_win, text='I am sure', command=self._confirm_removal, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
         confirm.grid(row=1)
 
     def _confirm_removal(self):
@@ -165,14 +166,18 @@ class MainAppController(ThemedTk):
     def _create_player(self):
         """ CREATES NEW PLAYER!!! """
         self._popup_win = tk.Toplevel(bg='indian red')
-        self._popup_win.geometry('250x100')
+        self._popup_win.geometry('250x90')
+        self._popup_win.resizable(False, False)
         self._error_msg = ''
 
-        tk.Label(self._popup_win, text='Player Name', bg=self._widget_bg, fg='white').grid(row=0, column=1)
-        self._new_player_name = tk.Entry(self._popup_win, bg=self._text_bg, fg='black')
-        self._new_player_name.grid(row=0, column=2)
+        self._popup_frame = tk.Frame(self._popup_win, bg='indian red')
+        self._popup_frame.grid(row=1, column=1, padx=(10,0))
 
-        confirm = tk.Button(self._popup_win, text='Create New Player', command=self._confirm_player, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
+        tk.Label(self._popup_frame, text='Player Name', bg=self._widget_bg, fg='white').grid(row=0, column=1, padx=(10,0), pady=(10,0))
+        self._new_player_name = tk.Entry(self._popup_frame, bg=self._text_bg, fg='black')
+        self._new_player_name.grid(row=0, column=2, padx=(10,0), pady=(10,0))
+
+        confirm = tk.Button(self._popup_frame, text='Create New Player', command=self._confirm_player, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
         confirm.grid(row=1, column=1,columnspan=2)
 
     def _confirm_player(self):
@@ -185,13 +190,14 @@ class MainAppController(ThemedTk):
             self._close_popup()
         elif r.status_code == 400 or r.status_code == 401:
             self._error_msg = tk.Label(self._popup_win,
-                                        text=f'Please enter a name for your new player.')
+                                        text=f'Please enter a name for your new player.', font=('Arial',10), bg='indian red', fg='white')
             self._error_msg.grid(row=3, column=1, columnspan=2)
 
     def _create_member(self):
         """ Creates popup to choose which type of member to create """
         self._popup_win = tk.Toplevel(bg='indian red')
         self._popup_win.geometry('150x100')
+        self._popup_win.resizable(False, False)
         self._error_msg = ''
         options = ['Pokemon', 'Egg']
 
@@ -217,11 +223,13 @@ class MainAppController(ThemedTk):
     def _add_pokemon(self):
         """ Add Pokemon Popup """
         self._popup_win = tk.Toplevel()
+        self._popup_win.resizable(False, False)
         self._popup = AddPokemonPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _add_egg(self):
         """ Add Egg Popup """
         self._popup_win = tk.Toplevel()
+        self._popup_win.resizable(False, False)
         self._popup = AddEggPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _edit_member(self):
@@ -232,6 +240,7 @@ class MainAppController(ThemedTk):
             return
         manager_id = self._get_manager_id()
         self._popup_win = tk.Toplevel()
+        self._popup_win.resizable(False, False)
 
         if member_id[0] == 'p':
             self._popup = EditPokemonPopup(self._popup_win, manager_id, member_id, self._close_popup)
@@ -244,6 +253,7 @@ class MainAppController(ThemedTk):
         stats = r.json()
 
         self._popup_win = tk.Toplevel()
+        self._popup_win.resizable(False, False)
         self._popup = PokeStatsPopup(stats, self._popup_win, self._close_popup)
 
     def _update_textbox(self, evt):
