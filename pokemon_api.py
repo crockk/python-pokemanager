@@ -15,23 +15,26 @@ app = Flask(__name__)
 drop_tables()
 create_tables()
 
-poke_inventory = PartyManager(player_name="Ashy Ketchup")
+poke_inventory = PartyManager(player_name="Dash Ketchup")
 poke_inventory.save()
 
-nolan = PartyManager(player_name="Nolan")
+nolan = PartyManager(player_name="Trainer Nolan")
 nolan.save()
 
-pika = Pokemon.create(pokedex_num=10, nickname="Nolan's Pikachu", player=nolan, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
+rival = PartyManager(player_name='Rival Tushya')
+rival.save()
+
+pika = Pokemon.create(pokedex_num=10, nickname=Pokedex[10][0], player=nolan, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 pika.save()
 
-poke1 = Pokemon.create(pokedex_num=10, nickname='Slimjim', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
+poke1 = Pokemon.create(pokedex_num=10, nickname=Pokedex[10][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='spaghetti', item='poo')
 poke1.save()
-poke2 = Pokemon.create(pokedex_num=5, nickname='Bubbs', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='pomo', item='rock')
+poke2 = Pokemon.create(pokedex_num=5, nickname=Pokedex[5][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='pomo', item='rock')
 poke2.save()
-poke2 = Pokemon.create(pokedex_num=7, nickname='Hideyoshi', player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='tokyo', item='sakura')
+poke2 = Pokemon.create(pokedex_num=7, nickname=Pokedex[7][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.pokemon_id(), source='tokyo', item='sakura')
 poke2.save()
 
-egg1 = Egg.create(pokedex_num=2, nickname='Eggy', player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='house', item='pee')
+egg1 = Egg.create(pokedex_num=2, nickname=Pokedex[2][0], player=poke_inventory, id=poke_inventory._ID_MANAGER.egg_id(), source='house', item='pee')
 egg1.save()
 
 

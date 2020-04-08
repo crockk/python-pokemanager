@@ -8,6 +8,8 @@ from ttkthemes import ThemedTk, THEMES
 from pokepopups.add_pokemon_popup import AddPokemonPopup
 from pokepopups.add_egg_popup import AddEggPopup
 from pokepopups.pokestats_popup import PokeStatsPopup
+from pokepopups.edit_pokemon_popup import EditPokemonPopup
+from pokepopups.edit_egg_popup import EditEggPopup
 
 
 class MainAppController(ThemedTk):
@@ -52,7 +54,7 @@ class MainAppController(ThemedTk):
         self._info_text.grid(row=3, column=1, columnspan=2)
         self._info_text.tag_configure("bold", font=("TkTextFont", 10, "bold"))
         self._disable_text_insert(self._info_text)
-        ttk.Button(right_frame, text="Edit member", command=None).grid(row=4, column=1, columnspan=3)
+        ttk.Button(right_frame, text="Edit member", command=self._edit_member).grid(row=4, column=1, columnspan=3)
 
         # Create dropdown to choose manager
         managers = requests.get('http://127.0.0.1:5000/managers').json()
@@ -161,16 +163,28 @@ class MainAppController(ThemedTk):
             self._add_egg()
 
     def _add_pokemon(self):
-        print('pokemon create')
         """ Add Pokemon Popup """
         self._popup_win = tk.Toplevel()
         self._popup = AddPokemonPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _add_egg(self):
-        print('egg create')
         """ Add Egg Popup """
         self._popup_win = tk.Toplevel()
         self._popup = AddEggPopup(self._popup_win, self._get_manager_id(), self._close_popup)
+
+    def _edit_member(self):
+        try:
+            member_id = self._get_member_id_from_list()
+        except IndexError:
+            messagebox.showerror(title='Select member', message='Please select a member to edit.')
+            return
+        manager_id = self._get_manager_id()
+        self._popup_win = tk.Toplevel()
+
+        if member_id[0] == 'p':
+            self._popup = EditPokemonPopup(self._popup_win, manager_id, member_id, self._close_popup)
+        if member_id[0] == 'e':
+            self._popup = EditEggPopup(self._popup_win, manager_id, member_id, self._close_popup)
 
     def _get_stats(self):
         """ Pokestats Popup """
@@ -203,16 +217,6 @@ class MainAppController(ThemedTk):
             self._info_text.insert(tk.END, f"{v}\n")
 
         self._disable_text_insert(self._info_text)
-
-    # def _add_student(self):
-    #     """ Add Student Popup """
-    #     self._popup_win = tk.Toplevel()
-    #     self._popup = AddStudentPopup(self._popup_win, self._close_student_cb)
-
-    # def _add_teacher(self):
-    #     """ Add Teacher Popup """
-    #     self._popup_win = tk.Toplevel()
-    #     self._popup = AddTeacherPopup(self._popup_win, self._close_teacher_cb)
 
     def _close_popup(self):
         """ Close Generic Popup """

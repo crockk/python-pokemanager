@@ -27,6 +27,10 @@ class PartyMember(BaseModel):
     def elemental_type(self):
         return Pokedex[self.pokedex_num][1]
 
+    @property
+    def species(self):
+        return Pokedex[self.pokedex_num][0]
+
     @abstractmethod
     def to_dict(self) -> None:
         """ Abstract method to_dict implemented in child classes
@@ -38,7 +42,7 @@ class PartyMember(BaseModel):
         raise NotImplementedError
 
     pokedex_num = IntegerField(column_name='pokedex_num')
-    nickname = CharField(column_name='nickname')
+    nickname = CharField(column_name='nickname', null=True)
     in_party = BooleanField(default=False)
     weight = DecimalField(column_name='weight', default=RandomStats.rand_weight)
     height = DecimalField(column_name='height', default=RandomStats.rand_height)
