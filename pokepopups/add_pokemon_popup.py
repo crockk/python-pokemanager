@@ -14,7 +14,7 @@ class AddPokemonPopup(tk.Frame):
         self.config(background='indian red')
         self._text_bg = 'indian red'
         self._entry_bg = 'light sky blue'
-        self._entry_fg = 'white'
+        self._entry_fg = 'black'
         self._button_bg = 'light goldenrod'
         self._button_fg = 'black'
         self._button_select = 'hand2'
