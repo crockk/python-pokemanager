@@ -61,7 +61,7 @@ class MainAppController(ThemedTk):
         # Right frame widgets
         tk.Label(right_frame, text='Member Info', bg=self._widget_bg, fg='white').grid(row=1, column=1, columnspan=3)
         self._info_text = tk.Text(master=right_frame, height=20, width=70, bg=self._text_bg, fg=self._text_fg, font=self._text_font)
-        self._info_text.grid(row=2, column=2)
+        self._info_text.grid(row=2, column=2, columnspan=1)
         self._disable_text_insert(self._info_text)
         tk.Button(right_frame, text="Edit member", command=self._edit_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select).grid(row=4, column=1, columnspan=3)
 
@@ -234,9 +234,13 @@ class MainAppController(ThemedTk):
         self._disable_text_insert(self._info_text)
 
     def _generate_info(self, data):
-        self._sprite = tk.PhotoImage(file='img/bulbasaur.png')
+        self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
         self._info_text.image_create(tk.END, image=self._sprite)
-        self._info_text.insert(tk.END, data['nickname'] )
+        self._info_text.tag_configure('center', justify='center')
+        self._info_text.insert(tk.END, data['nickname'])
+        self._info_text.tag_add('center', '1.0', 'end')
+
+    def 
 
     def _close_popup(self):
         """ Close Generic Popup """
