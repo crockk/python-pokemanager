@@ -240,8 +240,6 @@ class MainAppController(ThemedTk):
         self._info_text.insert(tk.END, data['nickname'])
         self._info_text.tag_add('center', '1.0', 'end')
 
-    def 
-
     def _close_popup(self):
         """ Close Generic Popup """
         self._popup_win.destroy()
