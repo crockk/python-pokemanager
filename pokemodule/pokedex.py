@@ -2,16 +2,16 @@ from random import uniform, randint, sample
 
 # Species Name, Types
 Pokedex = {
-    1: ("Bulbasaur", "Grass"),
-    2: ("Charmander", "Fire"),
-    3: ("Squirtle", "Water"),
-    4: ("Pikachu", "Electric"),
-    5: ("Turtwig", "Grass"),
-    6: ("Chimchar", "Fire"),
-    7: ("Piplup", "Water"),
-    8: ("Kyogre", "Water"),
-    9: ("Groudon", "Ground"),
-    10: ("Rayquaza", "Flying/Dragon")
+    1: ["Bulbasaur", "Grass", 'img/1.png'],
+    2: ["Charmander", "Fire", 'img/2.png'],
+    3: ["Squirtle", "Water", 'img/3.png'],
+    4: ["Pikachu", "Electric", 'img/4.png'],
+    5: ["Turtwig", "Grass", 'img/5.png'],
+    6: ["Chimchar", "Fire", 'img/6.png'],
+    7: ["Piplup", "Water", 'img/7.png'],
+    8: ["Kyogre", "Water", 'img/8.png'],
+    9: ["Groudon", "Ground", 'img/9.png'],
+    10: ["Rayquaza", "Flying/Dragon", 'img/10.png']
 }
 
 class IdManager():
