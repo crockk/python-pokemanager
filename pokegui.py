@@ -103,9 +103,7 @@ class MainAppController(ThemedTk):
         self._pc_list.bind("<<ListboxSelect>>", self._update_textbox)
         self._party_list.bind("<<ListboxSelect>>", self._update_textbox)
 
-        # Now update the list
-        # self._update_lists()
-        # self._update_dropdown()
+        # Now update all widgets
         self._update_all(None)
 
     def _update_all(self, event):
