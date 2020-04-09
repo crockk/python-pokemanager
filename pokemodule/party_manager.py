@@ -57,7 +57,7 @@ class PartyManager(BaseModel):
             print('Your party is full')
             return False
         elif id in self.party_members:
-            print(f"This {self._party[id].member_type} is already in your party!")
+            print(f"This {self.get_member_by_id(id).member_type} is already in your party!")
             return False
         elif id not in self.pc_members:
             print("This pokemon is not available")
