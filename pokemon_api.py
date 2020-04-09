@@ -175,6 +175,14 @@ def heal(manager_id, member_id):
     member.heal(10)
     return make_response("", 204)
 
+@app.route("/<int:manager_id>/walk", methods=["PUT"])
+def walk(manager_id):
+    STEPS = 100
+    player = PartyManager.get_by_id(manager_id)
+
+    player.walk(STEPS)
+    return make_response("", 204)
+
 
 @app.route("/<"
            "int:manager_id>/member/<member_id>", methods=["DELETE"])

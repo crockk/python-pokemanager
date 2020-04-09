@@ -84,7 +84,7 @@ class MainAppController(ThemedTk):
         # Under text frame widgets
         self._edit_btn = tk.Button(self._under_frame, text="Edit member", command=self._edit_member, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
         self._edit_btn.grid(row=2, column=1)
-        self._walk_btn = tk.Button(self._under_frame, text="Walk", command=None, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
+        self._walk_btn = tk.Button(self._under_frame, text="Walk", command=self._walk, bg=self._button_bg, fg=self._button_fg, cursor=self._button_select)
         self._walk_btn.grid(row=2, column=2)
 
         # Create dropdown to choose manager
@@ -270,6 +270,9 @@ class MainAppController(ThemedTk):
         """ Updates the info text box on the right, based on the current ID selected """
         self._update_right_buttons()
         member_id = self._get_member_id_from_list()
+        if not member_id:
+            self._info_text.insert(tk.END, "No Member selected!")
+            return
 
         # Make some GET requests
         manager_id = self._get_manager_id()
@@ -283,6 +286,7 @@ class MainAppController(ThemedTk):
         # Check the request status code
         if r.status_code != 200:
             self._info_text.insert(tk.END, "Error running the request!")
+            return
 
         data = json.loads(r.text)
         self._generate_info(data)
@@ -353,13 +357,20 @@ class MainAppController(ThemedTk):
     def _get_member_id_from_list(self):
         """ Gets the Id of the selected member in either the pc or party list """
         selected_values = self._party_list.curselection()
-        if not selected_values:
-            selected_values = self._pc_list.curselection()
-            selected_index = selected_values[0]
-            member_id = self._pc_list.get(selected_index)[0:5]
-        else:
+        print(1)
+        if selected_values:
             selected_index = selected_values[0]
             member_id = self._party_list.get(selected_index)[0:5]
+
+        else:
+            selected_values = self._pc_list.curselection()
+
+            if selected_values:
+                selected_index = selected_values[0]
+                member_id = self._pc_list.get(selected_index)[0:5]
+            else:
+                return None
+        
         print(member_id)
         return member_id
 
@@ -387,18 +398,19 @@ class MainAppController(ThemedTk):
         except AttributeError:
             print('Attribute error handled. Dont even stress')
 
-        if member_id[0] == 'p':
-            self._bottom_frame.config(background='indian red')
-            self._lvl_btn = tk.Button(self._bottom_frame, text="Add XP", command=self._add_xp, bg=self._button_bg,
-                                      fg=self._button_fg, cursor=self._button_select)
-            self._lvl_btn.grid(row=4, column=0)
-            self._dmg_btn = tk.Button(self._bottom_frame, text="Damage", command=self._damage, bg=self._button_bg,
-                                      fg=self._button_fg, cursor=self._button_select)
-            self._dmg_btn.grid(row=4, column=2)
-            self._heal_btn = tk.Button(self._bottom_frame, text="Heal", command=self._heal, bg=self._button_bg,
-                                      fg=self._button_fg, cursor=self._button_select)
-            self._heal_btn.grid(row=4, column=3)
-            return
+        if member_id:
+            if member_id[0] == 'p':
+                self._bottom_frame.config(background='indian red')
+                self._lvl_btn = tk.Button(self._bottom_frame, text="Add XP", command=self._add_xp, bg=self._button_bg,
+                                        fg=self._button_fg, cursor=self._button_select)
+                self._lvl_btn.grid(row=4, column=0)
+                self._dmg_btn = tk.Button(self._bottom_frame, text="Damage", command=self._damage, bg=self._button_bg,
+                                        fg=self._button_fg, cursor=self._button_select)
+                self._dmg_btn.grid(row=4, column=2)
+                self._heal_btn = tk.Button(self._bottom_frame, text="Heal", command=self._heal, bg=self._button_bg,
+                                        fg=self._button_fg, cursor=self._button_select)
+                self._heal_btn.grid(row=4, column=3)
+
 
     def _heal(self):
         """ Heals the selected Pokemon and revives it if it was KO'd """
@@ -475,6 +487,16 @@ class MainAppController(ThemedTk):
         lvl_after = poke_r.json()['level']
         if lvl_after != lvl_before:
             messagebox.showinfo(title='Level up!', message=f"{poke_r.json()['nickname']} leveled up to level {lvl_after}!")
+
+    def _walk(self):
+        player_id = self._get_manager_id()
+        requests.put(f"{self._BASE_URL}/{player_id}/walk")
+
+        self._update_lists()
+        if not self._get_member_id_from_list():
+            print("hi")
+            self._party_list.select_set(0)
+            self._party_list.event_generate("<<ListboxSelect>>")
 
     def _update_dropdown(self):
         """ Updates the Player dropdown menu """
