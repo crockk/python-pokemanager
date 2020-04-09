@@ -88,7 +88,7 @@ class MainAppController(ThemedTk):
         self._walk_btn.grid(row=2, column=2)
 
         # Create dropdown to choose manager
-        managers = requests.get(f'{self._BASE_URL}/managers').json()
+        managers = requests.get(f'{self._BASE_URL}/managers/all').json()
         self._managers = {m['player_name']:m for m in managers}
 
         self._dropdown_var = StringVar(self)
@@ -259,7 +259,7 @@ class MainAppController(ThemedTk):
 
     def _get_stats(self):
         """ Pokestats Popup """
-        r = requests.get(f"{self._BASE_URL}/{self._get_manager_id()}/member/stats")
+        r = requests.get(f"{self._BASE_URL}/{self._get_manager_id()}/stats")
         stats = r.json()
 
         self._popup_win = tk.Toplevel()
@@ -476,10 +476,9 @@ class MainAppController(ThemedTk):
         if lvl_after != lvl_before:
             messagebox.showinfo(title='Level up!', message=f"{poke_r.json()['nickname']} leveled up to level {lvl_after}!")
 
-
     def _update_dropdown(self):
         """ Updates the Player dropdown menu """
-        managers = requests.get(f'{self._BASE_URL}/managers').json()
+        managers = requests.get(f'{self._BASE_URL}/managers/all').json()
         self._managers = {m['player_name']:m for m in managers}
         self._dropdown.destroy()
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)

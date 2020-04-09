@@ -260,7 +260,7 @@ def all_members_by_type(manager_id, member_type):
     return jsonify([member.to_dict() for member in members])
 
 
-@app.route("/<int:manager_id>/member/stats", methods=["GET"])
+@app.route("/<int:manager_id>/stats", methods=["GET"])
 def manager_stats(manager_id):
     """ POST method for Party Manager
     Returns a json representation of the stats for the Party Manager
@@ -276,7 +276,7 @@ def manager_stats(manager_id):
         return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
 
 
-@app.route('/managers', methods=["GET"])
+@app.route('/managers/all', methods=["GET"])
 def all_managers():
     """ GET method for Party Manager
     Returns a json of all the managers in the DB
