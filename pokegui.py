@@ -133,9 +133,9 @@ class MainAppController(ThemedTk):
 
     def _release_member(self):
         """ Release selected member into the wild """
-        try:
-            self._id_to_remove = self._get_member_id_from_list()
-        except IndexError:
+
+        member_id = self._get_member_id_from_list()
+        if not member_id:
             messagebox.showerror(title='Select member', message='Please select a member to release.')
             return
 
@@ -242,9 +242,8 @@ class MainAppController(ThemedTk):
 
     def _edit_member(self):
         """ Creates a popup to edit the selected member. """
-        try:
-            member_id = self._get_member_id_from_list()
-        except IndexError:
+        member_id = self._get_member_id_from_list()
+        if not member_id:
             messagebox.showerror(title='Select member', message='Please select a member to edit.')
             return
         manager_id = self._get_manager_id()
@@ -413,9 +412,8 @@ class MainAppController(ThemedTk):
 
     def _heal(self):
         """ Heals the selected Pokemon and revives it if it was KO'd """
-        try:
-            member_id = self._get_member_id_from_list()
-        except IndexError:
+        member_id = self._get_member_id_from_list()
+        if not member_id:
             messagebox.showerror(title='Select member', message='Please select a member to heal.')
             return
         manager_id = self._get_manager_id()
@@ -440,9 +438,8 @@ class MainAppController(ThemedTk):
 
     def _damage(self):
         """ Damages the selected Pokemon and KOs it if its hp reaches 0 """
-        try:
-            member_id = self._get_member_id_from_list()
-        except IndexError:
+        member_id = self._get_member_id_from_list()
+        if not member_id:
             messagebox.showerror(title='Select member', message='Please select a member to damage.')
             return
         manager_id = self._get_manager_id()
@@ -462,10 +459,9 @@ class MainAppController(ThemedTk):
 
     def _add_xp(self):
         """ Adds xp to the selected Pokemon """
-        try:
-            member_id = self._get_member_id_from_list()
-        except IndexError:
-            messagebox.showerror(title='Select member', message='Please select a member to add XP.')
+        member_id = self._get_member_id_from_list()
+        if not member_id:
+            messagebox.showerror(title='Select member', message='Please select a member to add xp.')
             return
         manager_id = self._get_manager_id()
 
