@@ -189,6 +189,7 @@ class MainAppController(ThemedTk):
         confirm.grid(row=1, column=1,columnspan=2)
 
     def _confirm_player(self):
+        """ Creates popup confirm if the new player is created or not """
         data = {'player_name': self._new_player_name.get()}
         r = requests.post(f'{self._BASE_URL}/create_manager', json=data)
         if r.status_code == 200:
@@ -241,6 +242,7 @@ class MainAppController(ThemedTk):
         self._popup = AddEggPopup(self._popup_win, self._get_manager_id(), self._close_popup)
 
     def _edit_member(self):
+        """ Creates a popup to edit the selected member. """
         try:
             member_id = self._get_member_id_from_list()
         except IndexError:
@@ -287,6 +289,7 @@ class MainAppController(ThemedTk):
         self._disable_text_insert(self._info_text)
 
     def _generate_info(self, data):
+        """ Creates and inserts the info into the info text widget """
         if data['member_type'] == 'Pokemon':
             self._species = Pokedex[data['pokedex_num']][0]
             self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
@@ -339,12 +342,14 @@ class MainAppController(ThemedTk):
         self.quit()
 
     def _get_manager_id(self):
+        """ Converts name in drop down menu to an Id """
         id = self._managers[self._dropdown_var.get()]['id']
         manager_id = requests.get(f"{self._BASE_URL}/managers/{id}")
         manager_id = manager_id.json()['id']
         return manager_id
 
     def _get_member_id_from_list(self):
+        """ Gets the Id of the selected member in either the pc or party list """
         selected_values = self._party_list.curselection()
         if not selected_values:
             selected_values = self._pc_list.curselection()
@@ -370,6 +375,7 @@ class MainAppController(ThemedTk):
                 self._pc_list.insert(tk.END, m['id'] + ' - ' + m['nickname'])
 
     def _update_right_buttons(self):
+        """ Dynamically show certain buttons for when either a Pokemon or Egg is selected """
         member_id = self._get_member_id_from_list()
         try:
 
@@ -393,6 +399,7 @@ class MainAppController(ThemedTk):
             return
 
     def _heal(self):
+        """ Heals the selected Pokemon and revives it if it was KO'd """
         try:
             member_id = self._get_member_id_from_list()
         except IndexError:
@@ -419,6 +426,7 @@ class MainAppController(ThemedTk):
             messagebox.showinfo(title=f"{poke_r.json()['nickname']} was revived!", message=f'Nurse Joy healed your Pokemon back to health!')
 
     def _damage(self):
+        """ Damages the selected Pokemon and KOs it if its hp reaches 0 """
         try:
             member_id = self._get_member_id_from_list()
         except IndexError:
@@ -440,6 +448,7 @@ class MainAppController(ThemedTk):
             messagebox.showinfo(title='KO!', message=f"{r.json()['nickname']} was knocked out!")
 
     def _add_xp(self):
+        """ Adds xp to the selected Pokemon """
         try:
             member_id = self._get_member_id_from_list()
         except IndexError:
@@ -467,6 +476,7 @@ class MainAppController(ThemedTk):
 
 
     def _update_dropdown(self):
+        """ Updates the Player dropdown menu """
         managers = requests.get(f'{self._BASE_URL}/managers').json()
         self._managers = {m['player_name']:m for m in managers}
         self._dropdown.destroy()
@@ -487,6 +497,5 @@ class MainAppController(ThemedTk):
 
 if __name__ == "__main__":
     root = MainAppController()
-    # root.set_theme("ubuntu")
     root.mainloop()
 
