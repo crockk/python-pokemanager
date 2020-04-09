@@ -23,7 +23,7 @@ from pokepopups.edit_egg_popup import EditEggPopup
 class MainAppController(ThemedTk):
     """ Main Application for GUI """
 
-    _BASE_URL = "http://127.0.0.1:5000/"
+    _BASE_URL = "http://127.0.0.1:5000"
 
     def __init__(self):
         """ Initialize Main Application """
@@ -88,7 +88,7 @@ class MainAppController(ThemedTk):
         self._walk_btn.grid(row=2, column=2)
 
         # Create dropdown to choose manager
-        managers = requests.get('http://127.0.0.1:5000/managers').json()
+        managers = requests.get(f'{self._BASE_URL}/managers').json()
         self._managers = {m['player_name']:m for m in managers}
 
         self._dropdown_var = StringVar(self)
@@ -122,7 +122,7 @@ class MainAppController(ThemedTk):
             return
         manager_id = self._get_manager_id()
 
-        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/{member_id}/move")
+        r = requests.put(f"{self._BASE_URL}/{manager_id}/{member_id}/move")
 
         if r.status_code == 400:
             messagebox.showerror(title='Error', message='Could not move member to party.')
@@ -157,7 +157,7 @@ class MainAppController(ThemedTk):
             self._error_msg.grid(row=2, column=1)
             return
 
-        r = requests.delete(f"http://127.0.0.1:5000/{manager_id}/member/{self._id_to_remove}")
+        r = requests.delete(f"{self._BASE_URL}/{manager_id}/member/{self._id_to_remove}")
         if r.status_code == 204:
             messagebox.showinfo(title='Success',
                                 message=f'Member with ID: {self._id_to_remove} has been released into the wild.')
@@ -190,7 +190,7 @@ class MainAppController(ThemedTk):
 
     def _confirm_player(self):
         data = {'player_name': self._new_player_name.get()}
-        r = requests.post('http://127.0.0.1:5000/create_manager', json=data)
+        r = requests.post(f'{self._BASE_URL}/create_manager', json=data)
         if r.status_code == 200:
             messagebox.showinfo(title='Success',
                                 message=f'Player {self._new_player_name.get()} created. Choose your new player from the drop down menu "Choose Player"')
@@ -257,7 +257,7 @@ class MainAppController(ThemedTk):
 
     def _get_stats(self):
         """ Pokestats Popup """
-        r = requests.get(f"http://127.0.0.1:5000/{self._get_manager_id()}/member/stats")
+        r = requests.get(f"{self._BASE_URL}/{self._get_manager_id()}/member/stats")
         stats = r.json()
 
         self._popup_win = tk.Toplevel()
@@ -272,7 +272,7 @@ class MainAppController(ThemedTk):
         # Make some GET requests
         manager_id = self._get_manager_id()
 
-        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
 
         # Clear the text box
         self._enable_text_insert(self._info_text)
@@ -340,7 +340,7 @@ class MainAppController(ThemedTk):
 
     def _get_manager_id(self):
         id = self._managers[self._dropdown_var.get()]['id']
-        manager_id = requests.get(f"http://127.0.0.1:5000/managers/{id}")
+        manager_id = requests.get(f"{self._BASE_URL}/managers/{id}")
         manager_id = manager_id.json()['id']
         return manager_id
 
@@ -360,7 +360,7 @@ class MainAppController(ThemedTk):
         """ Update the Lists"""
         manager_id = self._get_manager_id()
 
-        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/all")
+        r = requests.get(f"{self._BASE_URL}/{manager_id}/member/all")
         self._pc_list.delete(0, tk.END)
         self._party_list.delete(0, tk.END)
         for m in r.json():
@@ -401,11 +401,11 @@ class MainAppController(ThemedTk):
         manager_id = self._get_manager_id()
 
         # Check the pokemons KO status before healing
-        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        poke_r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
         ko_before = poke_r.json()['is_KO']
 
         # Heal the pokemon
-        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/heal")
+        r = requests.put(f"{self._BASE_URL}/{manager_id}/member/{member_id}/heal")
         if r.status_code == 400:
             messagebox.showerror(title='Error', message='Member not found')
 
@@ -413,7 +413,7 @@ class MainAppController(ThemedTk):
         self._update_textbox(evt='')
 
         # Check to see if the pokemon was revived
-        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        poke_r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
         ko_after = poke_r.json()['is_KO']
         if ko_before != ko_after:
             messagebox.showinfo(title=f"{poke_r.json()['nickname']} was revived!", message=f'Nurse Joy healed your Pokemon back to health!')
@@ -427,7 +427,7 @@ class MainAppController(ThemedTk):
         manager_id = self._get_manager_id()
 
         # Deal damage to the pokemon
-        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/damage")
+        r = requests.put(f"{self._BASE_URL}/{manager_id}/member/{member_id}/damage")
         if r.status_code == 400:
             messagebox.showerror(title='Error', message='Member not found')
 
@@ -435,7 +435,7 @@ class MainAppController(ThemedTk):
         self._update_textbox(evt='')
 
         # Check to see if the pokemon was knocked out
-        r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
         if r.json()['is_KO']:
             messagebox.showinfo(title='KO!', message=f"{r.json()['nickname']} was knocked out!")
 
@@ -448,11 +448,11 @@ class MainAppController(ThemedTk):
         manager_id = self._get_manager_id()
 
         # Get the pokemon's level before adding XP
-        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        poke_r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
         lvl_before = poke_r.json()['level']
 
         # Add XP to the pokemon
-        r = requests.put(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}/add_xp")
+        r = requests.put(f"{self._BASE_URL}/{manager_id}/member/{member_id}/add_xp")
         if r.status_code == 400:
             messagebox.showerror(title='Error', message='Member not found')
 
@@ -460,14 +460,14 @@ class MainAppController(ThemedTk):
         self._update_textbox(evt='')
 
         # Check to see if the pokemon leveled up
-        poke_r = requests.get(f"http://127.0.0.1:5000/{manager_id}/member/{member_id}")
+        poke_r = requests.get(f"{self._BASE_URL}/{manager_id}/member/{member_id}")
         lvl_after = poke_r.json()['level']
         if lvl_after != lvl_before:
             messagebox.showinfo(title='Level up!', message=f"{poke_r.json()['nickname']} leveled up to level {lvl_after}!")
 
 
     def _update_dropdown(self):
-        managers = requests.get('http://127.0.0.1:5000/managers').json()
+        managers = requests.get(f'{self._BASE_URL}/managers').json()
         self._managers = {m['player_name']:m for m in managers}
         self._dropdown.destroy()
         self._dropdown = tk.OptionMenu(self, self._dropdown_var, *self._managers, command=self._update_all)
