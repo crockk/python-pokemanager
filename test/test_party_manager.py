@@ -7,120 +7,117 @@ Date: 2/25/2020
 from pokemodule.party_manager import PartyManager
 from pokemodule.egg import Egg
 from pokemodule.pokemon import Pokemon
-from unittest import TestCase, mock
+from unittest import TestCase
 import random
 import os
+import sqlite3
+from create_tables import create_tables
+from drop_tables import drop_tables
 
 
 class TestPartyManager(TestCase):
 
-    _FILEPATH = os.path.join("data", "pokedata.json")
-
-    @mock.patch('party_manager.PartyManager._read_from_file', side_effect = FileNotFoundError)
-    def setUp(self, mock_read_func) -> None:
+    def setUp(self) -> None:
+        create_tables()
         random.seed(13)
 
-        self.party_manager = PartyManager('Nolan')
-        self.mock_save_func = mock.Mock()
-        self.party_manager._write_to_file = self.mock_save_func
+        self.party_manager = PartyManager(player_name = 'Nolan')
+        self.party_manager.save()
+
+    def tearDown(self):
+        drop_tables()
 
     def test_valid_init(self):
         self.assertIsInstance(self.party_manager, PartyManager)
 
-        self.assertEqual(self.party_manager._filepath, self._FILEPATH)
-
-    def test_invalid_init(self):
-        with self.assertRaises(TypeError):
-            manager = PartyManager(123)
-
-        with self.assertRaises(ValueError):
-            manager = PartyManager('')
+        self.assertEqual(self.party_manager.player_name, 'Nolan')
 
     def test_create_member(self):
-        with self.assertRaises(ValueError):
-            self.party_manager.create_member('Pakemun', 5, 'Route 55')
-        with self.assertRaises(ValueError):
-            self.party_manager.create_member('Pokemon', '5', 'Route 55')
-
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
-
-        self.party_manager.create_member('Egg', 5, 'Route 55')
-        self.assertIsInstance(self.party_manager.get_member_by_id(2), Egg)
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 2)
+        self.assertEqual(len(Pokemon.select()[:]), 0)
+        p1 = Pokemon.create(nickname = 'Pakemun', id=1, pokedex_num=4, player=self.party_manager)
+        p1.save()
+        self.assertEqual(len(Pokemon.select()[:]), 1)        
 
     def test_move_to_party(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p2.save()
+        p3 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p3.save()
+        p4 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p4.save()
+        p5 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p5.save()
+        p6 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p6.save()
+        p7 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p7.save()
 
-        self.assertTrue(self.party_manager.move_to_party(1))
+        self.assertTrue(self.party_manager.move_to_party(p1.id))
 
-        self.party_manager.move_to_party(2)
-        self.party_manager.move_to_party(3)
-        self.party_manager.move_to_party(4)
-        self.assertFalse(self.party_manager.move_to_party(4))
+        self.party_manager.move_to_party(p2.id)
+        self.party_manager.move_to_party(p3.id)
+        self.party_manager.move_to_party(p4.id)
+        self.assertFalse(self.party_manager.move_to_party(p4.id))
 
-        self.assertFalse(self.party_manager.move_to_party(9))
+        self.assertFalse(self.party_manager.move_to_party(self.party_manager._ID_MANAGER.pokemon_id()))
 
-        self.party_manager.move_to_party(5)
-        self.party_manager.move_to_party(6)
+        self.party_manager.move_to_party(p5.id)
+        self.party_manager.move_to_party(p6.id)
 
-        self.assertFalse(self.party_manager.move_to_party(7))
+        self.assertFalse(self.party_manager.move_to_party(p7.id))
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 19)
 
     def test_move_to_pc(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.move_to_party(1)
 
-        self.assertTrue(self.party_manager.move_to_pc(1))
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
 
-        self.assertFalse(self.party_manager.move_to_pc(1))
+        self.party_manager.move_to_party(p1.id)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 4)
+        self.assertTrue(self.party_manager.move_to_pc(p1.id))
 
-    def test_release_party_member(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.move_to_party(1)
+        self.assertFalse(self.party_manager.move_to_pc(p1.id))
 
-        self.assertTrue(self.party_manager.release_party_member(1))
+    def test_release_member(self):
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        self.party_manager.move_to_party(p1.id)
 
-        self.assertFalse(self.party_manager.release_party_member(1))
+        self.assertTrue(self.party_manager.release_member(p1.id))
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 4)
+        self.assertFalse(self.party_manager.release_member(p1.id))
 
-    def test_release_pc_pokemon(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p2.save()
+    
+        self.assertTrue(self.party_manager.release_member(p2.id))
 
-        self.assertTrue(self.party_manager.release_pc_pokemon(1))
-
-        self.assertFalse(self.party_manager.release_pc_pokemon(1))
-
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 2)
+        self.assertFalse(self.party_manager.release_member(p2.id))
 
     def test_get_members_by_elemental_type(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
 
         members = self.party_manager.get_members_by_elemental_type(('Grass', ))
         self.assertEqual(len(members['Grass']), 4)
 
-        self.party_manager.create_member('Pokemon', 10, 'Route 55')
-        self.party_manager.create_member('Pokemon', 10, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=10, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=10, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
 
         grass = self.party_manager.get_members_by_elemental_type(('Grass', ))
         dragon = self.party_manager.get_members_by_elemental_type(('Dragon', ))
@@ -128,92 +125,102 @@ class TestPartyManager(TestCase):
         self.assertEqual(len(grass['Grass']), 6)
         self.assertEqual(len(dragon['Dragon']), 2)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 8)
 
     def test_get_member_by_id(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
 
-        self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
+        self.assertIsInstance(self.party_manager.get_member_by_id(p1.id), Pokemon)
 
-        self.assertIsNone(self.party_manager.get_member_by_id(10))
+        self.assertIsNone(self.party_manager.get_member_by_id('p9999'))
 
-        self.party_manager.move_to_party(1)
+        self.party_manager.move_to_party(p1.id)
 
-        self.assertIsInstance(self.party_manager.get_member_by_id(1), Pokemon)
+        self.assertIsInstance(self.party_manager.get_member_by_id(p1.id), Pokemon)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 3)
 
     def test_get_all_party_members(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p2.save()
+        p3 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p3.save()
+        p4 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p4.save()
+        p5 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p5.save()
+        p6 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p6.save()
 
-        self.party_manager.move_to_party(1)
-        self.party_manager.move_to_party(2)
-        self.party_manager.move_to_party(3)
-        self.party_manager.move_to_party(4)
-        self.party_manager.move_to_party(5)
-        self.party_manager.move_to_party(6)
+        self.party_manager.move_to_party(p1.id)
+        self.party_manager.move_to_party(p2.id)
+        self.party_manager.move_to_party(p3.id)
+        self.party_manager.move_to_party(p4.id)
+        self.party_manager.move_to_party(p5.id)
+        self.party_manager.move_to_party(p6.id)
 
-        self.assertEqual(len(self.party_manager.get_all_party_members), 6)
-
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 18)
+        self.assertEqual(len(self.party_manager.party_members), 6)
 
     def test_get_all_pc_members(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p2.save()
+        p3 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p3.save()
+        p4 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p4.save()
+        p5 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p5.save()
+        p6 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p6.save()
 
-        self.assertEqual(len(self.party_manager.get_all_pc_members), 6)
-
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 6)
+        self.assertEqual(len(self.party_manager.pc_members), 6)
 
     def test_get_all_members(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p2.save()
+        p3 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p3.save()
+        p4 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p4.save()
+        p5 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p5.save()
+        p6 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p6.save()
 
-        self.party_manager.move_to_party(1)
-        self.party_manager.move_to_party(2)
-        self.party_manager.move_to_party(3)
+        self.party_manager.move_to_party(p1.id)
+        self.party_manager.move_to_party(p3.id)
+        self.party_manager.move_to_party(p5.id)
 
-        self.assertEqual(len(self.party_manager.get_all_members), 6)
-
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 12)
+        self.assertEqual(len(self.party_manager.all_members), 6)
 
     def test_get_member_by_type(self):
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Egg', 4, 'Route 55')
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
+        
+        e1 = Egg.create(id=self.party_manager._ID_MANAGER.egg_id(), pokedex_num=4, player=self.party_manager)
+        e1.save()
 
         members = self.party_manager.get_member_by_type('Pokemon')
 
         self.assertEqual(len(members), 1)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 2)
-
     def test_walk(self):
-        self.party_manager.create_member('Egg', 4, 'Route 55')
-        self.party_manager.create_member('Egg', 5, 'Route 55')
-        self.party_manager.create_member('Egg', 1, 'Route 55')
+        e1 = Egg.create(id=self.party_manager._ID_MANAGER.egg_id(), pokedex_num=4, player=self.party_manager)
+        e1.save()
+        e2 = Egg.create(id=self.party_manager._ID_MANAGER.egg_id(), pokedex_num=4, player=self.party_manager)
+        e2.save()
+        e3 = Egg.create(id=self.party_manager._ID_MANAGER.egg_id(), pokedex_num=4, player=self.party_manager)
+        e3.save()
+        
 
-        self.party_manager.move_to_party(1)
-        self.party_manager.move_to_party(2)
-        self.party_manager.move_to_party(3)
+        self.party_manager.move_to_party(e1.id)
+        self.party_manager.move_to_party(e2.id)
+        self.party_manager.move_to_party(e3.id)
 
         # Mazimum number of steps required to hatch is 5000, therefor all egs should hatch
         # For each hatched egg there is 3 calls to _write_to_file
@@ -223,30 +230,31 @@ class TestPartyManager(TestCase):
 
         self.assertEqual(stats.get_total_steps(), 5000)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 22)
 
     def test_add_xp(self):
-        self.party_manager.create_member('Pokemon', 4, 'Route 55')
-        xp_to_add = self.party_manager.get_member_by_id(1).xp_till_next_level - 1
-        self.party_manager.add_xp_to_pokemon(1, xp_to_add)
 
-        self.assertEqual(self.party_manager.get_member_by_id(1).xp_till_next_level, 1)
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=4, player=self.party_manager)
+        p1.save()
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 2)
+        xp_to_add = p1.xp_till_next_level - 1
+        self.party_manager.add_xp_to_pokemon(p1.id, xp_to_add)
+
+        self.assertEqual(self.party_manager.get_member_by_id(p1.id).xp_till_next_level, 1)
 
     def test_get_stats(self):
-        self.party_manager.create_member('Egg', 4, 'Route 55')
-        self.party_manager.create_member('Pokemon', 5, 'Route 55')
-        self.party_manager.create_member('Pokemon', 1, 'Route 55')
+        e1 = Egg.create(id=self.party_manager._ID_MANAGER.egg_id(), pokedex_num=4, player=self.party_manager)
+        e1.save()
+        p1 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=5, player=self.party_manager)
+        p1.save()
+        p2 = Pokemon.create(id=self.party_manager._ID_MANAGER.pokemon_id(), pokedex_num=1, player=self.party_manager)
+        p2.save()
 
-        self.party_manager.move_to_party(1)
-        self.party_manager.move_to_party(2)
-        self.party_manager.move_to_party(3)
+        self.party_manager.move_to_party(e1.id)
+        self.party_manager.move_to_party(p1.id)
+        self.party_manager.move_to_party(p2.id)
 
-        poke1 = self.party_manager.get_member_by_id(2)
-        poke2 = self.party_manager.get_member_by_id(3)
+        poke1 = p1
+        poke2 = p2
 
         poke1.damage(poke1.total_hp)
         poke2.damage(poke2.total_hp)
@@ -261,30 +269,11 @@ class TestPartyManager(TestCase):
 
         self.assertEqual(stats.get_total_eggs(), 1)
 
-        self.assertTrue(self.mock_save_func.called)
-        self.assertEqual(self.mock_save_func.call_count, 9)
-
         stat_check = {
+            'player_name': 'Nolan',
             'total_by_type': {'Grass': 2}, 
             'total_eggs': 1, 
             'total_KO': 2, 
             'total_steps': 0
         }
         self.assertDictEqual(stats.to_dict(), stat_check)
-
-    def test_read_from_file(self):
-        self.party_manager = PartyManager("Yuto")
-        self.party_manager.create_member('Egg', 4, 'Route 55')
-        self.party_manager.create_member('Pokemon', 4, 'Route 55')
-        self.party_manager.move_to_party(1)
-        self.party_manager = PartyManager("Bluto")
-        
-        self.assertEqual(len(self.party_manager.get_all_members),2)
-
-        os.remove(self._FILEPATH)
-
-        self.party_manager = PartyManager("Yuto")
-
-        
-
-        
