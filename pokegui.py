@@ -494,7 +494,6 @@ class MainAppController(ThemedTk):
 
         self._update_lists()
         if not self._get_member_id_from_list():
-            print("hi")
             self._party_list.select_set(0)
             self._party_list.event_generate("<<ListboxSelect>>")
 
