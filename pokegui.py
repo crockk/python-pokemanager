@@ -343,10 +343,12 @@ class MainAppController(ThemedTk):
 
     def _get_manager_id(self):
         """ Converts name in drop down menu to an Id """
-        id = self._managers[self._dropdown_var.get()]['id']
-        manager_id = requests.get(f"{self._BASE_URL}/managers/{id}")
-        manager_id = manager_id.json()['id']
-        return manager_id
+        player = self._managers[self._dropdown_var.get()]
+
+        if player:
+            return player['id']
+        else:
+            messagebox.showerror(title="Player ID", message=f"No Player Selected")
 
     def _get_member_id_from_list(self):
         """ Gets the Id of the selected member in either the pc or party list """
