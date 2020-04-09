@@ -18,6 +18,7 @@ from pokepopups.add_egg_popup import AddEggPopup
 from pokepopups.pokestats_popup import PokeStatsPopup
 from pokepopups.edit_pokemon_popup import EditPokemonPopup
 from pokepopups.edit_egg_popup import EditEggPopup
+from pokepopups.new_hatches_popup import PokeHatchPopup
 
 
 class MainAppController(ThemedTk):
@@ -485,12 +486,46 @@ class MainAppController(ThemedTk):
 
     def _walk(self):
         player_id = self._get_manager_id()
+
+        r = requests.get(f'{self._BASE_URL}/{player_id}/member/all/Pokemon')
+        before_pokemon_ids = set([p['id'] for p in r.json()])
+
         requests.put(f"{self._BASE_URL}/{player_id}/walk")
+        
+        r = requests.get(f'{self._BASE_URL}/{player_id}/member/all/Pokemon')
+        after_pokemon_ids = set([p['id'] for p in r.json()])
+
+        print(before_pokemon_ids)
+        print(after_pokemon_ids)
 
         self._update_lists()
         if not self._get_member_id_from_list():
             self._party_list.select_set(0)
             self._party_list.event_generate("<<ListboxSelect>>")
+
+        new_pokemon = self._determine_new_pokemon(before_pokemon_ids, after_pokemon_ids)
+
+        if new_pokemon:
+            self._popup_win = tk.Toplevel()
+            self._popup_win.resizable(False, False)
+            self._popup = PokeHatchPopup(new_pokemon, self._popup_win, self._close_popup)
+        
+
+    def _determine_new_pokemon(self, p_before, p_after):
+        new_pokemon_ids = list(p_before.symmetric_difference(p_after))
+
+        if len(new_pokemon_ids) == 0:
+            print("no new")
+            return None
+        
+        player_id = self._get_manager_id()
+
+        new_pokemon = []
+
+        for id in new_pokemon_ids:
+            r = requests.get(f'{self._BASE_URL}/{player_id}/member/{id}')
+            new_pokemon.append(r.json())    
+        return new_pokemon
 
     def _update_dropdown(self):
         """ Updates the Player dropdown menu """

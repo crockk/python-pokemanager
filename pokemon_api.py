@@ -257,13 +257,14 @@ def all_members_by_type(manager_id, member_type):
     :rtype: Response Object
     
     """
+    if member_type not in ['Pokemon', 'Egg']:
+        return make_response(f"No Members found for with type '{member_type}'.", 400)
+
     player = PartyManager.get_by_id(manager_id)
     if not player:
         return make_response(f"Party Manager with id '{manager_id}' not found.", 400)
     
     members = player.get_member_by_type(member_type)
-    if not members:
-        return make_response(f"No Members found for with type '{member_type}'.", 400)
 
     return jsonify([member.to_dict() for member in members])
 

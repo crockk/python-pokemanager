@@ -216,7 +216,8 @@ class Pokemon(PartyMember):
             "total_hp": self.total_hp,
             "current_hp": self.current_hp,
             "is_KO": self.is_KO,
-            "moves": self.moves
+            "moves": self.moves,
+            "old_egg_id": self.old_egg_id
         }
         return dikt
 
@@ -234,4 +235,5 @@ class Pokemon(PartyMember):
     member_type = CharField(column_name='member_type', default='Pokemon')
     moves = CharField(default=json.dumps(RandomStats.rand_move_set()))
     player = ForeignKeyField(PartyManager, backref='pokemon')
+    old_egg_id = CharField(default=None, null=True)
     id = CharField(primary_key=True)

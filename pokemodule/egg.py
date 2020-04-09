@@ -67,7 +67,7 @@ class Egg(PartyMember):
 
         new_pokemon = Pokemon.create(id=self.player._ID_MANAGER.pokemon_id(), pokedex_num=self.pokedex_num, 
                         nickname=nickname, source=self.source,
-                        date_acquired=self.date_acquired, item=self.item, player=self.player)
+                        date_acquired=self.date_acquired, item=self.item, player=self.player, in_party=True, old_egg_id=self.id)
         new_pokemon.save()
         
         # self.player.release_pc_pokemon(self.id)
