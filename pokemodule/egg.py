@@ -8,7 +8,7 @@ from peewee import IntegerField, BooleanField, ForeignKeyField, CharField
 from pokemodule.party_member import PartyMember
 from pokemodule.pokemon import Pokemon
 from pokemodule.party_manager import PartyManager
-from pokemodule.pokedex import RandomStats
+from pokemodule.pokedex import RandomStats, Pokedex
 
 
 class Egg(PartyMember):
@@ -60,11 +60,13 @@ class Egg(PartyMember):
                f"{ 'Currently in party.' if self.in_party else 'Not currently in party'}"
 
     def _hatch(self):
-        # self.hatched = True
-        # self.in_party = False
-        # self.save()
+        if self.nickname == 'Egg':
+            nickname = Pokedex[self.pokedex_num][0]
+        else:
+            nickname = self.nickname
+
         new_pokemon = Pokemon.create(id=self.player._ID_MANAGER.pokemon_id(), pokedex_num=self.pokedex_num, 
-                        nickname=self.nickname, source=self.source,
+                        nickname=nickname, source=self.source,
                         date_acquired=self.date_acquired, item=self.item, player=self.player)
         new_pokemon.save()
         
