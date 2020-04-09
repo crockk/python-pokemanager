@@ -104,12 +104,14 @@ class MainAppController(ThemedTk):
         self._party_list.bind("<<ListboxSelect>>", self._update_textbox)
 
         # Now update the list
-        self._update_lists()
-        self._update_dropdown()
+        # self._update_lists()
+        # self._update_dropdown()
+        self._update_all(None)
 
     def _update_all(self, event):
         """ Updates both lists and textbox for when manager changes """
         self._update_lists()
+        self._update_dropdown()
         self._update_textbox(event)
         self._update_right_buttons()
 
