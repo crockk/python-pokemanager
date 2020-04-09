@@ -115,9 +115,8 @@ class MainAppController(ThemedTk):
 
     def _move_member(self):
         """ Moved selected member to party, or remove from party depending on their status"""
-        try:
-            member_id = self._get_member_id_from_list()
-        except IndexError:
+        member_id = self._get_member_id_from_list()
+        if not member_id:
             messagebox.showerror(title='Select member', message='Please select a member to move.')
             return
         manager_id = self._get_manager_id()
