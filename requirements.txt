@@ -1,0 +1,4 @@
+requests=2.23.0
+Flask==1.1.2
+peewee==3.13.3
+ttkthemes==3.0.0
