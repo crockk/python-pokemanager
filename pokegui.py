@@ -140,6 +140,7 @@ class MainAppController(ThemedTk):
             messagebox.showerror(title='Select member', message='Please select a member to release.')
             return
 
+        self._id_to_remove = member_id
         self._popup_win = tk.Toplevel()
         self._error_msg = ''
         self._popup_win.config(bg='indian red')
@@ -295,7 +296,7 @@ class MainAppController(ThemedTk):
         """ Creates and inserts the info into the info text widget """
         if data['member_type'] == 'Pokemon':
             self._species = Pokedex[data['pokedex_num']][0]
-            self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
+            self._sprite = tk.PhotoImage(file='../'+Pokedex[data['pokedex_num']][2])
             ordered_keys = [
                 'nickname',
                 'source',
