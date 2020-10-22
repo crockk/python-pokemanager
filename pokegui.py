@@ -296,7 +296,7 @@ class MainAppController(ThemedTk):
         """ Creates and inserts the info into the info text widget """
         if data['member_type'] == 'Pokemon':
             self._species = Pokedex[data['pokedex_num']][0]
-            self._sprite = tk.PhotoImage(file='../'+Pokedex[data['pokedex_num']][2])
+            self._sprite = tk.PhotoImage(file=Pokedex[data['pokedex_num']][2])
             ordered_keys = [
                 'nickname',
                 'source',
