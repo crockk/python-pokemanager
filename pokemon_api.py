@@ -177,7 +177,7 @@ def heal(manager_id, member_id):
 
 @app.route("/<int:manager_id>/walk", methods=["PUT"])
 def walk(manager_id):
-    STEPS = 100
+    STEPS = 500
     player = PartyManager.get_by_id(manager_id)
 
     player.walk(STEPS)

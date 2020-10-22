@@ -314,7 +314,7 @@ class MainAppController(ThemedTk):
             ]
         else:
             self._species = 'Egg'
-            self._sprite = tk.PhotoImage(file='../img/egg.png')
+            self._sprite = tk.PhotoImage(file='img/egg.png')
             ordered_keys = [
                 'source',
                 'date_acquired',
