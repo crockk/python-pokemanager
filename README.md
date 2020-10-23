@@ -15,13 +15,13 @@ git clone https://github.com/crockk/python-pokemanager.git
 pip install -r requirements.txt
 ```
 > to install the necessary dependencies.
-
+>
 > *NOTE* Please make sure that you are on the branch "assignment-4" by running
 ```
 git checkout assignment-4
 git pull
 ```
-> This as been configured as the main branch for this repository.
+> This has been configured as the main branch for this repository.
 
 
 ## Usage
