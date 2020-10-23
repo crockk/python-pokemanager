@@ -16,6 +16,13 @@ pip install -r requirements.txt
 ```
 > to install the necessary dependencies.
 
+> *NOTE* Please make sure that you are on the branch "assignment-4" by running
+```
+git checkout assignment-4
+git pull
+```
+> This as been configured as the main branch for this repository.
+
 
 ## Usage
 - Follow these steps to get the application up and running:
